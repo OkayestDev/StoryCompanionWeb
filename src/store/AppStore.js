@@ -1,5 +1,7 @@
 export default class AppStore {
     email = '';
+    userId = null;
+    selectedStoryId = null;
     apiKey = '';
 
     setValue(params) {

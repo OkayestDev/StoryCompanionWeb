@@ -1,5 +1,3 @@
-import { RNS3 } from 'react-native-aws3';
-
 const options = {
     keyPrefix: "",
     bucket: "story-companion",

@@ -2,7 +2,6 @@ import { API_CONFIG } from '../config/ApiConfig.js';
 import { LOGS } from '../config/Logs.js';
 import { PATTERNS } from '../config/Patterns.js';
 import jsSHA from 'jssha';
-import { AsyncStorage } from 'react-native';
 
 /**
  * Creates a file object with name, filename, from a base64 data string
@@ -54,16 +53,15 @@ export function postRequestWithFormData(requestData, route, paramsObject) {
         }
     }
 
-    return AsyncStorage.getItem('apiKey').then((res) => {
-        formData.append('apiKey', res);
-        let params = {
-            method: 'POST',
-            credentials: 'include',
-            body: formData,
-        };
-        
-        return baseRequest(paramsObject, route, params);
-    });
+    let apiKey = localStorage.getItem('apiKey');
+    formData.append('apiKey', apiKey);
+    let params = {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+    };
+    
+    return baseRequest(paramsObject, route, params);
 }
 
 export function getData(paramsObject, route) {

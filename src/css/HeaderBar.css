@@ -1,0 +1,23 @@
+.headerBarContainer {
+    width: 100%;
+    height: 60px;
+    background-color: #2f95dc;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.storyCompanion {
+    color: white;
+    font-size: 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.storyCompanionLogo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
