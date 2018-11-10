@@ -8,7 +8,8 @@ const loginPathnames = [
 ];
 
 const storiesPathnames = [
-    '/stories'
+    '/stories',
+    '/settings',
 ];
 
 const storyPathnames = [
@@ -42,14 +43,54 @@ export default class HeaderBar extends StoryCompanion {
         else if (storiesPathnames.includes(pathname)) {
             return (
                 <div className="linksContainer">
-
+                    <div 
+                        className={"link" + (pathname === '/stories' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/stories")}
+                    >
+                        Stories
+                    </div>
+                    <div 
+                        className={"link" + (pathname === '/settings' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/settings")}
+                    >
+                        Settings
+                    </div>
                 </div>
             );
         }
         else if (storyPathnames.includes(pathname)) {
             return (
                 <div className="linksContainer">
-
+                    <div 
+                        className={"link" + (pathname === '/chapters' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/chapters")}
+                    >
+                        Chapters
+                    </div>
+                    <div 
+                        className={"link" + (pathname === '/plots' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/plots")}
+                    >
+                        Plots
+                    </div>
+                    <div 
+                        className={"link" + (pathname === '/plots' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/plots")}
+                    >
+                        Characters
+                    </div>
+                    <div 
+                        className={"link" + (pathname === '/draft' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/draft")}
+                    >
+                        Draft
+                    </div>
+                    <div 
+                        className={"link" + (pathname === '/notes' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/notes")}
+                    >
+                        Notes
+                    </div>
                 </div>
             );
         }

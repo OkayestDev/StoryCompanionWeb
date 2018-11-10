@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import AppStore from '../store/AppStore.js';
 
 export default class StoryCompanion extends Component {
@@ -15,7 +15,7 @@ export default class StoryCompanion extends Component {
     componentWillMount() {
         let loadedAppStore = localStorage.getItem('AppStore');
         if (loadedAppStore !== null) {
-            this.AppStore = JSON.parse(loadedAppStore);
+            this.AppStore.setValue(JSON.parse(loadedAppStore));
         }
     }
 
@@ -37,6 +37,8 @@ export default class StoryCompanion extends Component {
             globalAlertMessage: message,
             globalAlertType: type,
         });
+        // Automatically close alert after 10 seconds
+        setTimeout(() => this.closeAlert(), 10000);
     }
 
     closeAlert = () => {

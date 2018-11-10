@@ -21,7 +21,20 @@ export default class CreateAccount extends StoryCompanion {
                 this.props.showAlert(res.error, "warning");
             }
             else {
-                this.props.showAlert("Successfully created account", "success");
+                this.props.showAlert("Successfully created account. Logging you in now!", "success");
+                this.UserRequests.login(this.state.email, this.state.password).then((res) => {
+                    if ('error' in res) {
+                        this.props.showAlert(res.error, "warning");
+                    }
+                    else {
+                        this.AppStore.setValue(res.success);
+                        this.updateAppStore(this.AppStore);
+                        this.props.history.push("/stories");
+                    }
+                })
+                .catch(() => {
+                    this.props.showAlert("Unable to login at this time", "danger");
+                });
             }
         })
         .catch(() => {
@@ -59,6 +72,7 @@ export default class CreateAccount extends StoryCompanion {
                             Password
                         </div>
                         <input
+                            type="password"
                             className="input"
                             onChange={(newPassword) => this.setState({password: newPassword.target.value})}
                         />
@@ -68,6 +82,7 @@ export default class CreateAccount extends StoryCompanion {
                             Confirm Password
                         </div>
                         <input
+                            type="password"
                             className="input"
                             onChange={(newConfirmPassword) => this.setState({confirmPassword: newConfirmPassword.target.value})}
                         />

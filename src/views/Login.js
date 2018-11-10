@@ -20,7 +20,9 @@ export default class Login extends StoryCompanion {
                 this.props.showAlert(res.error, "warning");
             }
             else {
-
+                this.AppStore.setValue(res.success);
+                this.updateAppStore(this.AppStore);
+                this.props.history.push("/stories");
             }
         })
         .catch(() => {
@@ -45,7 +47,7 @@ export default class Login extends StoryCompanion {
                         <div style={{width: '50%'}}>
                             <input
                                 className="loginInput"
-                                onChange={(newEmail) => this.setState({password: newEmail.target.value})}
+                                onChange={(newEmail) => this.setState({email: newEmail.target.value})}
                             />
                         </div>
                     </div>

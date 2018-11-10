@@ -3,6 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import App from './App.js';
 import Login from './views/Login.js';
+import Stories from './views/Stories.js';
 import CreateAccount from './views/CreateAccount.js';
 import HeaderBar from './components/HeaderBar.js';
 import GlobalAlert from './components/GlobalAlert.js';
@@ -33,7 +34,6 @@ export default class Router extends StoryCompanion {
                         render={(props) => (
                             <HeaderBar
                                 {...props}
-                                AppStore={this.AppStore}
                                 showAlert={this.showAlert.bind(this)}
                             />
                         )}
@@ -44,7 +44,6 @@ export default class Router extends StoryCompanion {
                             <Login
                                 {...props}
                                 showAlert={this.showAlert.bind(this)}
-                                AppStore={this.AppStore}
                             />
                         )}
                     />
@@ -54,7 +53,15 @@ export default class Router extends StoryCompanion {
                             <CreateAccount
                                 {...props}
                                 showAlert={this.showAlert.bind(this)}
-                                AppStore={this.AppStore}
+                            />
+                        )}
+                    />
+                    <Route
+                        path="/stories" exact
+                        render={(props) => (
+                            <Stories
+                                {...props}
+                                showAlert={this.showAlert.bind(this)}
                             />
                         )}
                     />
@@ -63,7 +70,6 @@ export default class Router extends StoryCompanion {
                         render={(props) => (
                             <App
                                 {...props}
-                                AppStore={this.AppStore}
                             />
                         )}
                     />
