@@ -30,6 +30,7 @@ export default class Router extends StoryCompanion {
                             <HeaderBar
                                 {...props}
                                 AppStore={this.AppStore}
+                                showAlert={this.showAlert.bind(this)}
                             />
                         )}
                     />

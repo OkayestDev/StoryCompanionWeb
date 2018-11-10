@@ -19,6 +19,13 @@ export default class StoryCompanion extends Component {
         }
     }
 
+    isUserLoggedIn = () => {
+        if (this.AppStore.email !== null && this.AppStore.email !== '') {
+            return true;
+        }
+        return false;
+    }
+
     updateAppStore = (newAppStore) => {
         this.AppStore = newAppStore;
         localStorage.setItem('AppStore', JSON.stringify(newAppStore));
