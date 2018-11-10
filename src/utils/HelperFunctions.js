@@ -59,6 +59,7 @@ export function postRequestWithFormData(requestData, route, paramsObject) {
         method: 'POST',
         credentials: 'include',
         body: formData,
+        mode: "cors",
     };
     
     return baseRequest(paramsObject, route, params);

@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
+import StoryCompanion from '../utils/StoryCompanion.js';
 import UserRequests from '../utils/UserRequests'
 import '../css/Login.css';
 
-export default class Login extends Component {
+export default class Login extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
+            ...this.state,
             email: '',
             password: '',
         }
@@ -13,7 +15,20 @@ export default class Login extends Component {
     }
 
     login = () => {
-        
+        this.UserRequests.login(this.state.email, this.state.password).then((res) => {
+            if ('error' in res) {
+                this.props.showAlert(res.error, "warning");
+            }
+            else {
+
+            }
+        })
+        .catch(() => {
+            this.props.showAlert(
+                "Unable to login at this time",
+                "danger"
+            );
+        })
     }
 
     render() {
@@ -48,7 +63,7 @@ export default class Login extends Component {
                     </div>
                     <div 
                         className="loginButton button noSelect"
-                        onClick={() => this.login}
+                        onClick={() => this.login()}
                     >
                         Login
                     </div>

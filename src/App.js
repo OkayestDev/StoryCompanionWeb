@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 export default class App extends Component {
     componentWillMount() {
@@ -10,9 +10,6 @@ export default class App extends Component {
         }
     }
 
-    render() {
-        return (
-            <div/>
-        );
-    }
+    // Required function of Component
+    render() { return null }
 }

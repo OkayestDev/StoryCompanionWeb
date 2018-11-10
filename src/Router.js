@@ -4,33 +4,25 @@ import DocumentTitle from 'react-document-title';
 import App from './App.js';
 import Login from './views/Login.js';
 import HeaderBar from './components/HeaderBar.js';
-import AppStore from './store/AppStore.js';
+import GlobalAlert from './components/GlobalAlert.js';
+import StoryCompanion from './utils/StoryCompanion.js';
 import './css/Router.css';
 import './css/CommonTheme.css';
 require('dotenv').config();
 
-export default class Router extends Component {
-    constructor(props) {
-        super(props);
-        this.AppStore = new AppStore();
-    }
-
-    componentWillMount() {
-        let loadedAppStore = localStorage.getItem('AppStore');
-        if (loadedAppStore !== null) {
-            this.AppStore = JSON.parse(loadedAppStore);
-        }
-    }
-
-    updateAppStore = (newAppStore) => {
-        this.AppStore = newAppStore;
-        localStorage.setItem('AppStore', JSON.stringify(newAppStore));
-    }
-
+export default class Router extends StoryCompanion {
     render() {
         return(
             <BrowserRouter>
                 <div className="application">
+                    <div>
+                        <GlobalAlert
+                            visible={this.state.showGlobalAlert}
+                            type={this.state.globalAlertType}
+                            message={this.state.globalAlertMessage}
+                            closeAlert={this.closeAlert.bind(this)}
+                        />
+                    </div>
                     <title>Story Companion</title>
                     <DocumentTitle title="Story Companion"/>
                     <Route
@@ -46,6 +38,7 @@ export default class Router extends Component {
                         render={(props) => (
                             <Login
                                 {...props}
+                                showAlert={this.showAlert.bind(this)}
                                 AppStore={this.AppStore}
                             />
                         )}

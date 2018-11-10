@@ -1,0 +1,40 @@
+.globalAlert {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px;
+    /* position: fixed;
+    top: 0; */
+}
+
+.globalAlertIconAndMessage {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+}
+
+.globalAlertIcon {
+    color: white;
+    margin-right: 25px;
+}
+
+.globalAlertMessage {
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.globalAlertCloseContainer {
+    width: 8%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.globalAlertClose {
+    color: white;
+    cursor: pointer;
+}
