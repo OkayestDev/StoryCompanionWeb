@@ -3,7 +3,8 @@ import StoryCompanion from '../utils/StoryCompanion.js';
 import '../css/HeaderBar.css';
 
 const loginPathnames = [
-    '/login'
+    '/login',
+    '/create_account',
 ];
 
 const storiesPathnames = [
@@ -19,21 +20,33 @@ const storyPathnames = [
 
 export default class HeaderBar extends StoryCompanion {
     renderCorrectLinks = () => {
-        if (loginPathnames.includes(this.props.history.location.pathname)) {
+        let pathname = this.props.history.location.pathname;
+        if (loginPathnames.includes(pathname)) {
+            return (
+                <div className="linksContainer">
+                    <div 
+                        className={"link" + (pathname === '/login' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/login")}
+                    >
+                        Login
+                    </div>
+                    <div 
+                        className={"link" + (pathname === '/create_account' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/create_account")}
+                    >
+                        Create Account
+                    </div>
+                </div>
+            );
+        }
+        else if (storiesPathnames.includes(pathname)) {
             return (
                 <div className="linksContainer">
 
                 </div>
             );
         }
-        else if (storiesPathnames.includes(this.props.history.location.pathname)) {
-            return (
-                <div className="linksContainer">
-
-                </div>
-            );
-        }
-        else if (storyPathnames.includes(this.props.history.location.pathname)) {
+        else if (storyPathnames.includes(pathname)) {
             return (
                 <div className="linksContainer">
 

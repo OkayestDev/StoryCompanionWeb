@@ -25,5 +25,23 @@
 }
 
 .linksContainer {
-    
+    margin-right: 25px;
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.link {
+    color: #CCCCCC;
+    opacity: .7;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.activeLink {
+    color: white !important;
+    opacity: 1 !important;
 }
