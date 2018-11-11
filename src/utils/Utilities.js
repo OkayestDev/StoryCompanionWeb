@@ -23,9 +23,10 @@ export default class Utilities {
             name: fileName,
             type: 'image/' + fileExtension,
         };
-        return RNS3.put(file, options).then((res) => {
-            let imageUrl = "https://s3.amazonaws.com/story-companion/" + fileName; 
-            return imageUrl;
-        });
+        // @TODO use React lib
+        // return RNS3.put(file, options).then((res) => {
+        //     let imageUrl = "https://s3.amazonaws.com/story-companion/" + fileName; 
+        //     return imageUrl;
+        // });
     }
 }

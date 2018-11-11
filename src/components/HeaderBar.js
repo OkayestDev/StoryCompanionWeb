@@ -7,12 +7,8 @@ const loginPathnames = [
     '/create_account',
 ];
 
-const storiesPathnames = [
-    '/stories',
-    '/settings',
-];
-
 const storyPathnames = [
+    '/chapters',
     '/characters',
     '/plots',
     '/notes',
@@ -40,24 +36,6 @@ export default class HeaderBar extends StoryCompanion {
                 </div>
             );
         }
-        else if (storiesPathnames.includes(pathname)) {
-            return (
-                <div className="linksContainer">
-                    <div 
-                        className={"link" + (pathname === '/stories' ? " activeLink" : "")}
-                        onClick={() => this.props.history.push("/stories")}
-                    >
-                        Stories
-                    </div>
-                    <div 
-                        className={"link" + (pathname === '/settings' ? " activeLink" : "")}
-                        onClick={() => this.props.history.push("/settings")}
-                    >
-                        Settings
-                    </div>
-                </div>
-            );
-        }
         else if (storyPathnames.includes(pathname)) {
             return (
                 <div className="linksContainer">
@@ -74,8 +52,8 @@ export default class HeaderBar extends StoryCompanion {
                         Plots
                     </div>
                     <div 
-                        className={"link" + (pathname === '/plots' ? " activeLink" : "")}
-                        onClick={() => this.props.history.push("/plots")}
+                        className={"link" + (pathname === '/characters' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/characters")}
                     >
                         Characters
                     </div>
@@ -97,7 +75,7 @@ export default class HeaderBar extends StoryCompanion {
         else {
             this.props.showAlert("Invalid route", "warning");
             if (this.isUserLoggedIn()) {
-                this.props.history.push("/stories");
+                this.props.history.push("/chapters");
             }
             else {
                 this.props.history.push("/login");

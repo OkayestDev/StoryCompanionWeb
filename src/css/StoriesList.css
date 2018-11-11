@@ -1,0 +1,36 @@
+.storiesList {
+    background-color: white;
+    position: fixed;
+    width: 250px;
+    height: 200%;
+    overflow-y: scroll;
+}
+
+.hiddenStoriesList {
+    width: 50px;
+    position: fixed;
+    width: 250px;
+    height: 200%;
+}
+
+.storiesListLabel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+}
+
+.storiesListIcon {
+    color: #2f95dc;
+    cursor: pointer;
+}
+
+.storiesListLabelText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    font-size: 30px;
+    color: #2f95dc;
+    font-weight: bold;
+}

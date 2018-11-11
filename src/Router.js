@@ -8,6 +8,7 @@ import CreateAccount from './views/CreateAccount.js';
 import HeaderBar from './components/HeaderBar.js';
 import GlobalAlert from './components/GlobalAlert.js';
 import StoryCompanion from './utils/StoryCompanion.js';
+import StoriesList from './components/StoriesList.js';
 import './css/Router.css';
 import './css/CommonTheme.css';
 require('dotenv').config();
@@ -20,6 +21,7 @@ export default class Router extends StoryCompanion {
         return(
             <BrowserRouter>
                 <div className="application">
+                    
                     <div>
                         <GlobalAlert
                             visible={this.state.showGlobalAlert}
@@ -33,6 +35,14 @@ export default class Router extends StoryCompanion {
                     <Route
                         render={(props) => (
                             <HeaderBar
+                                {...props}
+                                showAlert={this.showAlert.bind(this)}
+                            />
+                        )}
+                    />
+                    <Route
+                        render={(props) => (
+                            <StoriesList
                                 {...props}
                                 showAlert={this.showAlert.bind(this)}
                             />

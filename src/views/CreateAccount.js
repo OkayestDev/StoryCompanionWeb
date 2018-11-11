@@ -15,6 +15,13 @@ export default class CreateAccount extends StoryCompanion {
         this.UserRequests = new UserRequests();
     }
 
+    componentWillMount() {
+        super.componentWillMount();
+        if (this.isUserLoggedIn()) {
+            this.props.history.push("/chapters");
+        }
+    }
+
     createAccount = () => {
         this.UserRequests.createAccount(this.state.email, this.state.password).then((res) => {
             if ('error' in res) {

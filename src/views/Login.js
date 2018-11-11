@@ -14,6 +14,13 @@ export default class Login extends StoryCompanion {
         this.UserRequests = new UserRequests();
     }
 
+    componentWillMount() {
+        super.componentWillMount();
+        if (this.isUserLoggedIn()) {
+            this.props.history.push("/chapters");
+        }
+    }
+
     login = () => {
         this.UserRequests.login(this.state.email, this.state.password).then((res) => {
             if ('error' in res) {
