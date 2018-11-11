@@ -1,3 +1,39 @@
+.modalHeader {
+    background-color: #2f95dc;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    width: 97% !important;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    height: 60px;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.modalHeader {
+    width: 50%;
+}
+
+.modalIconContainer {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modalCloseIcon {
+    color: white;
+    cursor: pointer;
+}
+
+.modalContent {
+    padding: 10px;
+}
+
 .button {
     color: white;
     font-weight: bold;
@@ -8,6 +44,10 @@
     height: 45px;
     font-size: 20px;
     border-radius: 4px;
+}
+
+.hover:hover {
+    filter: brightness(90%);
 }
 
 .button:hover {
@@ -43,6 +83,18 @@
     border-color: #CCCCCC;
 }
 
+.description {
+    width: 100%;
+    font-size: 20px;
+    padding: 5px;
+    height: 45px;
+    border: 2px solid;
+    border-radius: 4px;
+    border-color: #CCCCCC;
+    height: 150px;
+    resize: none;
+}
+
 .noSelect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
@@ -51,4 +103,4 @@
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome and Opera */
-  }
+}

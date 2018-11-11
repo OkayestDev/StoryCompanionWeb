@@ -3,7 +3,7 @@ import { Component } from 'react';
 export default class App extends Component {
     componentWillMount() {
         if (localStorage.getItem("AppStore") !== null) {
-            this.props.history.push("/stories");
+            this.props.history.push("/chapters");
         }
         else {
             this.props.history.push("/login");

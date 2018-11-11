@@ -3,6 +3,8 @@ import StoryCompanion from '../utils/StoryCompanion.js';
 import '../css/HeaderBar.css';
 
 const loginPathnames = [
+    '',
+    '/',
     '/login',
     '/create_account',
 ];
@@ -12,7 +14,8 @@ const storyPathnames = [
     '/characters',
     '/plots',
     '/notes',
-    '/draft'
+    '/draft',
+    '/settings',
 ];
 
 export default class HeaderBar extends StoryCompanion {
@@ -69,10 +72,17 @@ export default class HeaderBar extends StoryCompanion {
                     >
                         Notes
                     </div>
+                    <div 
+                        className={"link" + (pathname === '/settings' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/settings")}
+                    >
+                        Settings
+                    </div>
                 </div>
             );
         }
         else {
+            console.info(pathname);
             this.props.showAlert("Invalid route", "warning");
             if (this.isUserLoggedIn()) {
                 this.props.history.push("/chapters");

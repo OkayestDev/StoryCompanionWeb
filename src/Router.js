@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import App from './App.js';
 import Login from './views/Login.js';
-import Stories from './views/Stories.js';
+import Chapters from './views/Chapters.js';
 import CreateAccount from './views/CreateAccount.js';
 import HeaderBar from './components/HeaderBar.js';
 import GlobalAlert from './components/GlobalAlert.js';
@@ -17,11 +17,21 @@ require('dotenv').config();
  * @TODO add link to app stores for small screens (mobile)
  */
 export default class Router extends StoryCompanion {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isStoryListOpen: true
+        }
+    }
+
+    toggleIsStoryListOpen = () => {
+        this.setState({isStoryListOpen: !this.state.isStoryListOpen});
+    }
+
     render() {
         return(
             <BrowserRouter>
                 <div className="application">
-                    
                     <div>
                         <GlobalAlert
                             visible={this.state.showGlobalAlert}
@@ -45,6 +55,7 @@ export default class Router extends StoryCompanion {
                             <StoriesList
                                 {...props}
                                 showAlert={this.showAlert.bind(this)}
+                                toggleIsStoryListOpen={this.toggleIsStoryListOpen.bind(this)}
                             />
                         )}
                     />
@@ -57,32 +68,35 @@ export default class Router extends StoryCompanion {
                             />
                         )}
                     />
-                    <Route
-                        path="/create_account" exact
-                        render={(props) => (
-                            <CreateAccount
-                                {...props}
-                                showAlert={this.showAlert.bind(this)}
-                            />
-                        )}
-                    />
-                    <Route
-                        path="/stories" exact
-                        render={(props) => (
-                            <Stories
-                                {...props}
-                                showAlert={this.showAlert.bind(this)}
-                            />
-                        )}
-                    />
-                    <Route
-                        path="/" exact
-                        render={(props) => (
-                            <App
-                                {...props}
-                            />
-                        )}
-                    />
+                    {/* All routes with story list available inside this div */}
+                    <div style={(this.state.isStoryListOpen ? {paddingLeft: '250px'} : {paddingLeft: '50px'})}>
+                        <Route
+                            path="/create_account" exact
+                            render={(props) => (
+                                <CreateAccount
+                                    {...props}
+                                    showAlert={this.showAlert.bind(this)}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/chapters" exact
+                            render={(props) => (
+                                <Chapters
+                                    {...props}
+                                    showAlert={this.showAlert.bind(this)}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/" exact
+                            render={(props) => (
+                                <App
+                                    {...props}
+                                />
+                            )}
+                        />
+                    </div>
                 </div>
             </BrowserRouter>
         )

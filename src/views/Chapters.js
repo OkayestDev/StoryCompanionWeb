@@ -1,7 +1,7 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion.js';
 
-export default class Stories extends StoryCompanion {
+export default class Chapters extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,7 +13,7 @@ export default class Stories extends StoryCompanion {
     render() {
         return (
             <div>
-
+                I am chapters
             </div>
         )
     }

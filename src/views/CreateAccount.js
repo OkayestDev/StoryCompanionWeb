@@ -36,7 +36,7 @@ export default class CreateAccount extends StoryCompanion {
                     else {
                         this.AppStore.setValue(res.success);
                         this.updateAppStore(this.AppStore);
-                        this.props.history.push("/stories");
+                        this.props.history.push("/chapters");
                     }
                 })
                 .catch(() => {
