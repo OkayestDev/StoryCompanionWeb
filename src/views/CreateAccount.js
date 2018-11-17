@@ -29,22 +29,24 @@ export default class CreateAccount extends StoryCompanion {
             }
             else {
                 this.props.showAlert("Successfully created account. Logging you in now!", "success");
-                this.UserRequests.login(this.state.email, this.state.password).then((res) => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, "warning");
-                    }
-                    else {
-                        this.AppStore.setValue(res.success);
-                        this.updateAppStore(this.AppStore);
-                        this.props.history.push("/chapters");
-                    }
-                })
-                .catch(() => {
-                    this.props.showAlert("Unable to login at this time", "danger");
-                });
+                setTimeout(() => {
+                    this.UserRequests.login(this.state.email, this.state.password).then((res) => {
+                        if ('error' in res) {
+                            this.props.showAlert(res.error, "warning");
+                        }
+                        else {
+                            this.AppStore.setValue(res.success);
+                            this.updateAppStore(this.AppStore);
+                            this.props.history.push("/chapters");
+                        }
+                    })
+                    .catch(() => {
+                        this.props.showAlert("Unable to login at this time", "danger");
+                    });
+                }, 2000);
             }
         })
-        .catch(() => {
+        .catch((error) => {
             this.props.showAlert("Unable to create account at this time", "danger");
         });
     }

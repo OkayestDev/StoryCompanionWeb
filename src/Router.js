@@ -50,15 +50,18 @@ export default class Router extends StoryCompanion {
                             />
                         )}
                     />
-                    <Route
-                        render={(props) => (
-                            <StoriesList
-                                {...props}
-                                showAlert={this.showAlert.bind(this)}
-                                toggleIsStoryListOpen={this.toggleIsStoryListOpen.bind(this)}
-                            />
-                        )}
-                    />
+                    {
+                        this.isUserLoggedIn() &&
+                        <Route
+                            render={(props) => (
+                                <StoriesList
+                                    {...props}
+                                    showAlert={this.showAlert.bind(this)}
+                                    toggleIsStoryListOpen={this.toggleIsStoryListOpen.bind(this)}
+                                />
+                            )}
+                        />
+                    }
                     <Route
                         path="/login" exact
                         render={(props) => (
@@ -68,17 +71,20 @@ export default class Router extends StoryCompanion {
                             />
                         )}
                     />
+                    <Route
+                        path="/create_account" exact
+                        render={(props) => (
+                            <CreateAccount
+                                {...props}
+                                showAlert={this.showAlert.bind(this)}
+                            />
+                        )}
+                    />
                     {/* All routes with story list available inside this div */}
-                    <div style={(this.state.isStoryListOpen ? {paddingLeft: '250px'} : {paddingLeft: '50px'})}>
-                        <Route
-                            path="/create_account" exact
-                            render={(props) => (
-                                <CreateAccount
-                                    {...props}
-                                    showAlert={this.showAlert.bind(this)}
-                                />
-                            )}
-                        />
+                    <div 
+                        style={(this.state.isStoryListOpen ? {paddingLeft: '260px'} : {paddingLeft: '60px'})}
+                        className="view"
+                    >
                         <Route
                             path="/chapters" exact
                             render={(props) => (

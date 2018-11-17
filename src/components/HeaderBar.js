@@ -82,7 +82,6 @@ export default class HeaderBar extends StoryCompanion {
             );
         }
         else {
-            console.info(pathname);
             this.props.showAlert("Invalid route", "warning");
             if (this.isUserLoggedIn()) {
                 this.props.history.push("/chapters");

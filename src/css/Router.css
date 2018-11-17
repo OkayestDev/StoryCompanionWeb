@@ -11,9 +11,12 @@ html, body {
     height: 100%;
     margin: 0px;
     padding: 0px;
+    background-color: #CCCCCC;
 }
 
 .application {
     width: 100%;
-    height: 95%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #CCCCCC;
 }

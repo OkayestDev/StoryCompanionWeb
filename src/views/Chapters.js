@@ -6,7 +6,6 @@ export default class Chapters extends StoryCompanion {
         super(props);
         this.state = {
             ...this.state,
-
         }
     }
 

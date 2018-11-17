@@ -3,6 +3,9 @@ import StoryCompanion from '../utils/StoryCompanion.js';
 import UserRequests from '../utils/UserRequests'
 import '../css/Login.css';
 
+/**
+ * @TODO enter key press to login
+ */
 export default class Login extends StoryCompanion {
     constructor(props) {
         super(props);

@@ -3,41 +3,12 @@ import { LOGS } from '../config/Logs.js';
 import { PATTERNS } from '../config/Patterns.js';
 import jsSHA from 'jssha';
 
-/**
- * Creates a file object with name, filename, from a base64 data string
- * @param {string} dataURL a data*base64 file string of the file to create
- * @param {string} filename name of the file to be read from base64 string
- */
-function dataURLtoFile(dataURL, filename) {
-    let arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, {type:mime});
-}
-
 export function postRequestWithFormData(requestData, route, paramsObject) {
     const formData = new FormData();
     for (const key in requestData) {
         if (requestData[key] instanceof Array) {
             for (let i = 0; i < requestData[key].length; i++) {
                 formData.append(`${key}[]`, requestData[key][i]);
-            }
-        }
-        else if (key === 'new_attachment') {
-            for (let attachment in requestData[key]) {
-                if (typeof requestData[key][attachment].path === 'string') {
-                    formData.append(`${key}[]`, dataURLtoFile(requestData[key][attachment].path, requestData[key][attachment].name), requestData[key][attachment].name);
-                }
-                else {
-                    formData.append(`${key}[]`, requestData[key][attachment].path);
-                }
-            }
-        }
-        else if (key === 'logo') {
-            if (requestData[key].path !== null && requestData[key].path !== '') {
-                formData.append(`${key}[]`, dataURLtoFile(requestData[key].path, requestData[key].name), requestData[key].name);
             }
         }
         else if (requestData[key] instanceof Object) {
@@ -59,9 +30,7 @@ export function postRequestWithFormData(requestData, route, paramsObject) {
         method: 'POST',
         credentials: 'include',
         body: formData,
-        mode: "cors",
     };
-    
     return baseRequest(paramsObject, route, params);
 }
 
@@ -137,9 +106,6 @@ function baseRequest(paramsObject, route, params) {
                 catch(error) {
                     console.info(`ERROR: while parsing response from route ${route}: `, text);
                     return;
-                }
-                if (parsed && parsed.m7 && parsed.m7.error) {
-                    parsed.error = parsed.m7.error;
                 }
                 parsed.status = response.status;
                 if (LOGS.ENABLE_LOGS) {
