@@ -1,6 +1,5 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion';
-import AppStore from '../store/AppStore';
 
 export default class Settings extends StoryCompanion {
     logout = () => {

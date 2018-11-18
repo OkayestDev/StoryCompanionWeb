@@ -21,7 +21,7 @@ export default class StoriesList extends StoryCompanion {
             ...this.state,
             hidden: false,
             isStoryModalOpen: false,
-            selectStoryIdForEdit: null,
+            selectedStoryIdForEdit: null,
             name: '',
             description: '',
             image: '',
@@ -33,6 +33,7 @@ export default class StoriesList extends StoryCompanion {
             this.StoryRequests.getStories(this.props.AppStore.userId).then((res) => {
                 this.props.AppStore.setValue({stories: res.success});
                 this.props.updateAppStore(this.props.AppStore);
+                this.forceUpdate();
             });
         }
     }
@@ -64,6 +65,8 @@ export default class StoriesList extends StoryCompanion {
             }
             else {
                 this.props.showAlert("Successfully created new story, " + this.state.name, "success");
+                this.props.AppStore.setValue({stories: res.success});
+                this.props.updateAppStore(this.props.AppStore);
                 this.setState(this.defaultState());
             }
         })
@@ -76,6 +79,22 @@ export default class StoriesList extends StoryCompanion {
 
     }
 
+    deleteStory = (id) => {
+        this.StoryRequests.deleteStory(id).then((res) => {
+            if ('error' in res) {
+                this.props.showAlert(res.error, "warning")
+            }
+            else {
+                delete this.props.AppStore.stories[id];
+                this.props.updateAppStore(this.props.AppStore);
+                this.setState(this.defaultState());
+            }
+        })
+        .catch(() => {
+            this.props.showAlert("Unable to delete story at this time", "danger");
+        });
+    }
+
     selectStoryForComponents = (id) => {
 
     }
@@ -83,7 +102,7 @@ export default class StoriesList extends StoryCompanion {
     selectStoryForEdit = (id) => {
         this.setState({
             isStoryModalOpen: true,
-            selectStoryIdForEdit: id,
+            selectedStoryIdForEdit: id,
             name: this.props.AppStore.stories[id].name,
             description: this.props.AppStore.stories[id].description,
             image: this.props.AppStore.stories[id].image
@@ -93,7 +112,7 @@ export default class StoriesList extends StoryCompanion {
     newStory = () => {
         this.setState({
             isStoryModalOpen: true,
-            selectStoryIdForEdit: null,
+            selectedStoryIdForEdit: null,
             name: '',
             description: '',
             image: '',
@@ -124,18 +143,21 @@ export default class StoriesList extends StoryCompanion {
                 <div className="storiesList">
                     <EditEntityModal
                         isEntityModalOpen={this.state.isStoryModalOpen}
+                        selectedId={this.state.selectedStoryIdForEdit}
                         onRequestClose={() => this.setState({isStoryModalOpen: false})}
                         objectName="Story"
-                        title={"Create a Story"}
+                        title={this.state.selectedStoryIdForEdit === null ? "Create a Story" : "Edit Story"}
                         image={this.state.image}
                         imageOnChange={(image) => this.setState({image: image})}
                         description={this.state.description}
                         descriptionOnChange={(newDescription) => this.setState({description: newDescription})}
                         name={this.state.name}
                         nameOnChange={(newName) => this.setState({name: newName})}
-                        onSave={() => this.state.selectStoryIdForEdit === null ? this.createStory() : this.editStory()}
+                        onSave={() => this.state.selectedStoryIdForEdit === null ? this.createStory() : this.editStory()}
+                        onDelete={() => this.deleteStory(this.state.selectedStoryIdForEdit)}
                         showAlert={this.props.showAlert}
-                        saveButtonText={this.state.selectStoryIdForEdit === null ? "Create Story" : "Edit Story"}
+                        saveButtonText={this.state.selectedStoryIdForEdit === null ? "Create Story" : "Edit Story"}
+                        deleteButtonText="Delete Story"
                     />
                     <div className="storiesListLabel">
                         <Icon

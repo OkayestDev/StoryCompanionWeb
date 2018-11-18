@@ -139,6 +139,18 @@ export default class EditEntityModal extends StoryCompanion {
                     >
                         {this.props.saveButtonText}
                     </div>
+                {
+                    this.props.selectedId === null
+                    ?
+                    null
+                    :
+                    <div
+                        className="button deleteEntityButton"
+                        onClick={() => this.props.onDelete()}
+                    >
+                        {this.props.deleteButtonText}
+                    </div>
+                }
                 </div>
                 <ReactTooltip delayShow={500}/>
             </Modal> 
