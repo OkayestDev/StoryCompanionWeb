@@ -1,10 +1,9 @@
 import { 
     postRequestWithFormData,
 } from './HelperFunctions.js';
-import Utilities from './Utilities.js';
 
 // Character is referred to as Person in the back-end. Character is a reserved word in mysql
-export default class CharacterRequests extends Utilities {
+export default class CharacterRequests {
     getCharacters = (storyId) => {
         let paramsObject = {
             story: storyId

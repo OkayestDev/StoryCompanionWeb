@@ -104,6 +104,7 @@ export default class EditEntityModal extends StoryCompanion {
                             {this.props.objectName} Name
                         </div>
                         <input
+                            value={this.props.name}
                             className="input"
                             onChange={(newName) => this.props.nameOnChange(newName.target.value)}
                         />
@@ -112,6 +113,7 @@ export default class EditEntityModal extends StoryCompanion {
                     'descriptionOnChange' in this.props &&
                     <div className="inputAndLabelContainer">
                         <textarea
+                            value={this.props.description}
                             type="textarea"
                             placeholder="Description..."
                             className="description"
@@ -123,6 +125,7 @@ export default class EditEntityModal extends StoryCompanion {
                     'attributesOnChange' in this.props &&
                     <div className="inputAndLabelContainer">
                         <textarea
+                            value={this.props.attribute}
                             type="textarea"
                             placeholder="Attributes..."
                             className="description"

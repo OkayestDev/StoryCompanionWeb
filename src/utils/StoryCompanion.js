@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import AWS from 'aws-sdk';
 import AppStore from '../store/AppStore.js';
 

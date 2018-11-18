@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import App from './App.js';
@@ -82,7 +82,7 @@ export default class Router extends StoryCompanion {
                     />
                     {/* All routes with story list available inside this div */}
                     <div 
-                        style={(this.state.isStoryListOpen ? {paddingLeft: '260px'} : {paddingLeft: '60px'})}
+                        style={(this.state.isStoryListOpen ? {paddingLeft: '520px'} : {paddingLeft: '60px'})}
                         className="view"
                     >
                         <Route

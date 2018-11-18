@@ -2,16 +2,17 @@
     background-color: white;
     float: left;
     overflow-y: scroll;
-    width: 250px;
+    width: 500px;
     height: 100%;
 }
 
 .hiddenStoriesList {
-    width: 50px;
-    position: fixed;
-    width: 250px;
+    width: 37px;
+    float: left;
     height: 100%;
-    background-color: transparent;
+    padding-left: 5px;
+    padding-top: 10px;
+    background-color: white;
 }
 
 .storiesListLabel {
@@ -24,6 +25,10 @@
 .storiesListIcon {
     color: #2f95dc;
     cursor: pointer;
+}
+
+.storiesListIcon:hover {
+    filter: brightness(70%);
 }
 
 .storiesListClosed {

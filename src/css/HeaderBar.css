@@ -41,6 +41,10 @@
     margin-right: 10px;
 }
 
+.link:hover {
+    filter: brightness(70%);
+}
+
 .activeLink {
     color: white !important;
     opacity: 1 !important;

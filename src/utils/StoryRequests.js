@@ -1,9 +1,8 @@
 import { 
     postRequestWithFormData,
 } from './HelperFunctions.js';
-import Utilities from './Utilities.js';
 
-export default class StoryRequests extends Utilities {
+export default class StoryRequests {
     getStories = (userId) => {
         let paramsObject = {
             user: userId
