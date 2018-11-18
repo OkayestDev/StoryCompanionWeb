@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import App from './App.js';
+import Settings from './views/Settings.js';
 import Login from './views/Login.js';
 import Chapters from './views/Chapters.js';
 import CreateAccount from './views/CreateAccount.js';
@@ -9,6 +10,7 @@ import HeaderBar from './components/HeaderBar.js';
 import GlobalAlert from './components/GlobalAlert.js';
 import StoryCompanion from './utils/StoryCompanion.js';
 import StoriesList from './components/StoriesList.js';
+import AppStore from './store/AppStore.js';
 import './css/Router.css';
 import './css/CommonTheme.css';
 require('dotenv').config();
@@ -22,10 +24,32 @@ export default class Router extends StoryCompanion {
         this.state = {
             isStoryListOpen: true
         }
+        this.AppStore = new AppStore();
     }
 
     toggleIsStoryListOpen = () => {
         this.setState({isStoryListOpen: !this.state.isStoryListOpen});
+    }
+
+    componentWillMount() {
+        let loadedAppStore = localStorage.getItem('AppStore');
+        if (loadedAppStore !== null) {
+            this.AppStore.setValue(JSON.parse(loadedAppStore));
+        }
+    }
+
+    isUserLoggedIn = () => {
+        let loadedAppStore = localStorage.getItem('AppStore');
+        if (loadedAppStore !== null) {
+            return true;
+        }
+        return false;
+    }
+
+    updateAppStore = (newAppStore) => {
+        this.AppStore = newAppStore;
+        localStorage.setItem('apiKey', newAppStore.apiKey);
+        localStorage.setItem('AppStore', JSON.stringify(newAppStore));
     }
 
     render() {
@@ -37,7 +61,7 @@ export default class Router extends StoryCompanion {
                             visible={this.state.showGlobalAlert}
                             type={this.state.globalAlertType}
                             message={this.state.globalAlertMessage}
-                            closeAlert={this.closeAlert.bind(this)}
+                            closeAlert={this.closeAlert}
                         />
                     </div>
                     <title>Story Companion</title>
@@ -46,28 +70,33 @@ export default class Router extends StoryCompanion {
                         render={(props) => (
                             <HeaderBar
                                 {...props}
-                                showAlert={this.showAlert.bind(this)}
+                                showAlert={this.showAlert}
+                                AppStore={this.AppStore}
+                                isUserLoggedIn={this.isUserLoggedIn}
                             />
                         )}
                     />
-                    {
-                        this.isUserLoggedIn() &&
-                        <Route
-                            render={(props) => (
-                                <StoriesList
-                                    {...props}
-                                    showAlert={this.showAlert.bind(this)}
-                                    toggleIsStoryListOpen={this.toggleIsStoryListOpen.bind(this)}
-                                />
-                            )}
-                        />
-                    }
+                    <Route
+                        render={(props) => (
+                            <StoriesList
+                                {...props}
+                                isUserLoggedIn={this.isUserLoggedIn}
+                                showAlert={this.showAlert}
+                                updateAppStore={this.updateAppStore}
+                                AppStore={this.AppStore}
+                                toggleIsStoryListOpen={this.toggleIsStoryListOpen}
+                            />
+                        )}
+                    />
                     <Route
                         path="/login" exact
                         render={(props) => (
                             <Login
                                 {...props}
-                                showAlert={this.showAlert.bind(this)}
+                                updateAppStore={this.updateAppStore}
+                                AppStore={this.AppStore}
+                                isUserLoggedIn={this.isUserLoggedIn}
+                                showAlert={this.showAlert}
                             />
                         )}
                     />
@@ -76,7 +105,10 @@ export default class Router extends StoryCompanion {
                         render={(props) => (
                             <CreateAccount
                                 {...props}
-                                showAlert={this.showAlert.bind(this)}
+                                updateAppStore={this.updateAppStore}
+                                AppStore={this.AppStore}
+                                isUserLoggedIn={this.isUserLoggedIn}
+                                showAlert={this.showAlert}
                             />
                         )}
                     />
@@ -90,7 +122,20 @@ export default class Router extends StoryCompanion {
                             render={(props) => (
                                 <Chapters
                                     {...props}
-                                    showAlert={this.showAlert.bind(this)}
+                                    updateAppStore={this.updateAppStore}
+                                    AppStore={this.AppStore}
+                                    showAlert={this.showAlert}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/settings" exact
+                            render={(props) => (
+                                <Settings
+                                    {...props}
+                                    updateAppStore={this.updateAppStore}
+                                    AppStore={this.AppStore}
+                                    showAlert={this.showAlert}
                                 />
                             )}
                         />

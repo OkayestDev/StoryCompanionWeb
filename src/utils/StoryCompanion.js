@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import AWS from 'aws-sdk';
-import AppStore from '../store/AppStore.js';
 
 AWS.config.update({
     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY,
@@ -11,38 +10,11 @@ const s3 = new AWS.S3();
 export default class StoryCompanion extends Component {
     constructor(props) {
         super(props);
-        this.AppStore = new AppStore();
         this.state = {
             showGlobalAlert: false,
             globalAlertMessage: "",
             globalAlertType: "",
         }
-        this.uploadedFiles = null;
-    }
-
-    componentWillMount() {
-        let loadedAppStore = localStorage.getItem('AppStore');
-        if (loadedAppStore !== null) {
-            this.AppStore.setValue(JSON.parse(loadedAppStore));
-        }
-    }
-
-    selectStory = (storyId) => {
-        this.AppStore.selectedStoryId = storyId;
-        this.updateAppStore(this.AppStore);
-    }
-
-    isUserLoggedIn = () => {
-        if (this.AppStore.email !== null && this.AppStore.email !== '') {
-            return true;
-        }
-        return false;
-    }
-
-    updateAppStore = (newAppStore) => {
-        this.AppStore = newAppStore;
-        localStorage.setItem('apiKey', newAppStore.apiKey);
-        localStorage.setItem('AppStore', JSON.stringify(newAppStore));
     }
 
     /**
@@ -59,9 +31,9 @@ export default class StoryCompanion extends Component {
         return new File([u8arr], filename, {type:mime});
     }
 
-    uploadToS3 = async (data, objectName) => {
+    uploadToS3 = async (data, objectName, userId) => {
         let now = new Date();
-        let filename = this.AppStore.userId + "-" + objectName + "-" + now.getTime(); 
+        let filename = userId + "-" + objectName + "-" + now.getTime(); 
         let file = this.dataURLtoFile(data, filename);
         let extension = file.type.split("/");
         extension = extension[1];

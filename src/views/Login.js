@@ -3,9 +3,6 @@ import StoryCompanion from '../utils/StoryCompanion.js';
 import UserRequests from '../utils/UserRequests'
 import '../css/Login.css';
 
-/**
- * @TODO enter key press to login
- */
 export default class Login extends StoryCompanion {
     constructor(props) {
         super(props);
@@ -15,11 +12,17 @@ export default class Login extends StoryCompanion {
             password: '',
         }
         this.UserRequests = new UserRequests();
+        window.addEventListener('keydown', this.handleEnterKey);
+    }
+
+    handleEnterKey = (event) => {
+        if (event.key === "Enter") {
+            this.login();
+        }
     }
 
     componentWillMount() {
-        super.componentWillMount();
-        if (this.isUserLoggedIn()) {
+        if (this.props.isUserLoggedIn()) {
             this.props.history.push("/chapters");
         }
     }
@@ -30,12 +33,12 @@ export default class Login extends StoryCompanion {
                 this.props.showAlert(res.error, "warning");
             }
             else {
-                this.AppStore.setValue(res.success);
-                this.updateAppStore(this.AppStore);
+                this.props.AppStore.setValue(res.success);
+                this.props.updateAppStore(this.props.AppStore);
                 this.props.history.push("/chapters");
             }
         })
-        .catch(() => {
+        .catch((error) => {
             this.props.showAlert(
                 "Unable to login at this time",
                 "danger"

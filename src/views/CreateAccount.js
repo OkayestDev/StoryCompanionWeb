@@ -16,8 +16,7 @@ export default class CreateAccount extends StoryCompanion {
     }
 
     componentWillMount() {
-        super.componentWillMount();
-        if (this.isUserLoggedIn()) {
+        if (this.props.isUserLoggedIn()) {
             this.props.history.push("/chapters");
         }
     }
@@ -35,8 +34,8 @@ export default class CreateAccount extends StoryCompanion {
                             this.props.showAlert(res.error, "warning");
                         }
                         else {
-                            this.AppStore.setValue(res.success);
-                            this.updateAppStore(this.AppStore);
+                            this.props.AppStore.setValue(res.success);
+                            this.props.updateAppStore(this.AppStore);
                             this.props.history.push("/chapters");
                         }
                     })

@@ -19,6 +19,21 @@ const storyPathnames = [
 ];
 
 export default class HeaderBar extends StoryCompanion {
+    componentDidMount() {
+        this.canUserViewRoute(this.props);
+    }
+
+    componentWillReceiveProps(props) {
+        this.canUserViewRoute(props);
+    }
+
+    canUserViewRoute = (props) => {
+        if (storyPathnames.includes(props.location.pathname) && !this.props.isUserLoggedIn()) {
+            this.props.showAlert("You must be logged in to view that page", "warning");
+            props.history.push("/login");
+        }
+    }
+
     renderCorrectLinks = () => {
         let pathname = this.props.history.location.pathname;
         if (loginPathnames.includes(pathname)) {
@@ -83,7 +98,7 @@ export default class HeaderBar extends StoryCompanion {
         }
         else {
             this.props.showAlert("Invalid route", "warning");
-            if (this.isUserLoggedIn()) {
+            if (this.props.isUserLoggedIn()) {
                 this.props.history.push("/chapters");
             }
             else {

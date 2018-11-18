@@ -29,11 +29,10 @@ export default class StoriesList extends StoryCompanion {
     }
 
     componentWillMount() {
-        super.componentWillMount();
-        if (this.isUserLoggedIn()) {
-            this.StoryRequests.getStories(this.AppStore.userId).then((res) => {
-                this.AppStore.setValue({stories: res.success});
-                this.updateAppStore(this.AppStore);
+        if (this.props.AppStore.userId !== null || this.props.AppStore.userId === '') {
+            this.StoryRequests.getStories(this.props.AppStore.userId).then((res) => {
+                this.props.AppStore.setValue({stories: res.success});
+                this.props.updateAppStore(this.props.AppStore);
             });
         }
     }
@@ -41,7 +40,7 @@ export default class StoriesList extends StoryCompanion {
     createStory = async () => {
         var image = "";
         if (this.state.image.includes("data:image") && this.state.image.includes("base64")) {
-            image = await this.uploadToS3(this.state.image, "story");
+            image = await this.uploadToS3(this.state.image, "story", this.props.AppStore.userId);
         }
         else {
             image = this.state.image;
@@ -54,7 +53,7 @@ export default class StoriesList extends StoryCompanion {
         }
 
         let paramsObject = {
-            user: this.AppStore.userId, 
+            user: this.props.AppStore.userId, 
             name: this.state.name,
             description: this.state.description,
             image: image,
@@ -74,7 +73,7 @@ export default class StoriesList extends StoryCompanion {
     }
 
     editStory = async () => {
-        console.info("editing");
+
     }
 
     selectStoryForComponents = (id) => {
@@ -85,9 +84,9 @@ export default class StoriesList extends StoryCompanion {
         this.setState({
             isStoryModalOpen: true,
             selectStoryIdForEdit: id,
-            name: this.AppStore.stories[id].name,
-            description: this.AppStore.stories[id].description,
-            image: this.AppStore.stories[id].image
+            name: this.props.AppStore.stories[id].name,
+            description: this.props.AppStore.stories[id].description,
+            image: this.props.AppStore.stories[id].image
         })
     }
 
@@ -103,13 +102,13 @@ export default class StoriesList extends StoryCompanion {
 
     renderStories = () => {
         let storiesList = [];
-        for (let id in this.AppStore.stories) {
+        for (let id in this.props.AppStore.stories) {
             storiesList.push(
                 <div key={id}>
                     <StoryListItem
-                        isSelectedStory={id === this.AppStore.selectStoryForEdit}
+                        isSelectedStory={id === this.props.AppStore.selectStoryForEdit}
                         id={id}
-                        story={this.AppStore.stories[id]}
+                        story={this.props.AppStore.stories[id]}
                         selectStoryForComponents={() => this.selectStoryForComponents(id)}
                         selectStoryForEdit={() => this.selectStoryForEdit(id)}
                     />
@@ -120,7 +119,7 @@ export default class StoriesList extends StoryCompanion {
     }
 
     render() {
-        if (this.isUserLoggedIn() && !this.state.hidden) {
+        if (this.props.isUserLoggedIn() && !this.state.hidden) {
             return (
                 <div className="storiesList">
                     <EditEntityModal
@@ -167,7 +166,7 @@ export default class StoriesList extends StoryCompanion {
                 </div>
             )
         }
-        else if (this.isUserLoggedIn()) {
+        else if (this.props.isUserLoggedIn()) {
             return (
                 <div className="hiddenStoriesList">
                         <Icon
