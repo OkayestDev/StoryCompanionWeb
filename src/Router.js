@@ -50,6 +50,7 @@ export default class Router extends StoryCompanion {
         this.AppStore = newAppStore;
         localStorage.setItem('apiKey', newAppStore.apiKey);
         localStorage.setItem('AppStore', JSON.stringify(newAppStore));
+        this.forceUpdate();
     }
 
     render() {
@@ -85,6 +86,7 @@ export default class Router extends StoryCompanion {
                                 updateAppStore={this.updateAppStore}
                                 AppStore={this.AppStore}
                                 toggleIsStoryListOpen={this.toggleIsStoryListOpen}
+                                hidden={!this.state.isStoryListOpen}
                             />
                         )}
                     />
@@ -114,7 +116,7 @@ export default class Router extends StoryCompanion {
                     />
                     {/* All routes with story list available inside this div */}
                     <div 
-                        style={(this.state.isStoryListOpen ? {paddingLeft: '520px'} : {paddingLeft: '60px'})}
+                        style={(this.state.isStoryListOpen ? {marginLeft: '510px'} : {marginLeft: '50px'})}
                         className="view"
                     >
                         <Route

@@ -18,8 +18,6 @@ export default class StoriesList extends StoryCompanion {
 
     defaultState = () => {
         return {
-            ...this.state,
-            hidden: false,
             isStoryModalOpen: false,
             selectedStoryIdForEdit: null,
             name: '',
@@ -33,7 +31,6 @@ export default class StoriesList extends StoryCompanion {
             this.StoryRequests.getStories(this.props.AppStore.userId).then((res) => {
                 this.props.AppStore.setValue({stories: res.success});
                 this.props.updateAppStore(this.props.AppStore);
-                this.forceUpdate();
             });
         }
     }
@@ -76,7 +73,42 @@ export default class StoriesList extends StoryCompanion {
     }
 
     editStory = async () => {
+        var image = "";
+        if (this.state.image.includes("data:image") && this.state.image.includes("base64")) {
+            image = await this.uploadToS3(this.state.image, "story", this.props.AppStore.userId);
+        }
+        else {
+            image = this.state.image;
+        }
 
+        // Upload image failed. Show alert and reset image to avoid post error
+        if (typeof image === 'undefined') {
+            image = '';
+            this.props.showAlert("Unable to upload image at this time", "warning");
+        }
+
+        let paramsObject = {
+            story: this.state.selectedStoryIdForEdit,
+            user: this.props.AppStore.userId, 
+            name: this.state.name,
+            description: this.state.description,
+            image: image,
+        }
+
+        this.StoryRequests.editStory(paramsObject).then((res) => {
+            if ('error' in res) {
+                this.props.showAlert(res.error, "warning");
+            }
+            else {
+                this.props.showAlert("Successfully edited story, " + this.state.name, "success");
+                this.props.AppStore.stories[this.state.selectedStoryIdForEdit] = res.success;
+                this.props.updateAppStore(this.props.AppStore);
+                this.setState(this.defaultState());
+            }
+        })
+        .catch((error) => {
+            this.props.showAlert("Unable to edit at this time", "danger");
+        });
     }
 
     deleteStory = (id) => {
@@ -96,7 +128,8 @@ export default class StoriesList extends StoryCompanion {
     }
 
     selectStoryForComponents = (id) => {
-
+        this.props.AppStore.setValue({selectedStoryId: id});
+        this.props.updateAppStore(this.props.AppStore);
     }
 
     selectStoryForEdit = (id) => {
@@ -123,7 +156,10 @@ export default class StoriesList extends StoryCompanion {
         let storiesList = [];
         for (let id in this.props.AppStore.stories) {
             storiesList.push(
-                <div key={id}>
+                <div 
+                    className={id === this.props.AppStore.selectedStoryId ? "activeStory" : ""}
+                    key={id}
+                >
                     <StoryListItem
                         isSelectedStory={id === this.props.AppStore.selectStoryForEdit}
                         id={id}
@@ -138,7 +174,7 @@ export default class StoriesList extends StoryCompanion {
     }
 
     render() {
-        if (this.props.isUserLoggedIn() && !this.state.hidden) {
+        if (this.props.isUserLoggedIn() && !this.props.hidden) {
             return (
                 <div className="storiesList">
                     <EditEntityModal
@@ -166,7 +202,6 @@ export default class StoriesList extends StoryCompanion {
                             size={30}
                             data-tip="Close Stories List"
                             onClick={() => {
-                                this.setState({hidden: true});
                                 this.props.toggleIsStoryListOpen();
                             }}
                         />
@@ -197,7 +232,6 @@ export default class StoriesList extends StoryCompanion {
                             size={30}
                             data-tip="Open Stories List"
                             onClick={() => {
-                                this.setState({hidden: false})
                                 this.props.toggleIsStoryListOpen();                                
                             }}
                         />

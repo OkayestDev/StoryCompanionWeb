@@ -1,7 +1,5 @@
 import { 
     postRequestWithFormData,
-    getData,
-    createQueryString,
 } from './HelperFunctions.js';
 
 export default class ChapterRequests {

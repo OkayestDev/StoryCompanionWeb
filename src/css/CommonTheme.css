@@ -48,7 +48,6 @@
     border-radius: 4px;
     background-color: #2f95dc;
     color: white;
-    z-index: 12;
 }
 
 .hover:hover {
@@ -89,10 +88,13 @@
 }
 
 .view {
-    background-color: #CCCCCC;
+    /* background-color: #CCCCCC; */
+    background-color: white;
+    height: 100% !important;
+    margin-right: 7px;
+    margin-top: 7px;
     padding: 10px;
-    width: 100%;
-    height: stretch;
+    overflow-y: scroll;
 }
 
 .noSelect {

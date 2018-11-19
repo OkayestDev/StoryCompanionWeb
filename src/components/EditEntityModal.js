@@ -5,6 +5,7 @@ import { close } from 'react-icons-kit/fa';
 import ReactTooltip from 'react-tooltip';
 import StoryCompanion from '../utils/StoryCompanion.js';
 import $ from 'jquery';
+import Confirmation from './Confirmation.js';
 import '../css/EditEntityModal.css';
 
 const supportedUploadFileTypes = [
@@ -19,7 +20,7 @@ Modal.setAppElement('body');
 
 const modalStyle = {
     content : {
-        top: '45%',
+        top: '50%',
         left: '50%',
         right: 'auto',
         bottom: 'auto',
@@ -58,6 +59,7 @@ export default class EditEntityModal extends StoryCompanion {
                 contentLabel="Story Modal"
                 shouldCloseOnOverlayClick={true}
             >
+                <Confirmation/>
                 <div className="modalHeader">
                     <div className="modalTitle">
                         {this.props.title}
@@ -109,6 +111,19 @@ export default class EditEntityModal extends StoryCompanion {
                             onChange={(newName) => this.props.nameOnChange(newName.target.value)}
                         />
                     </div>
+                {
+                    'numberOnChange' in this.props &&
+                    <div className="inputAndLabelContainer">
+                        <div className="inputLabel">
+                            Number
+                        </div>
+                        <input
+                            value={this.props.number}
+                            className="input"
+                            onChange={(newNumber) => this.props.numberOnChange(newNumber.target.value)}
+                        />
+                    </div>    
+                }
                 {
                     'descriptionOnChange' in this.props &&
                     <div className="inputAndLabelContainer">

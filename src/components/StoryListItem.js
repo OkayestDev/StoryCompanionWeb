@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import Icon from 'react-icons-kit';
+import { pencil } from 'react-icons-kit/fa';
+import ReactTooltip from 'react-tooltip';
 import '../css/StoryListItem.css';
 
 export default class StoryListItem extends Component {
     render() {
         return (
-            <div 
-                className="storyListItem"
-                onClick={() => this.props.selectStoryForEdit()}
-            >
+            <div className="storyListItem">
             {
                 this.props.story.image === ''
                 ?
@@ -25,20 +25,28 @@ export default class StoryListItem extends Component {
             }
                 <div className="storyInfo">
                     <div className="storyTitle">
-                        {this.props.story.name}
+                        <div className="storyTitleText">
+                            {this.props.story.name}
+                        </div>
+                        <Icon
+                            className="storiesListIcon"
+                            size={20}
+                            icon={pencil}
+                            data-tip="Edit Story"
+                            onClick={() => this.props.selectStoryForEdit()}
+                        />
                     </div>
                     <div className="storyDescription">
                         {this.props.story.description}
                     </div>
-                    <div>
-                        <div 
-                            className="button"
-                            onClick={() => this.props.selectStoryForComponents()}
-                        >
-                            Edit Components
-                        </div>
+                    <div 
+                        className="button editComponentsButton"
+                        onClick={() => this.props.selectStoryForComponents()}
+                    >
+                        Edit Components
                     </div>
                 </div>
+                <ReactTooltip  delayShow={500}/>
             </div>
         )
     }

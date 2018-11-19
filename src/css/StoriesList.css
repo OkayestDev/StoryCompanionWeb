@@ -50,3 +50,7 @@
     color: #2f95dc;
     font-weight: bold;
 }
+
+.activeStory {
+    border-left: 15px solid #2f95dc;
+}

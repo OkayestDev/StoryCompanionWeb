@@ -6,10 +6,7 @@
     border-bottom: 2px solid #CCCCCC;
     padding: 8px;
     cursor: pointer;
-}
-
-.storyListItem:hover {
-    background-color: #F2F2F2;
+    z-index: 0;
 }
 
 .noStoryImage {
@@ -37,22 +34,27 @@
 }
 
 .storyTitle {
-    font-size: 25px;
-    font-weight: bold;
     height: 35px;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.storyTitleText {
+    width: 90%;
+    font-size: 25px;
+    font-weight: bold;
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+
+
 .storyDescription {
     height: 65px;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.editComponentsButton {
-
 }
 
