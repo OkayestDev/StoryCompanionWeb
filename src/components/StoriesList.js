@@ -20,6 +20,7 @@ export default class StoriesList extends StoryCompanion {
         return {
             isStoryModalOpen: false,
             selectedStoryIdForEdit: null,
+            isConfirmationOpen: true,
             name: '',
             description: '',
             image: '',
@@ -194,6 +195,7 @@ export default class StoriesList extends StoryCompanion {
                         showAlert={this.props.showAlert}
                         saveButtonText={this.state.selectedStoryIdForEdit === null ? "Create Story" : "Edit Story"}
                         deleteButtonText="Delete Story"
+                        confirmationAction="Delete Story?"
                     />
                     <div className="storiesListLabel">
                         <Icon
@@ -211,7 +213,7 @@ export default class StoriesList extends StoryCompanion {
                         <Icon
                             className="storiesListIcon"
                             icon={plus}
-                            size={30}
+                            size={28}
                             data-tip="Create Story"
                             onClick={() => this.newStory()}
                         />

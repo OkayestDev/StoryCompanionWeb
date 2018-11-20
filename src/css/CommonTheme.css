@@ -97,6 +97,15 @@
     overflow-y: scroll;
 }
 
+.icon {
+    color: #2f95dc;
+    cursor: pointer;
+}
+
+.icon:hover {
+    filter: brightness(90%);
+}
+
 .noSelect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */

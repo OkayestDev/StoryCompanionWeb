@@ -9,11 +9,17 @@ export default class Confirmation extends Component {
                     {this.props.action}
                 </div>
                 <div className="confirmationButtonContainer">
-                    <div>
-                        here
+                    <div 
+                        className="button confirmationYesButton"
+                        onClick={() => this.props.onConfirm()}
+                    >
+                        Confirm
                     </div> 
-                    <div>
-
+                    <div 
+                        className="button confirmationNoButton"
+                        onClick={() => this.props.onCancel()}
+                    >
+                        Cancel
                     </div>
                 </div>
             </div>
