@@ -1,0 +1,35 @@
+.chapterContainer {
+    border-bottom: 2px solid #CCCCCC;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 70px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.chapterContainer:hover {
+    background-color: #F2F2F2;
+}
+
+.chapterNumberAndNameContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.chapterNumber {
+    font-weight: bold;
+    font-size: 36px;
+    margin-right: 15px;
+}
+
+.chapterName {
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.chapterDescription {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

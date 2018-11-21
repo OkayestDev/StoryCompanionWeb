@@ -26,7 +26,7 @@ const modalStyle = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        width: '500px',
+        width: '550px',
         height:  'auto',
         overflow: 'visible',
         padding: '0px',
@@ -60,17 +60,6 @@ export default class EditEntityModal extends StoryCompanion {
     render() {
         return (
             <div>
-            {
-                this.state.isConfirmationOpen &&
-                <Confirmation
-                    action={this.props.confirmationAction} 
-                    onConfirm={() => {
-                        this.setState({isConfirmationOpen: false})
-                        this.props.onDelete()
-                    }}
-                    onCancel={() => this.setState({isConfirmationOpen: false})}
-                />
-            }
                 <Modal
                     isOpen={this.props.isEntityModalOpen}
                     onRequestClose={() => this.props.onRequestClose()}
@@ -136,7 +125,7 @@ export default class EditEntityModal extends StoryCompanion {
                         'numberOnChange' in this.props &&
                         <div className="inputAndLabelContainer">
                             <div className="inputLabel">
-                                Number
+                                {this.props.objectName} Number
                             </div>
                             <input
                                 value={this.props.number}
@@ -182,7 +171,9 @@ export default class EditEntityModal extends StoryCompanion {
                         :
                         <div
                             className="button deleteEntityButton"
-                            onClick={() => this.setState({isConfirmationOpen: true})}
+                            onClick={() => {
+                                this.setState({isConfirmationOpen: true});
+                            }}
                         >
                             {this.props.deleteButtonText}
                         </div>
@@ -190,6 +181,15 @@ export default class EditEntityModal extends StoryCompanion {
                     </div>
                     <ReactTooltip delayShow={500}/>
                 </Modal>
+                <Confirmation
+                    isOpen={this.state.isConfirmationOpen}
+                    action={this.props.confirmationAction} 
+                    onConfirm={() => {
+                        this.setState({isConfirmationOpen: false})
+                        this.props.onDelete()
+                    }}
+                    onCancel={() => this.setState({isConfirmationOpen: false})}
+                />
             </div> 
         )
     }

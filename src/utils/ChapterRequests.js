@@ -19,13 +19,7 @@ export default class ChapterRequests {
         return postRequestWithFormData(paramObject, 'chapter/view', {}).then(res => res);
     }
 
-    createChapter = (name, number, description, story) => {
-        let paramObject = {
-            name: name,
-            number: parseInt(number),
-            description: description,
-            story: story,
-        };
+    createChapter = (paramObject) => {
         return postRequestWithFormData(paramObject, 'chapter/creation', {}).then(res => res);
     }
 

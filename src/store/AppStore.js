@@ -4,12 +4,6 @@ export default class AppStore {
     selectedStoryId = null;
     apiKey = '';
     stories = {};
-    chapters = {};
-    plots = {};
-    characters = {};
-    draft = null;
-    notes = {};
-
 
     setValue(params) {
         if ('id' in params) {

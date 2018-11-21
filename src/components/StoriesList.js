@@ -107,7 +107,7 @@ export default class StoriesList extends StoryCompanion {
                 this.setState(this.defaultState());
             }
         })
-        .catch((error) => {
+        .catch(() => {
             this.props.showAlert("Unable to edit at this time", "danger");
         });
     }
