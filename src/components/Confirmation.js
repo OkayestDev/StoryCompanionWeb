@@ -15,7 +15,6 @@ const modalStyle = {
         width: '550px',
         height:  'auto',
         overflow: 'visible',
-        padding: '0px',
         borderRadius: '8px',
         borderColor: '#CCCCCC',
         borderWidth: '3px',

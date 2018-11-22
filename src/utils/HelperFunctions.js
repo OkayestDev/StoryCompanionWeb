@@ -109,7 +109,7 @@ function baseRequest(paramsObject, route, params) {
                 }
                 parsed.status = response.status;
                 if (LOGS.ENABLE_LOGS) {
-                    console.info(`Reponse from route ${route}: `, parsed);
+                    console.info(`Response from route ${route}: `, parsed);
                 }
                 return parsed;
             })

@@ -53,13 +53,13 @@ export default class Chapters extends StoryCompanion {
             return;
         }
 
-        let paramObject = {
+        let paramsObject = {
             name: this.state.name,
             number: this.state.number,
             description: this.state.description,
             story: this.props.AppStore.selectedStoryId,
         }
-        this.ChapterRequests.createChapter(paramObject).then((res) => {
+        this.ChapterRequests.createChapter(paramsObject).then((res) => {
             if ('error' in res) {
                 this.props.showAlert(res.error, "warning");
             }
@@ -76,7 +76,38 @@ export default class Chapters extends StoryCompanion {
     }
 
     editChapter = () => {
-        alert('@IMPLEMENT');
+        console.info(this.state);
+        if (!this.validateChapter()) {
+            return;
+        }
+
+        let paramsObject = {
+            chapter: this.state.selectedChapterIdForEdit,
+            name: this.state.name,
+            description: this.state.description,
+            number: this.state.number,
+            story: this.props.AppStore.selectedStoryId
+        };
+        this.ChapterRequests.editChapter(paramsObject).then((res) => {
+            if ('error' in res) {
+                this.props.showAlert(res.error, "warning");
+            }
+            else {
+                let tempChapters = this.state.chapters;
+                tempChapters[this.state.selectedChapterIdForEdit] = res.success;
+                this.setState({
+                    chapters: tempChapters,
+                    name: '',
+                    description: '',
+                    number: '',
+                    selectedChapterIdForEdit: null,
+                    isChapterModalOpen: false,
+                })
+            }
+        })
+        .catch(() =>  {
+            this.props.showAlert("Unable to edit chapter at this time", "danger");
+        })
     }
 
     deleteChapter = (id) => {

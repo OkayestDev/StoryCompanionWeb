@@ -13,14 +13,14 @@ export default class ChapterRequests {
     }
 
     getChapters = (storyId) => {
-        let paramObject = {
+        let paramsObject = {
             story: storyId
         };
-        return postRequestWithFormData(paramObject, 'chapter/view', {}).then(res => res);
+        return postRequestWithFormData(paramsObject, 'chapter/view', {}).then(res => res);
     }
 
-    createChapter = (paramObject) => {
-        return postRequestWithFormData(paramObject, 'chapter/creation', {}).then(res => res);
+    createChapter = (paramsObject) => {
+        return postRequestWithFormData(paramsObject, 'chapter/creation', {}).then(res => res);
     }
 
     editChapter = (paramsObject) => {
@@ -28,9 +28,9 @@ export default class ChapterRequests {
     }
 
     deleteChapter = (chapterId) => {
-        let paramObject = {
+        let paramsObject = {
             chapter: chapterId
         };
-        return postRequestWithFormData(paramObject, 'chapter/delete', {}).then(res => res);
+        return postRequestWithFormData(paramsObject, 'chapter/delete', {}).then(res => res);
     }
 }

@@ -1,0 +1,34 @@
+.plot {
+    width: 99%;
+    height: 70px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* .plot:hover {
+    background-color: #F2F2F2;
+} */
+
+.plotName {
+    margin-right: 100px;
+}
+
+.plotName:hover {
+    color: #CCCCCC;
+}
+
+.parentPlots {
+    padding-left: 10px;
+}
+
+.childOnePlots {
+    padding-left: 100px;
+}
+
+.childTwoPlots {
+    padding-left: 200px;
+}
