@@ -1,0 +1,19 @@
+.note {
+    height: 200px;
+    cursor: pointer;
+}
+
+.note:hover {
+    background-color: #F2F2F2;
+}
+
+.noteName {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.noteDescription {
+    padding: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

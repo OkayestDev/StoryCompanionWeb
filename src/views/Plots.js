@@ -233,37 +233,42 @@ export default class Plots extends StoryCompanion {
     }
 
     render() {
-        return (
-            <div className="full">
-                <ReactTooltip delay={500}/>
-                <EditEntityModal
-                    isEntityModalOpen={this.state.isPlotModalOpen}
-                    selectedId={this.state.selectedPlotIdForEdit}
-                    onRequestClose={() => this.setState({isPlotModalOpen: false})}
-                    objectName="Plot"
-                    title={this.state.selectedPlotIdForEdit === null ? "Create a Plot" : "Edit Plot"}
-                    name={this.state.name}
-                    nameOnChange={(newName) => this.setState({name: newName})}
-                    description={this.state.description}
-                    descriptionOnChange={(newDescription) => this.setState({description: newDescription})}
-                    onSave={() => this.state.selectedPlotIdForEdit === null ? this.createPlot() : this.editPlot()}
-                    onDelete={() => this.deletePlot(this.state.selectedPlotIdForEdit)}
-                    showAlert={this.props.showAlert}
-                    saveButtonText={this.state.selectedPlotIdForEdit === null ? "Create Plot" : "Edit Plot"}
-                    deleteButtonText="Delete Plot"
-                    confirmationAction="Delete Plot?"
-                />
-                <Icon
-                    className="icon floatRight"
-                    icon={plus}
-                    size={28}
-                    onClick={() => this.newPlot()}
-                    data-tip="Create a new chapter"
-                />
+        if (this.props.AppStore.selectedStoryId !== null) {
+            return (
                 <div className="full">
-                    {this.renderPlots()}
+                    <ReactTooltip delay={500}/>
+                    <EditEntityModal
+                        isEntityModalOpen={this.state.isPlotModalOpen}
+                        selectedId={this.state.selectedPlotIdForEdit}
+                        onRequestClose={() => this.setState({isPlotModalOpen: false})}
+                        objectName="Plot"
+                        title={this.state.selectedPlotIdForEdit === null ? "Create a Plot" : "Edit Plot"}
+                        name={this.state.name}
+                        nameOnChange={(newName) => this.setState({name: newName})}
+                        description={this.state.description}
+                        descriptionOnChange={(newDescription) => this.setState({description: newDescription})}
+                        onSave={() => this.state.selectedPlotIdForEdit === null ? this.createPlot() : this.editPlot()}
+                        onDelete={() => this.deletePlot(this.state.selectedPlotIdForEdit)}
+                        showAlert={this.props.showAlert}
+                        saveButtonText={this.state.selectedPlotIdForEdit === null ? "Create Plot" : "Edit Plot"}
+                        deleteButtonText="Delete Plot"
+                        confirmationAction="Delete Plot?"
+                    />
+                    <Icon
+                        className="icon floatRight"
+                        icon={plus}
+                        size={28}
+                        onClick={() => this.newPlot()}
+                        data-tip="Create a new chapter"
+                    />
+                    <div className="full">
+                        {this.renderPlots()}
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }
+        else {
+            return null;
+        }
     }
 }

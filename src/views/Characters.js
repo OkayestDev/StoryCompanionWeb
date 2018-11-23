@@ -252,41 +252,46 @@ export default class Character extends StoryCompanion {
     }
 
     render() {
-        return (
-            <div className="full">
-                <ReactTooltip delay={500}/>
-                <EditEntityModal
-                    isEntityModalOpen={this.state.isCharacterModalOpen}
-                    selectedId={this.state.selectedCharacterIdForEdit}
-                    onRequestClose={() => this.setState({isCharacterModalOpen: false})}
-                    objectName="Character"
-                    title={this.state.selectedCharacterIdForEdit === null ? "Create a Character" : "Edit Character"}
-                    image={this.state.image}
-                    imageOnChange={(newImage) => this.setState({image: newImage})}
-                    name={this.state.name}
-                    nameOnChange={(newName) => this.setState({name: newName})}
-                    description={this.state.description}
-                    descriptionOnChange={(newDescription) => this.setState({description: newDescription})}
-                    attribute={this.state.attribute}
-                    attributeOnChange={(newAttribute) => this.setState({attribute: newAttribute})}
-                    onSave={() => this.state.selectedCharacterIdForEdit === null ? this.createCharacter() : this.editCharacter()}
-                    onDelete={() => this.deleteCharacter(this.state.selectedCharacterIdForEdit)}
-                    showAlert={this.props.showAlert}
-                    saveButtonText={this.state.selectedCharacterIdForEdit === null ? "Create Character" : "Edit Character"}
-                    deleteButtonText="Delete Character"
-                    confirmationAction="Delete Character?"
-                />
-                <Icon
-                    className="icon floatRight"
-                    icon={plus}
-                    size={28}
-                    onClick={() => this.newCharacter()}
-                    data-tip="Create a new character"
-                />
+        if (this.props.AppStore.selectedStoryId !== null) {
+            return (
                 <div className="full">
-                    {this.renderCharacters()}
+                    <ReactTooltip delay={500}/>
+                    <EditEntityModal
+                        isEntityModalOpen={this.state.isCharacterModalOpen}
+                        selectedId={this.state.selectedCharacterIdForEdit}
+                        onRequestClose={() => this.setState({isCharacterModalOpen: false})}
+                        objectName="Character"
+                        title={this.state.selectedCharacterIdForEdit === null ? "Create a Character" : "Edit Character"}
+                        image={this.state.image}
+                        imageOnChange={(newImage) => this.setState({image: newImage})}
+                        name={this.state.name}
+                        nameOnChange={(newName) => this.setState({name: newName})}
+                        description={this.state.description}
+                        descriptionOnChange={(newDescription) => this.setState({description: newDescription})}
+                        attribute={this.state.attribute}
+                        attributeOnChange={(newAttribute) => this.setState({attribute: newAttribute})}
+                        onSave={() => this.state.selectedCharacterIdForEdit === null ? this.createCharacter() : this.editCharacter()}
+                        onDelete={() => this.deleteCharacter(this.state.selectedCharacterIdForEdit)}
+                        showAlert={this.props.showAlert}
+                        saveButtonText={this.state.selectedCharacterIdForEdit === null ? "Create Character" : "Edit Character"}
+                        deleteButtonText="Delete Character"
+                        confirmationAction="Delete Character?"
+                    />
+                    <Icon
+                        className="icon floatRight"
+                        icon={plus}
+                        size={28}
+                        onClick={() => this.newCharacter()}
+                        data-tip="Create a new character"
+                    />
+                    <div className="full">
+                        {this.renderCharacters()}
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }
+        else {
+            return null;
+        }
     }
 }

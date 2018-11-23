@@ -76,7 +76,6 @@ export default class Chapters extends StoryCompanion {
     }
 
     editChapter = () => {
-        console.info(this.state);
         if (!this.validateChapter()) {
             return;
         }
@@ -124,7 +123,7 @@ export default class Chapters extends StoryCompanion {
                 })
             }
         })
-        .catch((error) => {
+        .catch(() => {
             this.props.showAlert("Unable to delete chapter at this time", "danger");
         });
     }

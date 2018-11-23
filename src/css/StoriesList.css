@@ -2,6 +2,7 @@
     background-color: white;
     float: left;
     overflow-y: scroll;
+    overflow-x: hidden;
     width: 500px;
     height: 100%;
 }

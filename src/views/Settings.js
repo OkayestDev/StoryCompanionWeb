@@ -9,7 +9,7 @@ export default class Settings extends StoryCompanion {
     
     render() {
         return (
-            <div>
+            <div className="full settingsContainer">
                 <div
                     onClick={() => this.logout()}
                     className="button"

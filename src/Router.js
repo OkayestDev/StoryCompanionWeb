@@ -7,6 +7,8 @@ import Login from './views/Login.js';
 import Chapters from './views/Chapters.js';
 import Plots from './views/Plots.js';
 import Characters from './views/Characters.js';
+import Notes from './views/Notes.js';
+import Draft from './views/Draft.js';
 import CreateAccount from './views/CreateAccount.js';
 import HeaderBar from './components/HeaderBar.js';
 import GlobalAlert from './components/GlobalAlert.js';
@@ -147,6 +149,28 @@ export default class Router extends StoryCompanion {
                             path="/characters" exact
                             render={(props) => (
                                 <Characters
+                                    {...props}
+                                    updateAppStore={this.updateAppStore}
+                                    AppStore={this.AppStore}
+                                    showAlert={this.showAlert}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/notes" exact
+                            render={(props) => (
+                                <Notes
+                                    {...props}
+                                    updateAppStore={this.updateAppStore}
+                                    AppStore={this.AppStore}
+                                    showAlert={this.showAlert}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/draft" exact
+                            render={(props) => (
+                                <Draft
                                     {...props}
                                     updateAppStore={this.updateAppStore}
                                     AppStore={this.AppStore}
