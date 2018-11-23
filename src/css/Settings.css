@@ -1,0 +1,10 @@
+.settingsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settings {
+    width: 700px;
+    height: 500px;
+}

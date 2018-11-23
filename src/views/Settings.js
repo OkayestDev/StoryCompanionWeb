@@ -1,5 +1,6 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion';
+import '../css/Settings.css';
 
 export default class Settings extends StoryCompanion {
     logout = () => {
@@ -10,11 +11,13 @@ export default class Settings extends StoryCompanion {
     render() {
         return (
             <div className="full settingsContainer">
-                <div
-                    onClick={() => this.logout()}
-                    className="button"
-                >
-                    Logout
+                <div className="settings">
+                    <div
+                        onClick={() => this.logout()}
+                        className="button"
+                    >
+                        Logout
+                    </div>
                 </div>
             </div>
         );

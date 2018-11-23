@@ -17,6 +17,7 @@ export default class StoriesList extends StoryCompanion {
         super(props);
         this.state = this.defaultState();
         this.StoryRequests = new StoryRequests();
+        this.getStories();
     }
 
     defaultState = () => {
@@ -27,14 +28,32 @@ export default class StoriesList extends StoryCompanion {
             name: '',
             description: '',
             image: '',
+            userId: null,
+            stories: null,
         };
     }
 
-    componentWillMount() {
-        if (this.props.AppStore.userId !== null || this.props.AppStore.userId === '') {
+    componentWillReceiveProps(props) {
+        if (this.state.userId !== props.AppStore.userId) {
+            this.getStories();
+        }
+    }
+
+    getStories = () => {
+        if (this.props.AppStore.userId !== null) {
             this.StoryRequests.getStories(this.props.AppStore.userId).then((res) => {
-                this.props.AppStore.setValue({stories: res.success});
-                this.props.updateAppStore(this.props.AppStore);
+                if ('error' in res) {
+                    this.props.showAlert(res.error, "warning");
+                }
+                else {
+                    this.setState({
+                        userId: this.props.AppStore.userId,
+                        stories: res.success
+                    });
+                }
+            })
+            .catch(() => {
+                this.props.showAlert("Unable to fetch stories at this time", "danger");
             });
         }
     }
@@ -66,9 +85,10 @@ export default class StoriesList extends StoryCompanion {
             }
             else {
                 this.props.showAlert("Successfully created new story, " + this.state.name, "success");
-                this.props.AppStore.setValue({stories: res.success});
-                this.props.updateAppStore(this.props.AppStore);
-                this.setState(this.defaultState());
+                this.setState({
+                    ...this.defaultState(),
+                    stories: res.success
+                });
             }
         })
         .catch((error) => {
@@ -105,9 +125,12 @@ export default class StoriesList extends StoryCompanion {
             }
             else {
                 this.props.showAlert("Successfully edited story, " + this.state.name, "success");
-                this.props.AppStore.stories[this.state.selectedStoryIdForEdit] = res.success;
-                this.props.updateAppStore(this.props.AppStore);
-                this.setState(this.defaultState());
+                let tempStories = this.state.stories;
+                tempStories[this.state.selectedStoryIdForEdit] = res.success;
+                this.setState({
+                    ...this.defaultState(),
+                    stories: tempStories,
+                });
             }
         })
         .catch(() => {
@@ -121,9 +144,12 @@ export default class StoriesList extends StoryCompanion {
                 this.props.showAlert(res.error, "warning")
             }
             else {
-                delete this.props.AppStore.stories[id];
-                this.props.updateAppStore(this.props.AppStore);
-                this.setState(this.defaultState());
+                let tempStories = this.state.stories
+                delete tempStories[id];
+                this.setState({
+                    ...this.defaultState(),
+                    stories: tempStories,
+                });
             }
         })
         .catch(() => {
@@ -140,9 +166,9 @@ export default class StoriesList extends StoryCompanion {
         this.setState({
             isStoryModalOpen: true,
             selectedStoryIdForEdit: id,
-            name: this.props.AppStore.stories[id].name,
-            description: this.props.AppStore.stories[id].description,
-            image: this.props.AppStore.stories[id].image
+            name: this.state.stories[id].name,
+            description: this.state.stories[id].description,
+            image: this.state.stories[id].image
         })
     }
 
@@ -158,7 +184,7 @@ export default class StoriesList extends StoryCompanion {
 
     renderStories = () => {
         let storiesList = [];
-        for (let id in this.props.AppStore.stories) {
+        for (let id in this.state.stories) {
             storiesList.push(
                 <div 
                     className={id === this.props.AppStore.selectedStoryId ? "activeStory" : ""}
@@ -167,7 +193,7 @@ export default class StoriesList extends StoryCompanion {
                     <StoryListItem
                         isSelectedStory={id === this.props.AppStore.selectStoryForEdit}
                         id={id}
-                        story={this.props.AppStore.stories[id]}
+                        story={this.state.stories[id]}
                         selectStoryForComponents={() => this.selectStoryForComponents(id)}
                         selectStoryForEdit={() => this.selectStoryForEdit(id)}
                     />
