@@ -1,0 +1,10 @@
+.emailMessage {
+    resize: none;
+    border: 2px solid #CCCCCC;
+    border-radius: 6px;
+    height: 200px;
+    width: 98.5%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-size: 16px;
+}

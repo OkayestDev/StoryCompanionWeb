@@ -1,10 +1,21 @@
 .settingsContainer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+.settingsLogo {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 25px;
+}
+
 .settings {
-    width: 700px;
+    width: 500px;
     height: 500px;
+}
+
+.settingsButton {
+    margin-bottom: 25px;
 }
