@@ -215,7 +215,7 @@ export default class Plots extends StoryCompanion {
                 <div className="noEntityContainer">
                     <div className="noEntityText">
                         <div>
-                            Looks like you haven't created any chapters yet.
+                            Looks like you haven't created any plots yet.
                         </div>
                         <div>
                             Press on the
@@ -225,7 +225,7 @@ export default class Plots extends StoryCompanion {
                                 size={30}
                             />
                             &nbsp;
-                            to create a new chapter.
+                            to create a new plot.
                         </div>
                     </div>
                 </div>
