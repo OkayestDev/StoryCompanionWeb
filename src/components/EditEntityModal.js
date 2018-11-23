@@ -147,14 +147,14 @@ export default class EditEntityModal extends StoryCompanion {
                         </div>
                     }
                     {
-                        'attributesOnChange' in this.props &&
+                        'attributeOnChange' in this.props &&
                         <div className="inputAndLabelContainer">
                             <textarea
                                 value={this.props.attribute}
                                 type="textarea"
                                 placeholder="Attributes..."
                                 className="description"
-                                onChange={(newDescription) => this.props.descriptionOnChange(newDescription.target.value)}
+                                onChange={(newAttribute) => this.props.attributeOnChange(newAttribute.target.value)}
                             />
                         </div>
                     }

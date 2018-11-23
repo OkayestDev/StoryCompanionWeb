@@ -12,7 +12,7 @@ const modalStyle = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        width: '550px',
+        width: '650px',
         height:  'auto',
         overflow: 'visible',
         borderRadius: '8px',

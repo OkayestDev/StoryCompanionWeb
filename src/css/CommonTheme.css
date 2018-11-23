@@ -137,6 +137,12 @@
     padding-bottom: 300px;
 }
 
+.trueCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .noSelect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */

@@ -9,6 +9,9 @@ import EditEntityModal from './EditEntityModal.js';
 import StoryListItem from './StoryListItem.js';
 import '../css/StoriesList.css';
 
+/**
+ * @TODO open/closed book for story list
+ */
 export default class StoriesList extends StoryCompanion {
     constructor(props) {
         super(props);

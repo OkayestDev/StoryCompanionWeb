@@ -1,0 +1,51 @@
+.character {
+    height: 250px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.character:hover {
+    background-color: #F2F2F2;
+}
+
+.characterImage {
+    width: 200px;
+    height: 200px;
+    border-radius: 4px;
+    margin-right: 25px;
+}
+
+.noCharacterImage {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid #CCCCCC;
+    border-radius: 8px;
+    margin-right: 25px;
+}
+
+.characterName {
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.characterLabelContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.characterLabel {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.characterContent {
+    height: 60px;
+    padding: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

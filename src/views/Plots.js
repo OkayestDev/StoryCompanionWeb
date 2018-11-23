@@ -126,7 +126,6 @@ export default class Plots extends StoryCompanion {
             name: '',
             plotParent: '',
             description: '',
-            plotParent: '',
         });
     }
 
@@ -192,12 +191,12 @@ export default class Plots extends StoryCompanion {
                     let parentOneId = id;
                     // Render Children one
                     plotIds.forEach((id) => {
-                        if (this.state.plots[id].plot == parentOneId) {
+                        if (this.state.plots[id].plot === parentOneId) {
                             renderedPlots.push(this.returnPlot('childOnePlots', id));
                             // Render childrenTwo
                             let parentTwoId = id;
                             plotIds.forEach((id) => {
-                                if (this.state.plots[id].plot == parentTwoId) {
+                                if (this.state.plots[id].plot === parentTwoId) {
                                     renderedPlots.push(this.returnPlot('childTwoPlots', id, false));
                                 }
                             })
@@ -243,8 +242,6 @@ export default class Plots extends StoryCompanion {
                     onRequestClose={() => this.setState({isPlotModalOpen: false})}
                     objectName="Plot"
                     title={this.state.selectedPlotIdForEdit === null ? "Create a Plot" : "Edit Plot"}
-                    description={this.state.description}
-                    descriptionOnChange={(newDescription) => this.setState({description: newDescription})}
                     name={this.state.name}
                     nameOnChange={(newName) => this.setState({name: newName})}
                     description={this.state.description}
