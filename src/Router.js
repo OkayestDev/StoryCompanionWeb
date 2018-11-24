@@ -16,6 +16,7 @@ import GlobalAlert from './components/GlobalAlert.js';
 import StoryCompanion from './utils/StoryCompanion.js';
 import StoriesList from './components/StoriesList.js';
 import AppStore from './store/AppStore.js';
+import Ad from './components/Ad.js';
 import './css/Router.css';
 import './css/CommonTheme.css';
 require('dotenv').config();
@@ -62,19 +63,10 @@ export default class Router extends StoryCompanion {
     }
 
     render() {
-        var adsbygoogle;
         return(
             <BrowserRouter>
                 <div className="application">
-                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                    <script>
-                    {
-                        (adsbygoogle = window.adsbygoogle || []).push({
-                            google_ad_client: "ca-pub-5830175342552944",
-                            enable_page_level_ads: true
-                        })
-                    }
-                    </script>
+                            
                     <div>
                         <GlobalAlert
                             visible={this.state.showGlobalAlert}
@@ -224,7 +216,7 @@ export default class Router extends StoryCompanion {
                             )}
                         />
                     </div>
-                    
+                    <Ad/>
                 </div>
             </BrowserRouter>
         )
