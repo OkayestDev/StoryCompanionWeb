@@ -1,7 +1,6 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion';
 import SettingsRequest from '../utils/SettingsRequests.js';
-import UserRequests from '../utils/UserRequests.js';
 import EmailModal from '../components/EmailModal';
 import ChangePasswordModal from '../components/ChangePasswordModal.js';
 import '../css/Settings.css';

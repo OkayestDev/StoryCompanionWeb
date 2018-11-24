@@ -62,7 +62,7 @@ export default class Router extends StoryCompanion {
     }
 
     render() {
-        let adsbygoogle
+        var adsbygoogle;
         return(
             <BrowserRouter>
                 <div className="application">
