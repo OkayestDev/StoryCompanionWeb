@@ -10,6 +10,7 @@ import Characters from './views/Characters.js';
 import Notes from './views/Notes.js';
 import Draft from './views/Draft.js';
 import CreateAccount from './views/CreateAccount.js';
+import ResetPassword from './views/ResetPassword.js';
 import HeaderBar from './components/HeaderBar.js';
 import GlobalAlert from './components/GlobalAlert.js';
 import StoryCompanion from './utils/StoryCompanion.js';
@@ -123,6 +124,18 @@ export default class Router extends StoryCompanion {
                         path="/create_account" exact
                         render={(props) => (
                             <CreateAccount
+                                {...props}
+                                updateAppStore={this.updateAppStore}
+                                AppStore={this.AppStore}
+                                isUserLoggedIn={this.isUserLoggedIn}
+                                showAlert={this.showAlert}
+                            />
+                        )}
+                    />
+                    <Route
+                        path="/reset_password" exact
+                        render={(props) => (
+                            <ResetPassword
                                 {...props}
                                 updateAppStore={this.updateAppStore}
                                 AppStore={this.AppStore}

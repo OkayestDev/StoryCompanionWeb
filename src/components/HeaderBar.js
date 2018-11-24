@@ -7,6 +7,7 @@ const loginPathnames = [
     '/',
     '/login',
     '/create_account',
+    '/reset_password',
 ];
 
 const storyPathnames = [
@@ -50,6 +51,12 @@ export default class HeaderBar extends StoryCompanion {
                         onClick={() => this.props.history.push("/create_account")}
                     >
                         Create Account
+                    </div>
+                    <div 
+                        className={"link" + (pathname === '/reset_password' ? " activeLink" : "")}
+                        onClick={() => this.props.history.push("/reset_password")}
+                    >
+                        Reset Password
                     </div>
                 </div>
             );

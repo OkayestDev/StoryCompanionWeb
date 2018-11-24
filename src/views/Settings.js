@@ -2,8 +2,9 @@ import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion';
 import SettingsRequest from '../utils/SettingsRequests.js';
 import UserRequests from '../utils/UserRequests.js';
-import '../css/Settings.css';
 import EmailModal from '../components/EmailModal';
+import ChangePasswordModal from '../components/ChangePasswordModal.js';
+import '../css/Settings.css';
 
 export default class Settings extends StoryCompanion {
     constructor(props) {
@@ -16,7 +17,6 @@ export default class Settings extends StoryCompanion {
             message: '',
         }
         this.SettingsRequests = new SettingsRequest();
-        this.UserRequests = new UserRequests();
     }
 
     openBug = () => {
@@ -48,6 +48,10 @@ export default class Settings extends StoryCompanion {
             }
             else {
                 this.props.showAlert("Successfully sent bug. Thank you!", "success");
+                this.setState({
+                    message: '',
+                    isEmailModalOpen: false,
+                })
             }
         })
         .catch(() => {
@@ -66,6 +70,10 @@ export default class Settings extends StoryCompanion {
             }
             else {
                 this.props.showAlert("Successfully sent feature request. Thank you!", "success");
+                this.setState({
+                    message: '',
+                    isEmailModalOpen: false,
+                })
             }
         })
         .catch(() => {
@@ -74,11 +82,7 @@ export default class Settings extends StoryCompanion {
     }
 
     openPassword = () => {
-
-    }
-
-    changePassword = () => {
-
+        this.setState({isChangePasswordModalOpen: true});
     }
 
     logout = () => {
@@ -89,10 +93,17 @@ export default class Settings extends StoryCompanion {
     render() {
         return (
             <div className="full settingsContainer">
+                <ChangePasswordModal
+                    isChangePasswordModalOpen={this.state.isChangePasswordModalOpen}
+                    onRequestClose={() => this.setState({isChangePasswordModalOpen: false})}
+                    showAlert={this.props.showAlert}
+                    AppStore={this.props.AppStore}
+                />
                 <EmailModal
                     isEmailModalOpen={this.state.isEmailModalOpen}
                     onRequestClose={() => this.setState({isEmailModalOpen: false})}
                     title={this.state.emailTitle}
+                    placeholder={this.state.emailType === 'feature' ? "Feature Description..." : "Bug Description..."}
                     onSend={() => (this.state.emailType === 'feature' ? this.sendFeatureRequest() : this.sendBug())}
                     message = {this.state.message}
                     messageOnChange={(newMessage) => this.setState({message: newMessage})}

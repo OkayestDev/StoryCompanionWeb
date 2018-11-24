@@ -49,7 +49,7 @@ export default class EmailModal extends Component {
                 </div>
                 <div className="modalContent">
                     <textarea
-                        placeholder="Bug Description..."
+                        placeholder={this.props.placeholder}
                         className="emailMessage"
                         value={this.props.message}
                         onChange={(newMessage) => this.props.messageOnChange(newMessage.target.value)}
