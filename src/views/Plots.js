@@ -259,7 +259,7 @@ export default class Plots extends StoryCompanion {
                         icon={plus}
                         size={28}
                         onClick={() => this.newPlot()}
-                        data-tip="Create a new chapter"
+                        data-tip="Create a new plot"
                     />
                     <div className="full">
                         {this.renderPlots()}

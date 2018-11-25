@@ -21,10 +21,8 @@ import './css/Router.css';
 import './css/CommonTheme.css';
 require('dotenv').config();
 
-// auto full width responsive ads
-
-
 /**
+ * @TODO change password fields to be in a form
  * @TODO add link to app stores for small screens (mobile)
  */
 export default class Router extends StoryCompanion {

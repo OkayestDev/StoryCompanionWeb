@@ -7,7 +7,7 @@ export default class Draft extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
-            draft: null,
+            draft: 'none',
             description: '',
             selectedStoryId: null,
         };
@@ -22,23 +22,31 @@ export default class Draft extends StoryCompanion {
     }
 
     getDraft() {
-        this.DraftRequests.getDrafts(this.props.AppStore.selectedStoryId).then((res) => {
-            if ('error' in res) {
-                this.props.showAlert(res.error, "warning");
-            }
-            else {
-                if ('id' in res.success) {
-                    this.setState({
-                        draft: res.success.id,
-                        description: res.success.description,
-                        selectedStoryId: this.props.AppStore.selectedStoryId,
-                    });
+        if (this.props.AppStore.selectedStoryId !== null) {
+            this.DraftRequests.getDrafts(this.props.AppStore.selectedStoryId).then((res) => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, "warning");
                 }
-            }
-        })
-        .catch(() => {
-            this.props.showAlert("Unable to fetch draft at this time", "danger");
-        })
+                else {
+                    if ('id' in res.success) {
+                        this.setState({
+                            draft: res.success.id,
+                            description: res.success.description,
+                            selectedStoryId: this.props.AppStore.selectedStoryId,
+                        });
+                    }
+                    else {
+                        this.setState({
+                            draft: null,
+                            selectedStoryId: this.props.AppStore.selectedStoryId,
+                        });
+                    }
+                }
+            })
+            .catch(() => {
+                this.props.showAlert("Unable to fetch draft at this time", "danger");
+            });
+        }
     }
 
     createDraft = () => {
@@ -95,6 +103,7 @@ export default class Draft extends StoryCompanion {
     }
 
     render() {
+        console.info(`draft`, this.state.draft);
         if (this.props.AppStore.selectedStoryId !== null && this.state.draft !== null) {
             return (
                 <div className="full">

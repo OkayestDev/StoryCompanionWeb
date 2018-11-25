@@ -52,7 +52,7 @@ export default class Login extends StoryCompanion {
                 <div className="welcomeBack">
                     Welcome Back!
                 </div>
-                <div className="login">
+                <form className="login">
                     <div className="loginInputContainer">
                         <div className="loginLabel">
                             Email
@@ -82,7 +82,7 @@ export default class Login extends StoryCompanion {
                     >
                         Login
                     </div>
-                </div>
+                </form>
             </div>
         );
     }

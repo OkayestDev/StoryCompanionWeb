@@ -207,7 +207,7 @@ export default class Notes extends StoryCompanion {
                         icon={plus}
                         size={28}
                         onClick={() => this.newNote()}
-                        data-tip="Create a new chapter"
+                        data-tip="Create a new note"
                     />
                     <div className="full">
                         {this.renderNotes()}
