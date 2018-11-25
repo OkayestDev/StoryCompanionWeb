@@ -34,6 +34,8 @@
 
 .modalContent {
     padding: 10px;
+    overflow-y: scroll;
+    max-height: 600px;
 }
 
 .button {
@@ -91,8 +93,6 @@
     /* background-color: #CCCCCC; */
     background-color: white;
     height: 100% !important;
-    margin-right: 7px;
-    margin-top: 7px;
     padding: 10px;
     overflow-y: scroll;
 }
@@ -109,7 +109,7 @@
 .floatRight {
     position: absolute;
     right: 0;
-    padding-right: 30px;
+    padding-right: 25px;
 }
 
 .full {

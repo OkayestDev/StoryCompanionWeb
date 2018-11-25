@@ -103,8 +103,7 @@ export default class Draft extends StoryCompanion {
     }
 
     render() {
-        console.info(`draft`, this.state.draft);
-        if (this.props.AppStore.selectedStoryId !== null && this.state.draft !== null) {
+        if (this.props.AppStore.selectedStoryId !== null && this.state.draft !== 'none' && this.state.draft !== null) {
             return (
                 <div className="full">
                     <div className="draftActions">
