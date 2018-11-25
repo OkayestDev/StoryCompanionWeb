@@ -109,7 +109,7 @@ export default class Settings extends StoryCompanion {
                 />
                 <div>
                     <img
-                        src="/favicon.ico"
+                        src="/logo.png"
                         className="settingsLogo"
                         alt=""
                     />

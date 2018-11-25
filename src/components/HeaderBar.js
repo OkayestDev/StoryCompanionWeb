@@ -120,7 +120,7 @@ export default class HeaderBar extends StoryCompanion {
                 <div className="storyCompanion">
                     <img 
                         className="storyCompanionLogo"
-                        src="./favicon.ico"
+                        src="./logo.png"
                         alt=""
                     />
                     Story Companion
