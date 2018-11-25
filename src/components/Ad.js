@@ -8,7 +8,7 @@ export default class Ad extends Component {
 
     render () {
         return (
-            <div className='ad'>
+            <div className='adContainer'>
                 <ins 
                     className="adsbygoogle"
                     style={{
