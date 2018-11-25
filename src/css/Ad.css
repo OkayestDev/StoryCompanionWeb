@@ -2,5 +2,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color:red;
+    background-color: white;
+    border-top: 3px solid #CCCCCC;
 }

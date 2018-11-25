@@ -18,7 +18,6 @@ export default class Ad extends Component {
                     }}
                     data-ad-client="ca-pub-5830175342552944"
                     data-ad-slot="5608403413"
-                    data-ad-test="on"
                 />
             </div>
         );
