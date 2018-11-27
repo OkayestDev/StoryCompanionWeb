@@ -215,7 +215,10 @@ export default class Router extends StoryCompanion {
                         </div>
                     </div>
                 </BrowserRouter>
-                <Ad/>
+                {
+                    this.isUserLoggedIn() &&
+                    <Ad/>
+                }
             </div>
         )
     }
