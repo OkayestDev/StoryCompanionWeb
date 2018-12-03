@@ -4,10 +4,7 @@ import {
 
 // Character is referred to as Person in the back-end. Character is a reserved word in mysql
 export default class CharacterRequests {
-    getCharacters = (storyId) => {
-        let paramsObject = {
-            story: storyId
-        };
+    getCharacters = (paramsObject) => {
         return postRequestWithFormData(paramsObject, 'person/view', {}).then(res => res);
     }
 
@@ -19,10 +16,7 @@ export default class CharacterRequests {
         return postRequestWithFormData(paramsObject, 'person/edit', {}).then(res => res);
     }
 
-    deleteCharacter = (character) => {
-        let paramsObject = {
-            character: character
-        };
+    deleteCharacter = (paramsObject) => {
         return postRequestWithFormData(paramsObject, 'person/delete', {}).then(res => res);
     }
 }

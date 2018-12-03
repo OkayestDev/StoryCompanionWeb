@@ -3,10 +3,7 @@ import {
 } from './HelperFunctions.js';
 
 export default class PlotRequests {
-    getPlots = (storyId) => {
-        let paramsObject = {
-            story: storyId
-        };
+    getPlots = (paramsObject) => {
         return postRequestWithFormData(paramsObject, 'plot/view', {}).then(res => res);
     }
 
@@ -18,10 +15,7 @@ export default class PlotRequests {
         return postRequestWithFormData(paramsObject, 'plot/edit', {}).then(res => res);
     }
 
-    deletePlot = (plot) => {
-        let paramsObject = {
-            plot: plot
-        };
+    deletePlot = (paramsObject) => {
         return postRequestWithFormData(paramsObject, 'plot/delete', {}).then(res => res);
     }
 }

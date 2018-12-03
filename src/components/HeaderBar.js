@@ -1,5 +1,7 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion.js';
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import '../css/HeaderBar.css';
 
 const loginPathnames = [
@@ -19,7 +21,7 @@ const storyPathnames = [
     '/settings',
 ];
 
-export default class HeaderBar extends StoryCompanion {
+class HeaderBar extends StoryCompanion {
     componentDidMount() {
         this.canUserViewRoute(this.props);
     }
@@ -130,3 +132,5 @@ export default class HeaderBar extends StoryCompanion {
         )
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(HeaderBar);

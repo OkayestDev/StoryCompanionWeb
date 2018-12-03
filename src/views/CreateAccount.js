@@ -1,9 +1,11 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion.js';
 import UserRequests from '../utils/UserRequests.js';
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import '../css/CreateAccount.css';
 
-export default class CreateAccount extends StoryCompanion {
+class CreateAccount extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
@@ -106,3 +108,5 @@ export default class CreateAccount extends StoryCompanion {
         )
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(CreateAccount);

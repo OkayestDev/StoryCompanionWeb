@@ -7,12 +7,14 @@ import StoryRequests from '../utils/StoryRequests.js';
 import ReactTooltip from 'react-tooltip';
 import EditEntityModal from './EditEntityModal.js';
 import StoryListItem from './StoryListItem.js';
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import '../css/StoriesList.css';
 
 /**
  * @TODO open/closed book for story list
  */
-export default class StoriesList extends StoryCompanion {
+class StoriesList extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = this.defaultState();
@@ -23,33 +25,30 @@ export default class StoriesList extends StoryCompanion {
     defaultState = () => {
         return {
             isStoryModalOpen: false,
-            selectedStoryIdForEdit: null,
+            selectedStoryId: null,
             isConfirmationOpen: true,
             name: '',
             description: '',
             image: '',
-            userId: null,
-            stories: null,
+            tag: '',
         };
     }
 
     componentWillReceiveProps(props) {
-        if (this.state.userId !== props.AppStore.userId) {
+        if (this.props.userId !== props.userId) {
             this.getStories();
         }
     }
 
     getStories = () => {
-        if (this.props.AppStore.userId !== null) {
-            this.StoryRequests.getStories(this.props.AppStore.userId).then((res) => {
+        if (this.props.userId !== null) {
+            let paramsObject = this.createParamsObject();
+            this.StoryRequests.getStories(paramsObject).then((res) => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, "warning");
                 }
                 else {
-                    this.setState({
-                        userId: this.props.AppStore.userId,
-                        stories: res.success
-                    });
+                    this.props.setStories(res.success);
                 }
             })
             .catch(() => {
@@ -61,7 +60,7 @@ export default class StoriesList extends StoryCompanion {
     createStory = async () => {
         var image = "";
         if (this.state.image.includes("data:image") && this.state.image.includes("base64")) {
-            image = await this.uploadToS3(this.state.image, "story", this.props.AppStore.userId);
+            image = await this.uploadToS3(this.state.image, "story", this.props.userId);
         }
         else {
             image = this.state.image;
@@ -73,22 +72,16 @@ export default class StoriesList extends StoryCompanion {
             this.props.showAlert("Unable to upload image at this time", "warning");
         }
 
-        let paramsObject = {
-            user: this.props.AppStore.userId, 
-            name: this.state.name,
-            description: this.state.description,
-            image: image,
-        }
+        let paramsObject = this.createParamsObject();
+        paramsObject['image'] = image;
         this.StoryRequests.createStory(paramsObject).then((res) => {
             if ('error' in res) {
                 this.props.showAlert(res.error, "warning");
             }
             else {
                 this.props.showAlert("Successfully created new story, " + this.state.name, "success");
-                this.setState({
-                    ...this.defaultState(),
-                    stories: res.success
-                });
+                this.setState({...this.defaultState()});
+                this.props.setStories(res.success);
             }
         })
         .catch((error) => {
@@ -99,7 +92,7 @@ export default class StoriesList extends StoryCompanion {
     editStory = async () => {
         var image = "";
         if (this.state.image.includes("data:image") && this.state.image.includes("base64")) {
-            image = await this.uploadToS3(this.state.image, "story", this.props.AppStore.userId);
+            image = await this.uploadToS3(this.state.image, "story", this.props.userId);
         }
         else {
             image = this.state.image;
@@ -111,26 +104,18 @@ export default class StoriesList extends StoryCompanion {
             this.props.showAlert("Unable to upload image at this time", "warning");
         }
 
-        let paramsObject = {
-            story: this.state.selectedStoryIdForEdit,
-            user: this.props.AppStore.userId, 
-            name: this.state.name,
-            description: this.state.description,
-            image: image,
-        }
-
+        let paramsObject = this.createParamsObject();
+        paramsObject['image'] = image;
         this.StoryRequests.editStory(paramsObject).then((res) => {
             if ('error' in res) {
                 this.props.showAlert(res.error, "warning");
             }
             else {
                 this.props.showAlert("Successfully edited story, " + this.state.name, "success");
-                let tempStories = this.state.stories;
-                tempStories[this.state.selectedStoryIdForEdit] = res.success;
-                this.setState({
-                    ...this.defaultState(),
-                    stories: tempStories,
-                });
+                let tempStories = this.props.stories;
+                tempStories[this.state.selectedStoryId] = res.success;
+                this.setState({...this.defaultState()});
+                this.props.setStories(res.success);
             }
         })
         .catch(() => {
@@ -139,17 +124,16 @@ export default class StoriesList extends StoryCompanion {
     }
 
     deleteStory = (id) => {
-        this.StoryRequests.deleteStory(id).then((res) => {
+        let paramsObject = this.createParamsObject();
+        this.StoryRequests.deleteStory(paramsObject).then((res) => {
             if ('error' in res) {
                 this.props.showAlert(res.error, "warning")
             }
             else {
-                let tempStories = this.state.stories
+                let tempStories = this.props.stories
                 delete tempStories[id];
-                this.setState({
-                    ...this.defaultState(),
-                    stories: tempStories,
-                });
+                this.setState({...this.defaultState()});
+                this.props.setStories(tempStories);
             }
         })
         .catch(() => {
@@ -158,24 +142,23 @@ export default class StoriesList extends StoryCompanion {
     }
 
     selectStoryForComponents = (id) => {
-        this.props.AppStore.setValue({selectedStoryId: id});
-        this.props.updateAppStore(this.props.AppStore);
+        this.props.editStoryComponents(id);
     }
 
     selectStoryForEdit = (id) => {
         this.setState({
             isStoryModalOpen: true,
-            selectedStoryIdForEdit: id,
-            name: this.state.stories[id].name,
-            description: this.state.stories[id].description,
-            image: this.state.stories[id].image
+            selectedStoryId: id,
+            name: this.props.stories[id].name,
+            description: this.props.stories[id].description,
+            image: this.props.stories[id].image
         })
     }
 
     newStory = () => {
         this.setState({
             isStoryModalOpen: true,
-            selectedStoryIdForEdit: null,
+            selectedStoryId: null,
             name: '',
             description: '',
             image: '',
@@ -184,16 +167,16 @@ export default class StoriesList extends StoryCompanion {
 
     renderStories = () => {
         let storiesList = [];
-        for (let id in this.state.stories) {
+        for (let id in this.props.stories) {
             storiesList.push(
                 <div 
-                    className={id === this.props.AppStore.selectedStoryId ? "activeStory" : ""}
+                    className={id === this.props.selectedStoryId ? "activeStory" : ""}
                     key={id}
                 >
                     <StoryListItem
-                        isSelectedStory={id === this.props.AppStore.selectStoryForEdit}
+                        isSelectedStory={id === this.props.selectStoryForEdit}
                         id={id}
-                        story={this.state.stories[id]}
+                        story={this.props.stories[id]}
                         selectStoryForComponents={() => this.selectStoryForComponents(id)}
                         selectStoryForEdit={() => this.selectStoryForEdit(id)}
                     />
@@ -204,25 +187,25 @@ export default class StoriesList extends StoryCompanion {
     }
 
     render() {
-        if (this.props.isUserLoggedIn() && !this.props.hidden) {
+        if (this.isUserLoggedIn() && !this.props.hidden) {
             return (
                 <div className="storiesList">
                     <EditEntityModal
                         isEntityModalOpen={this.state.isStoryModalOpen}
-                        selectedId={this.state.selectedStoryIdForEdit}
+                        selectedId={this.state.selectedStoryId}
                         onRequestClose={() => this.setState({isStoryModalOpen: false})}
                         objectName="Story"
-                        title={this.state.selectedStoryIdForEdit === null ? "Create a Story" : "Edit Story"}
+                        title={this.state.selectedStoryId === null ? "Create a Story" : "Edit Story"}
                         image={this.state.image}
                         imageOnChange={(image) => this.setState({image: image})}
                         description={this.state.description}
                         descriptionOnChange={(newDescription) => this.setState({description: newDescription})}
                         name={this.state.name}
                         nameOnChange={(newName) => this.setState({name: newName})}
-                        onSave={() => this.state.selectedStoryIdForEdit === null ? this.createStory() : this.editStory()}
-                        onDelete={() => this.deleteStory(this.state.selectedStoryIdForEdit)}
+                        onSave={() => this.state.selectedStoryId === null ? this.createStory() : this.editStory()}
+                        onDelete={() => this.deleteStory(this.state.selectedStoryId)}
                         showAlert={this.props.showAlert}
-                        saveButtonText={this.state.selectedStoryIdForEdit === null ? "Create Story" : "Edit Story"}
+                        saveButtonText={this.state.selectedStoryId === null ? "Create Story" : "Edit Story"}
                         deleteButtonText="Delete Story"
                         confirmationAction="Delete Story?"
                     />
@@ -254,7 +237,7 @@ export default class StoriesList extends StoryCompanion {
                 </div>
             )
         }
-        else if (this.props.isUserLoggedIn()) {
+        else if (this.isUserLoggedIn()) {
             return (
                 <div className="hiddenStoriesList">
                         <Icon
@@ -275,3 +258,5 @@ export default class StoriesList extends StoryCompanion {
         }
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(StoriesList);

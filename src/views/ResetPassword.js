@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import UserRequests from '../utils/UserRequests.js';
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import '../css/ResetPassword.css';
 
-export default class ResetPassword extends Component {
+class ResetPassword extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -54,3 +56,5 @@ export default class ResetPassword extends Component {
         )
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(ResetPassword);

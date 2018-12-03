@@ -24,8 +24,6 @@ export function postRequestWithFormData(requestData, route, paramsObject) {
         }
     }
 
-    let apiKey = localStorage.getItem('apiKey');
-    formData.append('apiKey', apiKey);
     let params = {
         method: 'POST',
         credentials: 'include',

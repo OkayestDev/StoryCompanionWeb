@@ -1,6 +1,8 @@
 import { Component } from 'react';
+import { connect } from 'react-redux';
+import { Actions } from './store/Actions.js';
 
-export default class App extends Component {
+class App extends Component {
     componentWillMount() {
         if (localStorage.getItem("AppStore") !== null) {
             this.props.history.push("/chapters");
@@ -13,3 +15,5 @@ export default class App extends Component {
     // Required function of Component
     render() { return null }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(App);

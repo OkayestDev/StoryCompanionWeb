@@ -1,9 +1,11 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion.js';
 import DraftRequests from '../utils/DraftRequests.js';
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import '../css/Draft.css';
 
-export default class Draft extends StoryCompanion {
+class Draft extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
@@ -152,3 +154,5 @@ export default class Draft extends StoryCompanion {
         }
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(Draft);

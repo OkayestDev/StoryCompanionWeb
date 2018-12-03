@@ -1,9 +1,11 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion.js';
 import UserRequests from '../utils/UserRequests'
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import '../css/Login.css';
 
-export default class Login extends StoryCompanion {
+class Login extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,27 +24,30 @@ export default class Login extends StoryCompanion {
     }
 
     componentWillMount() {
-        if (this.props.isUserLoggedIn()) {
+        if (this.isUserLoggedIn()) {
             this.props.history.push("/chapters");
         }
     }
 
     login = () => {
-        this.UserRequests.login(this.state.email, this.state.password).then((res) => {
+        let paramsObject = this.createParamsObject();
+        this.UserRequests.login(paramsObject).then((res) => {
             if ('error' in res) {
-                this.props.showAlert(res.error, "warning");
+                this.props.showAlert({
+                    globalAlertMessage: res.error, 
+                    globalAlertType: "warning"
+                });
             }
             else {
-                this.props.AppStore.setValue(res.success);
-                this.props.updateAppStore(this.props.AppStore);
+                this.props.login(res.success);
                 this.props.history.push("/chapters");
             }
         })
-        .catch((error) => {
-            this.props.showAlert(
-                "Unable to login at this time",
-                "danger"
-            );
+        .catch(() => {
+            this.props.showAlert({
+                globalAlertMessage: "Unable to login at this time",
+                globalAlertType: "danger",
+            });
         })
     }
 
@@ -87,3 +92,5 @@ export default class Login extends StoryCompanion {
         );
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(Login);

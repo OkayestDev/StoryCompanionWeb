@@ -5,9 +5,11 @@ import EditEntityModal from '../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
 import { plus } from 'react-icons-kit/fa';
 import ReactTooltip from 'react-tooltip';
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import "../css/Plots.css";
 
-export default class Plots extends StoryCompanion {
+class Plots extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
@@ -272,3 +274,5 @@ export default class Plots extends StoryCompanion {
         }
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(Plots);

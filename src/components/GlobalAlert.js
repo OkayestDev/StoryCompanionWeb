@@ -2,14 +2,17 @@ import React from 'react';
 import Icon from 'react-icons-kit';
 import { smileO, warning, ban, close } from 'react-icons-kit/fa';
 import StoryCompanion from '../utils/StoryCompanion.js';
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import "../css/GlobalAlert.css";
 
-export default class GlobalAlert extends StoryCompanion {
+// @TODO set timeout for showing global alert
+class GlobalAlert extends StoryCompanion {
     figureColor = () => {
-        if (this.props.type === "success") {
+        if (this.props.globalAlertType === "success") {
             return "#4CAF4F"
         }
-        else if (this.props.type === "warning") {
+        else if (this.props.globalAlertType === "warning") {
             return "#F5A623";
         }
         else {
@@ -18,10 +21,10 @@ export default class GlobalAlert extends StoryCompanion {
     }
 
     figureIcon = () => {
-        if (this.props.type === "success") {
+        if (this.props.globalAlertType === "success") {
             return smileO;
         }
-        else if (this.props.type === "warning") {
+        else if (this.props.globalAlertType === "warning") {
             return warning;
         }
         else {
@@ -30,7 +33,7 @@ export default class GlobalAlert extends StoryCompanion {
     }
 
     render() {
-        if (this.props.visible) {
+        if (this.props.showGlobalAlert) {
             return (
                 <div
                     className="globalAlert"
@@ -45,7 +48,7 @@ export default class GlobalAlert extends StoryCompanion {
                             />
                         </div>
                         <div className="globalAlertMessage">
-                            {this.props.message}
+                            {this.props.globalAlertMessage}
                         </div>
                     </div>
                     <div className="globalAlertCloseContainer">
@@ -64,3 +67,5 @@ export default class GlobalAlert extends StoryCompanion {
         }
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(GlobalAlert);

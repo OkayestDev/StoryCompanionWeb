@@ -3,9 +3,11 @@ import StoryCompanion from '../utils/StoryCompanion';
 import SettingsRequest from '../utils/SettingsRequests.js';
 import EmailModal from '../components/EmailModal';
 import ChangePasswordModal from '../components/ChangePasswordModal.js';
+import { connect } from 'react-redux';
+import { Actions } from '../store/Actions.js';
 import '../css/Settings.css';
 
-export default class Settings extends StoryCompanion {
+class Settings extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
@@ -144,3 +146,5 @@ export default class Settings extends StoryCompanion {
         );
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(Settings);

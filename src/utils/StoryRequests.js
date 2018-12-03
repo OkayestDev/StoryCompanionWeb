@@ -3,10 +3,7 @@ import {
 } from './HelperFunctions.js';
 
 export default class StoryRequests {
-    getStories = (userId) => {
-        let paramsObject = {
-            user: userId
-        };
+    getStories = (paramsObject) => {
         return postRequestWithFormData(paramsObject, 'story/view', {}).then(res => res);
     }
 
@@ -18,10 +15,7 @@ export default class StoryRequests {
         return postRequestWithFormData(paramsObject, 'story/edit', {}).then(res => res);
     }
 
-    deleteStory = (storyId) => {
-        let paramsObject = {
-            story: storyId
-        };
+    deleteStory = (paramsObject) => {
         return postRequestWithFormData(paramsObject, 'story/delete', {}).then(res => res);
     }
 }

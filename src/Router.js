@@ -15,48 +15,23 @@ import HeaderBar from './components/HeaderBar.js';
 import GlobalAlert from './components/GlobalAlert.js';
 import StoryCompanion from './utils/StoryCompanion.js';
 import StoriesList from './components/StoriesList.js';
-import AppStore from './store/AppStore.js';
+import { connect } from 'react-redux';
+import { Actions } from './store/Actions.js';
 import Ad from './components/Ad.js';
 import './css/Router.css';
 import './css/CommonTheme.css';
 require('dotenv').config();
 
-/**
- * @TODO add link to app stores for small screens (mobile)
- */
-export default class Router extends StoryCompanion {
+class Router extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
             isStoryListOpen: true
         }
-        this.AppStore = new AppStore();
     }
 
     toggleIsStoryListOpen = () => {
         this.setState({isStoryListOpen: !this.state.isStoryListOpen});
-    }
-
-    componentWillMount() {
-        let loadedAppStore = localStorage.getItem('AppStore');
-        if (loadedAppStore !== null) {
-            this.AppStore.setValue(JSON.parse(loadedAppStore));
-        }
-    }
-
-    isUserLoggedIn = () => {
-        let loadedAppStore = localStorage.getItem('AppStore');
-        if (loadedAppStore !== null) {
-            return true;
-        }
-        return false;
-    }
-
-    updateAppStore = (newAppStore) => {
-        this.AppStore = newAppStore;
-        localStorage.setItem('apiKey', newAppStore.apiKey);
-        localStorage.setItem('AppStore', JSON.stringify(newAppStore));
-        this.forceUpdate();
     }
 
     render() {
@@ -65,12 +40,7 @@ export default class Router extends StoryCompanion {
                 <BrowserRouter>
                     <div className="application">
                         <div>
-                            <GlobalAlert
-                                visible={this.state.showGlobalAlert}
-                                type={this.state.globalAlertType}
-                                message={this.state.globalAlertMessage}
-                                closeAlert={this.closeAlert}
-                            />
+                            <GlobalAlert/>
                         </div>
                         <title>Story Companion</title>
                         <DocumentTitle title="Story Companion"/>
@@ -78,9 +48,6 @@ export default class Router extends StoryCompanion {
                             render={(props) => (
                                 <HeaderBar
                                     {...props}
-                                    showAlert={this.showAlert}
-                                    AppStore={this.AppStore}
-                                    isUserLoggedIn={this.isUserLoggedIn}
                                 />
                             )}
                         />
@@ -88,10 +55,6 @@ export default class Router extends StoryCompanion {
                             render={(props) => (
                                 <StoriesList
                                     {...props}
-                                    isUserLoggedIn={this.isUserLoggedIn}
-                                    showAlert={this.showAlert}
-                                    updateAppStore={this.updateAppStore}
-                                    AppStore={this.AppStore}
                                     toggleIsStoryListOpen={this.toggleIsStoryListOpen}
                                     hidden={!this.state.isStoryListOpen}
                                 />
@@ -102,10 +65,6 @@ export default class Router extends StoryCompanion {
                             render={(props) => (
                                 <Login
                                     {...props}
-                                    updateAppStore={this.updateAppStore}
-                                    AppStore={this.AppStore}
-                                    isUserLoggedIn={this.isUserLoggedIn}
-                                    showAlert={this.showAlert}
                                 />
                             )}
                         />
@@ -114,10 +73,6 @@ export default class Router extends StoryCompanion {
                             render={(props) => (
                                 <CreateAccount
                                     {...props}
-                                    updateAppStore={this.updateAppStore}
-                                    AppStore={this.AppStore}
-                                    isUserLoggedIn={this.isUserLoggedIn}
-                                    showAlert={this.showAlert}
                                 />
                             )}
                         />
@@ -126,10 +81,6 @@ export default class Router extends StoryCompanion {
                             render={(props) => (
                                 <ResetPassword
                                     {...props}
-                                    updateAppStore={this.updateAppStore}
-                                    AppStore={this.AppStore}
-                                    isUserLoggedIn={this.isUserLoggedIn}
-                                    showAlert={this.showAlert}
                                 />
                             )}
                         />
@@ -143,9 +94,7 @@ export default class Router extends StoryCompanion {
                                 render={(props) => (
                                     <Chapters
                                         {...props}
-                                        updateAppStore={this.updateAppStore}
-                                        AppStore={this.AppStore}
-                                        showAlert={this.showAlert}
+
                                     />
                                 )}
                             />
@@ -154,9 +103,7 @@ export default class Router extends StoryCompanion {
                                 render={(props) => (
                                     <Plots
                                         {...props}
-                                        updateAppStore={this.updateAppStore}
-                                        AppStore={this.AppStore}
-                                        showAlert={this.showAlert}
+
                                     />
                                 )}
                             />
@@ -165,9 +112,7 @@ export default class Router extends StoryCompanion {
                                 render={(props) => (
                                     <Characters
                                         {...props}
-                                        updateAppStore={this.updateAppStore}
-                                        AppStore={this.AppStore}
-                                        showAlert={this.showAlert}
+
                                     />
                                 )}
                             />
@@ -176,9 +121,7 @@ export default class Router extends StoryCompanion {
                                 render={(props) => (
                                     <Notes
                                         {...props}
-                                        updateAppStore={this.updateAppStore}
-                                        AppStore={this.AppStore}
-                                        showAlert={this.showAlert}
+
                                     />
                                 )}
                             />
@@ -187,9 +130,7 @@ export default class Router extends StoryCompanion {
                                 render={(props) => (
                                     <Draft
                                         {...props}
-                                        updateAppStore={this.updateAppStore}
-                                        AppStore={this.AppStore}
-                                        showAlert={this.showAlert}
+
                                     />
                                 )}
                             />
@@ -198,9 +139,7 @@ export default class Router extends StoryCompanion {
                                 render={(props) => (
                                     <Settings
                                         {...props}
-                                        updateAppStore={this.updateAppStore}
-                                        AppStore={this.AppStore}
-                                        showAlert={this.showAlert}
+
                                     />
                                 )}
                             />
@@ -223,3 +162,5 @@ export default class Router extends StoryCompanion {
         )
     }
 }
+
+export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(Router);
