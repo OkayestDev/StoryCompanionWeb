@@ -16,7 +16,7 @@ import GlobalAlert from './components/GlobalAlert.js';
 import StoryCompanion from './utils/StoryCompanion.js';
 import StoriesList from './components/StoriesList.js';
 import { connect } from 'react-redux';
-import { Actions } from './store/Actions.js';
+import { showAlert } from './store/Actions.js';
 import Ad from './components/Ad.js';
 import './css/Router.css';
 import './css/CommonTheme.css';
@@ -26,33 +26,27 @@ class Router extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
-            isStoryListOpen: true
-        }
+            isStoryListOpen: true,
+        };
     }
 
     toggleIsStoryListOpen = () => {
-        this.setState({isStoryListOpen: !this.state.isStoryListOpen});
-    }
+        this.setState({ isStoryListOpen: !this.state.isStoryListOpen });
+    };
 
     render() {
-        return(
+        return (
             <div className="full flex">
                 <BrowserRouter>
                     <div className="application">
                         <div>
-                            <GlobalAlert/>
+                            <GlobalAlert />
                         </div>
                         <title>Story Companion</title>
-                        <DocumentTitle title="Story Companion"/>
+                        <DocumentTitle title="Story Companion" />
+                        <Route render={props => <HeaderBar {...props} />} />
                         <Route
-                            render={(props) => (
-                                <HeaderBar
-                                    {...props}
-                                />
-                            )}
-                        />
-                        <Route
-                            render={(props) => (
+                            render={props => (
                                 <StoriesList
                                     {...props}
                                     toggleIsStoryListOpen={this.toggleIsStoryListOpen}
@@ -60,107 +54,66 @@ class Router extends StoryCompanion {
                                 />
                             )}
                         />
+                        <Route path="/login" exact render={props => <Login {...props} />} />
                         <Route
-                            path="/login" exact
-                            render={(props) => (
-                                <Login
-                                    {...props}
-                                />
-                            )}
+                            path="/create_account"
+                            exact
+                            render={props => <CreateAccount {...props} />}
                         />
                         <Route
-                            path="/create_account" exact
-                            render={(props) => (
-                                <CreateAccount
-                                    {...props}
-                                />
-                            )}
-                        />
-                        <Route
-                            path="/reset_password" exact
-                            render={(props) => (
-                                <ResetPassword
-                                    {...props}
-                                />
-                            )}
+                            path="/reset_password"
+                            exact
+                            render={props => <ResetPassword {...props} />}
                         />
                         {/* All routes with story list available inside this div */}
-                        <div 
-                            style={(this.state.isStoryListOpen ? {marginLeft: '510px'} : {marginLeft: '50px'})}
+                        <div
+                            style={
+                                this.state.isStoryListOpen
+                                    ? { marginLeft: '510px' }
+                                    : { marginLeft: '50px' }
+                            }
                             className="view"
                         >
                             <Route
-                                path="/chapters" exact
-                                render={(props) => (
-                                    <Chapters
-                                        {...props}
-
-                                    />
-                                )}
+                                path="/chapters"
+                                exact
+                                render={props => <Chapters {...props} />}
                             />
+                            <Route path="/plots" exact render={props => <Plots {...props} />} />
                             <Route
-                                path="/plots" exact
-                                render={(props) => (
-                                    <Plots
-                                        {...props}
-
-                                    />
-                                )}
+                                path="/characters"
+                                exact
+                                render={props => <Characters {...props} />}
                             />
+                            <Route path="/notes" exact render={props => <Notes {...props} />} />
+                            <Route path="/draft" exact render={props => <Draft {...props} />} />
                             <Route
-                                path="/characters" exact
-                                render={(props) => (
-                                    <Characters
-                                        {...props}
-
-                                    />
-                                )}
+                                path="/settings"
+                                exact
+                                render={props => <Settings {...props} />}
                             />
-                            <Route
-                                path="/notes" exact
-                                render={(props) => (
-                                    <Notes
-                                        {...props}
-
-                                    />
-                                )}
-                            />
-                            <Route
-                                path="/draft" exact
-                                render={(props) => (
-                                    <Draft
-                                        {...props}
-
-                                    />
-                                )}
-                            />
-                            <Route
-                                path="/settings" exact
-                                render={(props) => (
-                                    <Settings
-                                        {...props}
-
-                                    />
-                                )}
-                            />
-                            <Route
-                                path="/" exact
-                                render={(props) => (
-                                    <App
-                                        {...props}
-                                    />
-                                )}
-                            />
+                            <Route path="/" exact render={props => <App {...props} />} />
                         </div>
                     </div>
                 </BrowserRouter>
-                {
-                    this.isUserLoggedIn() &&
-                    <Ad/>
-                }
+                {this.isUserLoggedIn() && <Ad />}
             </div>
-        )
+        );
     }
 }
 
-export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(Router);
+function mapStateToProps(state) {
+    return {
+        apiKey: state.apiKey,
+        userId: state.userId,
+    };
+}
+
+const mapDispatchToProps = {
+    showAlert,
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Router);

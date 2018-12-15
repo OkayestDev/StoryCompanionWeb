@@ -1,48 +1,47 @@
 import React, { Component } from 'react';
 import UserRequests from '../utils/UserRequests.js';
 import { connect } from 'react-redux';
-import { Actions } from '../store/Actions.js';
+import { showAlert } from '../store/Actions.js';
 import '../css/ResetPassword.css';
 
 class ResetPassword extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: ''
-        }
+            email: '',
+        };
         this.UserRequests = new UserRequests();
     }
 
     resetPassword = () => {
-        this.UserRequests.passwordReset(this.state.email).then((res) => {
-            if ('error' in res) {
-                this.props.showAlert(res.error, "warning");
-            }
-            else {
-                this.props.showAlert(`Successfully sent temporary password to ${this.state.email}`, "success");
-                this.setState({email: ''});
-            }
-        })
-        .catch(() => {
-            this.props.showAlert("Unable to reset password at this time", "danger");
-        })
-    }
+        this.UserRequests.passwordReset(this.state.email)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.showAlert(
+                        `Successfully sent temporary password to ${this.state.email}`,
+                        'success'
+                    );
+                    this.setState({ email: '' });
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to reset password at this time', 'danger');
+            });
+    };
 
     render() {
         return (
             <div className="full resetPasswordContainer">
-                <div className="forgotPassword">
-                    Forgot Your Password, eh?
-                </div>
+                <div className="forgotPassword">Forgot Your Password, eh?</div>
                 <div className="resetPassword">
                     <div className="resetPasswordInputContainer">
-                        <div className="resetPasswordLabel">
-                            Email
-                        </div>
+                        <div className="resetPasswordLabel">Email</div>
                         <input
                             value={this.state.email}
                             className="resetPasswordInput"
-                            onChange={(newEmail) => this.setState({email: newEmail.target.value})}
+                            onChange={newEmail => this.setState({ email: newEmail.target.value })}
                         />
                     </div>
                     <div
@@ -53,8 +52,22 @@ class ResetPassword extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
-export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(ResetPassword);
+function mapStateToProps(state) {
+    return {
+        userId: state.userId,
+        apiKey: state.apiKey,
+    };
+}
+
+const mapDispatchToProps = {
+    showAlert,
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ResetPassword);

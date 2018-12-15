@@ -8,7 +8,7 @@ import ReactTooltip from 'react-tooltip';
 import EditEntityModal from './EditEntityModal.js';
 import StoryListItem from './StoryListItem.js';
 import { connect } from 'react-redux';
-import { Actions } from '../store/Actions.js';
+import { showAlert, setStories, editStoryComponents } from '../store/Actions.js';
 import '../css/StoriesList.css';
 
 /**
@@ -32,7 +32,7 @@ class StoriesList extends StoryCompanion {
             image: '',
             tag: '',
         };
-    }
+    };
 
     componentWillReceiveProps(props) {
         if (this.props.userId !== props.userId) {
@@ -43,117 +43,121 @@ class StoriesList extends StoryCompanion {
     getStories = () => {
         if (this.props.userId !== null) {
             let paramsObject = this.createParamsObject();
-            this.StoryRequests.getStories(paramsObject).then((res) => {
+            this.StoryRequests.getStories(paramsObject)
+                .then(res => {
+                    if ('error' in res) {
+                        this.props.showAlert(res.error, 'warning');
+                    } else {
+                        this.props.setStories(res.success);
+                    }
+                })
+                .catch(() => {
+                    this.props.showAlert('Unable to fetch stories at this time', 'danger');
+                });
+        }
+    };
+
+    createStory = async () => {
+        var image = '';
+        if (this.state.image.includes('data:image') && this.state.image.includes('base64')) {
+            image = await this.uploadToS3(this.state.image, 'story', this.props.userId);
+        } else {
+            image = this.state.image;
+        }
+
+        // Upload image failed. Show alert and reset image to avoid post error
+        if (typeof image === 'undefined') {
+            image = '';
+            this.props.showAlert('Unable to upload image at this time', 'warning');
+        }
+
+        let paramsObject = this.createParamsObject();
+        paramsObject['image'] = image;
+        this.StoryRequests.createStory(paramsObject)
+            .then(res => {
                 if ('error' in res) {
-                    this.props.showAlert(res.error, "warning");
-                }
-                else {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.showAlert(
+                        'Successfully created new story, ' + this.state.name,
+                        'success'
+                    );
+                    this.setState({ ...this.defaultState() });
                     this.props.setStories(res.success);
                 }
             })
             .catch(() => {
-                this.props.showAlert("Unable to fetch stories at this time", "danger");
+                this.props.showAlert('Unable to create story at this time', 'danger');
             });
-        }
-    }
-
-    createStory = async () => {
-        var image = "";
-        if (this.state.image.includes("data:image") && this.state.image.includes("base64")) {
-            image = await this.uploadToS3(this.state.image, "story", this.props.userId);
-        }
-        else {
-            image = this.state.image;
-        }
-
-        // Upload image failed. Show alert and reset image to avoid post error
-        if (typeof image === 'undefined') {
-            image = '';
-            this.props.showAlert("Unable to upload image at this time", "warning");
-        }
-
-        let paramsObject = this.createParamsObject();
-        paramsObject['image'] = image;
-        this.StoryRequests.createStory(paramsObject).then((res) => {
-            if ('error' in res) {
-                this.props.showAlert(res.error, "warning");
-            }
-            else {
-                this.props.showAlert("Successfully created new story, " + this.state.name, "success");
-                this.setState({...this.defaultState()});
-                this.props.setStories(res.success);
-            }
-        })
-        .catch((error) => {
-            this.props.showAlert("Unable to create story at this time", "danger");
-        });
-    }
+    };
 
     editStory = async () => {
-        var image = "";
-        if (this.state.image.includes("data:image") && this.state.image.includes("base64")) {
-            image = await this.uploadToS3(this.state.image, "story", this.props.userId);
-        }
-        else {
+        var image = '';
+        if (this.state.image.includes('data:image') && this.state.image.includes('base64')) {
+            image = await this.uploadToS3(this.state.image, 'story', this.props.userId);
+        } else {
             image = this.state.image;
         }
 
         // Upload image failed. Show alert and reset image to avoid post error
         if (typeof image === 'undefined') {
             image = '';
-            this.props.showAlert("Unable to upload image at this time", "warning");
+            this.props.showAlert('Unable to upload image at this time', 'warning');
         }
 
         let paramsObject = this.createParamsObject();
         paramsObject['image'] = image;
-        this.StoryRequests.editStory(paramsObject).then((res) => {
-            if ('error' in res) {
-                this.props.showAlert(res.error, "warning");
-            }
-            else {
-                this.props.showAlert("Successfully edited story, " + this.state.name, "success");
-                let tempStories = this.props.stories;
-                tempStories[this.state.selectedStoryId] = res.success;
-                this.setState({...this.defaultState()});
-                this.props.setStories(res.success);
-            }
-        })
-        .catch(() => {
-            this.props.showAlert("Unable to edit at this time", "danger");
-        });
-    }
+        this.StoryRequests.editStory(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.showAlert(
+                        'Successfully edited story, ' + this.state.name,
+                        'success'
+                    );
+                    let tempStories = this.props.stories;
+                    tempStories[this.state.selectedStoryId] = res.success;
+                    this.setState({ ...this.defaultState() });
+                    this.props.setStories(res.success);
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to edit at this time', 'danger');
+            });
+    };
 
-    deleteStory = (id) => {
+    deleteStory = id => {
         let paramsObject = this.createParamsObject();
-        this.StoryRequests.deleteStory(paramsObject).then((res) => {
-            if ('error' in res) {
-                this.props.showAlert(res.error, "warning")
-            }
-            else {
-                let tempStories = this.props.stories
-                delete tempStories[id];
-                this.setState({...this.defaultState()});
-                this.props.setStories(tempStories);
-            }
-        })
-        .catch(() => {
-            this.props.showAlert("Unable to delete story at this time", "danger");
-        });
-    }
+        this.StoryRequests.deleteStory(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    let tempStories = this.props.stories;
+                    delete tempStories[id];
+                    this.setState({ ...this.defaultState() });
+                    this.props.setStories(tempStories);
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to delete story at this time', 'danger');
+            });
+    };
 
-    selectStoryForComponents = (id) => {
+    selectStoryForComponents = id => {
         this.props.editStoryComponents(id);
-    }
+    };
 
-    selectStoryForEdit = (id) => {
+    selectStoryForEdit = id => {
         this.setState({
             isStoryModalOpen: true,
             selectedStoryId: id,
             name: this.props.stories[id].name,
             description: this.props.stories[id].description,
-            image: this.props.stories[id].image
-        })
-    }
+            image: this.props.stories[id].image,
+        });
+    };
 
     newStory = () => {
         this.setState({
@@ -163,16 +167,13 @@ class StoriesList extends StoryCompanion {
             description: '',
             image: '',
         });
-    }
+    };
 
     renderStories = () => {
         let storiesList = [];
         for (let id in this.props.stories) {
             storiesList.push(
-                <div 
-                    className={id === this.props.selectedStoryId ? "activeStory" : ""}
-                    key={id}
-                >
+                <div className={id === this.props.selectedStoryId ? 'activeStory' : ''} key={id}>
                     <StoryListItem
                         isSelectedStory={id === this.props.selectStoryForEdit}
                         id={id}
@@ -181,10 +182,10 @@ class StoriesList extends StoryCompanion {
                         selectStoryForEdit={() => this.selectStoryForEdit(id)}
                     />
                 </div>
-            )
+            );
         }
         return storiesList;
-    }
+    };
 
     render() {
         if (this.isUserLoggedIn() && !this.props.hidden) {
@@ -193,19 +194,29 @@ class StoriesList extends StoryCompanion {
                     <EditEntityModal
                         isEntityModalOpen={this.state.isStoryModalOpen}
                         selectedId={this.state.selectedStoryId}
-                        onRequestClose={() => this.setState({isStoryModalOpen: false})}
+                        onRequestClose={() => this.setState({ isStoryModalOpen: false })}
                         objectName="Story"
-                        title={this.state.selectedStoryId === null ? "Create a Story" : "Edit Story"}
+                        title={
+                            this.state.selectedStoryId === null ? 'Create a Story' : 'Edit Story'
+                        }
                         image={this.state.image}
-                        imageOnChange={(image) => this.setState({image: image})}
+                        imageOnChange={image => this.setState({ image: image })}
                         description={this.state.description}
-                        descriptionOnChange={(newDescription) => this.setState({description: newDescription})}
+                        descriptionOnChange={newDescription =>
+                            this.setState({ description: newDescription })
+                        }
                         name={this.state.name}
-                        nameOnChange={(newName) => this.setState({name: newName})}
-                        onSave={() => this.state.selectedStoryId === null ? this.createStory() : this.editStory()}
+                        nameOnChange={newName => this.setState({ name: newName })}
+                        onSave={() =>
+                            this.state.selectedStoryId === null
+                                ? this.createStory()
+                                : this.editStory()
+                        }
                         onDelete={() => this.deleteStory(this.state.selectedStoryId)}
                         showAlert={this.props.showAlert}
-                        saveButtonText={this.state.selectedStoryId === null ? "Create Story" : "Edit Story"}
+                        saveButtonText={
+                            this.state.selectedStoryId === null ? 'Create Story' : 'Edit Story'
+                        }
                         deleteButtonText="Delete Story"
                         confirmationAction="Delete Story?"
                     />
@@ -219,9 +230,7 @@ class StoriesList extends StoryCompanion {
                                 this.props.toggleIsStoryListOpen();
                             }}
                         />
-                        <div className="storiesListLabelText">
-                            Stories
-                        </div>
+                        <div className="storiesListLabelText">Stories</div>
                         <Icon
                             className="storiesListIcon"
                             icon={plus}
@@ -230,33 +239,48 @@ class StoriesList extends StoryCompanion {
                             onClick={() => this.newStory()}
                         />
                     </div>
-                    <div>
-                        {this.renderStories()}
-                    </div>
-                    <ReactTooltip  delayShow={500}/>
+                    <div>{this.renderStories()}</div>
+                    <ReactTooltip delayShow={500} />
                 </div>
-            )
-        }
-        else if (this.isUserLoggedIn()) {
+            );
+        } else if (this.isUserLoggedIn()) {
             return (
                 <div className="hiddenStoriesList">
-                        <Icon
-                            className="storiesListIcon"
-                            icon={iosBook}
-                            size={30}
-                            data-tip="Open Stories List"
-                            onClick={() => {
-                                this.props.toggleIsStoryListOpen();                                
-                            }}
-                        />
-                    <ReactTooltip delayShow={500}/>
+                    <Icon
+                        className="storiesListIcon"
+                        icon={iosBook}
+                        size={30}
+                        data-tip="Open Stories List"
+                        onClick={() => {
+                            this.props.toggleIsStoryListOpen();
+                        }}
+                    />
+                    <ReactTooltip delayShow={500} />
                 </div>
-            )
-        }
-        else {
+            );
+        } else {
             return null;
         }
     }
 }
 
-export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(StoriesList);
+function mapStateToProps(state) {
+    return {
+        stories: state.stories,
+        selectedStoryId: state.selectedStoryId,
+        userId: state.userId,
+        apiKey: state.apiKey,
+        tags: state.tags,
+    };
+}
+
+const mapDispatchToProps = {
+    showAlert,
+    setStories,
+    editStoryComponents,
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(StoriesList);

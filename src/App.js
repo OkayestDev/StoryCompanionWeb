@@ -1,19 +1,33 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { Actions } from './store/Actions.js';
+import { showAlert } from './store/Actions.js';
 
 class App extends Component {
     componentWillMount() {
-        if (localStorage.getItem("AppStore") !== null) {
-            this.props.history.push("/chapters");
-        }
-        else {
-            this.props.history.push("/login");
+        if (this.props.userId !== null) {
+            this.props.history.push('/chapters');
+        } else {
+            this.props.history.push('/login');
         }
     }
 
     // Required function of Component
-    render() { return null }
+    render() {
+        return null;
+    }
 }
 
-export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(App);
+function mapStateToProps(state) {
+    return {
+        userId: state.userId,
+    };
+}
+
+const mapDispatchToProps = {
+    showAlert,
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);

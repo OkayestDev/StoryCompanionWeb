@@ -1,37 +1,31 @@
-export const Actions = {
-    mapStateToProps: (
-        function mapStateToProps(state) {
-            return {
-                ...state
-            }
-        }
-    ),
-    mapDispatchToProps: (
-        function mapDispatchToProps(dispatch) {
-            return {
-                login: (payload) => dispatch({
-                    type: "LOGIN",
-                    payload: payload,
-                }),
-                setStories: (payload) => dispatch({
-                    type: "SET_STORIES",
-                    payload: payload,
-                }),
-                editStoryComponents: (payload) => dispatch({
-                    type: "EDIT_COMPONENTS",
-                    payload: payload,
-                }),
-                setTags: (payload) => dispatch({
-                    type: "SET_TAGS",
-                    payload: payload,
-                }),
-                logout: () => dispatch({type: "LOGOUT"}),
-                showAlert: (payload) => dispatch({
-                    type: "SHOW_ALERT",
-                    payload: payload,
-                }),
-                closeAlert: () => dispatch({type: "CLOSE_ALERT"})
-            }
-        }
-    )
-}
+export const login = payload => ({
+    type: 'LOGIN',
+    payload: payload,
+});
+
+export const setStories = payload => ({
+    type: 'SET_STORIES',
+    payload: payload,
+});
+
+export const editStoryComponents = payload => ({
+    type: 'EDIT_COMPONENTS',
+    payload: payload,
+});
+
+export const setTags = payload => ({
+    type: 'SET_TAGS',
+    payload: payload,
+});
+
+export const logout = () => ({ type: 'LOGOUT' });
+
+export const showAlert = (message, type) => ({
+    type: 'SHOW_ALERT',
+    payload: {
+        globalAlertMessage: message,
+        globalAlertType: type,
+    },
+});
+
+export const closeAlert = () => ({ type: 'CLOSE_ALERT' });

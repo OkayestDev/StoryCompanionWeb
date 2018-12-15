@@ -9,7 +9,7 @@ import storage from 'redux-persist/lib/storage';
 const PERSIST_CONFIG = {
     key: '1.0.0',
     storage: storage,
-}
+};
 
 const INITIAL_STATE = {
     apiKey: null,
@@ -22,67 +22,68 @@ const INITIAL_STATE = {
     plots: null,
     characters: null,
     showGlobalAlert: false,
-    globalAlertType: "success",
+    globalAlertType: 'success',
     globalAlertMessage: '',
-}
+};
 
 const reducer = (state = INITIAL_STATE, action) => {
     let newState = state;
     switch (action.type) {
-        case "LOGIN":
+        case 'LOGIN':
             newState = {
                 ...state,
                 apiKey: action.payload.apiKey,
                 email: action.payload.email,
                 userId: action.payload.id,
+                showGlobalAlert: false,
             };
             break;
-        case "SET_STORIES":
+        case 'SET_STORIES':
             newState = {
                 ...state,
                 stories: action.payload,
-            }
-            break;
-        case "EDIT_COMPONENTS":
-            newState = {
-                ...state,
-                selectedStoryId: action.payload
             };
             break;
-        case "SET_TAGS":
+        case 'EDIT_COMPONENTS':
             newState = {
                 ...state,
-                tags: action.payload
+                selectedStoryId: action.payload,
             };
             break;
-        case "LOGOUT":
+        case 'SET_TAGS':
+            newState = {
+                ...state,
+                tags: action.payload,
+            };
+            break;
+        case 'LOGOUT':
             newState = INITIAL_STATE;
             break;
-        case "SHOW_ALERT":
+        case 'SHOW_ALERT':
             newState = {
                 ...state,
                 showGlobalAlert: true,
                 globalAlertType: action.payload.globalAlertType,
                 globalAlertMessage: action.payload.globalAlertMessage,
-            }
+            };
             break;
-        case "CLOSE_ALERT":
+        case 'CLOSE_ALERT':
             newState = {
                 ...state,
                 showGlobalAlert: false,
-            }
+            };
             break;
     }
 
-    if (LOGS.ENABLE_LOGS) {
-        console.info("Updating AppStore: ", {
+    if (LOGS.LOG_APPSTORE_CHANGE) {
+        console.info('Updating AppStore: ', {
             state: newState,
             action: action,
         });
     }
 
     return newState;
-}
+};
 
 const persistedReducer = persistReducer(PERSIST_CONFIG, reducer);
 

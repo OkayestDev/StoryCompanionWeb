@@ -11,11 +11,6 @@ const s3 = new AWS.S3();
 export default class StoryCompanion extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            showGlobalAlert: false,
-            globalAlertMessage: "",
-            globalAlertType: "",
-        }
         this.TagRequests = new TagRequests();
     }
 
@@ -25,47 +20,49 @@ export default class StoryCompanion extends Component {
      * @param {string} filename name of the file to be read from base64 string
      */
     dataURLtoFile = (dataURL, filename) => {
-        let arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-        while(n--) {
+        let arr = dataURL.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
         }
-        return new File([u8arr], filename, {type:mime});
-    }
+        return new File([u8arr], filename, { type: mime });
+    };
 
     uploadToS3 = async (data, objectName, userId) => {
         let now = new Date();
-        let filename = userId + "-" + objectName + "-" + now.getTime(); 
+        let filename = userId + '-' + objectName + '-' + now.getTime();
         let file = this.dataURLtoFile(data, filename);
-        let extension = file.type.split("/");
+        let extension = file.type.split('/');
         extension = extension[1];
         let params = {
-            ACL: "public-read",
+            ACL: 'public-read',
             Body: file,
             Bucket: process.env.REACT_APP_AWS_BUCKET,
             ContentTye: file.type,
-            Key: `${filename}.${extension}`
-        }
-        return s3.upload(params).promise().then((res) => {
-            return res.Location;
-        })
-        .catch((error) => {
-            console.info("Unable to upload image to S3", error);
-        });
-    }
+            Key: `${filename}.${extension}`,
+        };
+        return s3
+            .upload(params)
+            .promise()
+            .then(res => {
+                return res.Location;
+            })
+            .catch(error => {
+                console.info('Unable to upload image to S3', error);
+            });
+    };
 
     isUserLoggedIn = () => {
         if (this.props.userId !== null && this.props.apiKey !== null) {
             return true;
         }
         return false;
-    }
+    };
 
     createParamsObject = () => {
-        if (typeof this.state === 'undefined') {
-            this.state = {};
-        }
-
         return {
             plot: 'selectedPlotId' in this.state ? this.state.selectedPlotId : '',
             plotParent: 'plotParent' in this.state ? this.state.plotParent : '',
@@ -74,58 +71,75 @@ export default class StoryCompanion extends Component {
             character: 'selectedCharacterId' in this.state ? this.state.selectedCharacterId : '',
             chapter: 'selectedChapterId' in this.state ? this.state.selectedChapterId : '',
             number: 'number' in this.state ? this.state.number : '',
-            user: 'userId' in this.state ? this.state.userId : this.props.userId,
-            story: 'selectedStoryId' in this.state ? this.state.selectedStoryId : this.props.selectedStoryId,
+            user:
+                'userId' in this.state
+                    ? this.state.userId
+                    : 'userId' in this.props
+                    ? this.props.userId
+                    : '',
+            story:
+                'selectedStoryId' in this.state
+                    ? this.state.selectedStoryId
+                    : 'selectedStoryId' in this.props
+                    ? this.props.selectedStoryId
+                    : '',
             tag: 'selectedTagId' in this.state ? this.state.selectedTagId : '',
             type: 'type' in this.state ? this.state.type : '',
             description: 'description' in this.state ? this.state.description : '',
             attribute: 'attribute' in this.state ? this.state.attribute : '',
             name: 'name' in this.state ? this.state.name : '',
-            email: 'email' in this.state ? this.state.email : this.props.email,
+            email:
+                'email' in this.state
+                    ? this.state.email
+                    : 'email' in this.props
+                    ? this.props.email
+                    : '',
             confirmEmail: 'confirmEmail' in this.state ? this.state.confirmEmail : '',
             password: 'password' in this.state ? this.state.password : '',
             confirmPassword: 'confirmPassword' in this.state ? this.state.confirmPassword : '',
             apiKey: this.props.apiKey,
-        }
-    }
+        };
+    };
 
     getTags = () => {
         // Instance of array means tags is empty
         if (this.props.tags === null || this.props.tags instanceof Array) {
             let paramsObject = this.createParamsObject();
-            this.TagRequests.getTags(paramsObject).then((res) => {
-                if ('error' in res) {
+            this.TagRequests.getTags(paramsObject)
+                .then(res => {
+                    if ('error' in res) {
+                        this.setState({
+                            globalAlertVisible: true,
+                            globalAlertType: 'danger',
+                            globalAlertMessage: 'Unable to fetch tags at this time',
+                        });
+                    } else {
+                        this.props.setTags(res.success);
+                    }
+                })
+                .catch(() => {
                     this.setState({
                         globalAlertVisible: true,
                         globalAlertType: 'danger',
-                        globalAlertMessage: "Unable to fetch tags at this time",
+                        globalAlertMessage: 'Unable to fetch tags at this time',
                     });
-                }
-                else {
-                    this.props.setTags(res.success);
-                }
-            })
-            .catch(() => {
-                this.setState({
-                    globalAlertVisible: true,
-                    globalAlertType: 'danger',
-                    globalAlertMessage: "Unable to fetch tags at this time",
-                })
-            })
+                });
         }
-    }
+    };
 
-    filterTagsByType = (type) => {
+    filterTagsByType = type => {
         let tagIds = Object.keys(this.props.tags);
         let tagByType = {};
-        tagIds.forEach((id) => {
+        tagIds.forEach(id => {
             if (this.props.tags[id].type === type) {
                 tagByType[id] = this.props.tags[id];
             }
         });
         return tagByType;
-    }
+    };
 
     // Required function of Component
-    render() { return null }
+    render() {
+        return null;
+    }
 }

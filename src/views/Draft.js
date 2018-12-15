@@ -2,123 +2,117 @@ import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion.js';
 import DraftRequests from '../utils/DraftRequests.js';
 import { connect } from 'react-redux';
-import { Actions } from '../store/Actions.js';
+import { showAlert } from '../store/Actions.js';
 import '../css/Draft.css';
 
 class Draft extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
-            draft: 'none',
+            selectedDraftId: 'none',
             description: '',
-            selectedStoryId: null,
         };
         this.DraftRequests = new DraftRequests();
         this.getDraft();
     }
 
     componentWillReceiveProps(props) {
-        if (this.state.selectedStoryId !== props.AppStore.selectedStoryId) {
+        if (this.props.selectedStoryId !== props.selectedStoryId) {
             this.getDraft();
         }
     }
 
     getDraft() {
-        if (this.props.AppStore.selectedStoryId !== null) {
-            this.DraftRequests.getDrafts(this.props.AppStore.selectedStoryId).then((res) => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, "warning");
-                }
-                else {
-                    if ('id' in res.success) {
-                        this.setState({
-                            draft: res.success.id,
-                            description: res.success.description,
-                            selectedStoryId: this.props.AppStore.selectedStoryId,
-                        });
+        if (this.props.selectedStoryId !== null) {
+            const paramsObject = this.createParamsObject();
+            this.DraftRequests.getDrafts(paramsObject)
+                .then(res => {
+                    if ('error' in res) {
+                        this.props.showAlert(res.error, 'warning');
+                    } else {
+                        if ('id' in res.success) {
+                            this.setState({
+                                selectedDraftId: res.success.id,
+                                description: res.success.description,
+                            });
+                        } else {
+                            this.setState({
+                                selectedDraftId: null,
+                                description: '',
+                            });
+                        }
                     }
-                    else {
-                        this.setState({
-                            draft: null,
-                            selectedStoryId: this.props.AppStore.selectedStoryId,
-                        });
-                    }
-                }
-            })
-            .catch(() => {
-                this.props.showAlert("Unable to fetch draft at this time", "danger");
-            });
+                })
+                .catch(() => {
+                    this.props.showAlert('Unable to fetch draft at this time', 'danger');
+                });
         }
     }
 
     createDraft = () => {
-        let paramsObject = {
-            story: this.props.AppStore.selectedStoryId,
-            description: '',
-        };
-        this.DraftRequests.createDraft(paramsObject).then((res) => {
-            if ('error' in res) {
-                this.props.showAlert(res.error, "warning");
-            }
-            else {
-                this.setState({
-                    draft: res.success.id,
-                    description: res.success.description
-                });
-            }
-        })
-        .catch(() => {
-            this.props.showAlert("Unable to create a draft at this time", "danger");
-        })
-    }
+        const paramsObject = this.createParamsObject();
+        this.DraftRequests.createDraft(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.setState({
+                        selectedDraftId: res.success.id,
+                        description: res.success.description,
+                    });
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to create a draft at this time', 'danger');
+            });
+    };
 
     editDraft = () => {
-        let paramsObject = {
-            description: this.state.description,
-            draft: this.state.draft,
-        };
-        this.DraftRequests.editDraft(paramsObject).then((res) => {
-            if ('error' in res) {
-                this.props.showAlert(res.error, "warning");
-            }
-            else {
-                this.props.showAlert("Successfully saved draft", "success");
-            }
-        })
-        .catch(() => {
-            this.props.showAlert("Unable to edit draft at this time", "danger");
-        })
-    }
+        const paramsObject = this.createParamsObject();
+        this.DraftRequests.editDraft(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.showAlert('Successfully saved draft', 'success');
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to edit draft at this time', 'danger');
+            });
+    };
 
     exportDraft = () => {
-        this.DraftRequests.exportDraft(this.state.draft).then((res) => {
-            if ('error' in res) {
-                this.props.showAlert(res.error, "warning");
-            }
-            else {
-                this.props.showAlert(`Successfully emailed draft to ${this.props.AppStore.email}`, "success");
-            }
-        })
-        .catch(() => {
-            this.props.showAlert("Unable to export draft at this time", "danger");
-        })
-    }
+        const paramsObject = this.createParamsObject();
+        this.DraftRequests.exportDraft(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.showAlert(
+                        `Successfully emailed draft to ${this.props.email}`,
+                        'success'
+                    );
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to export draft at this time', 'danger');
+            });
+    };
 
     render() {
-        if (this.props.AppStore.selectedStoryId !== null && this.state.draft !== 'none' && this.state.draft !== null) {
+        if (
+            this.props.selectedStoryId !== null &&
+            this.state.selectedDraftId !== 'none' &&
+            this.state.selectedDraftId !== null
+        ) {
             return (
                 <div className="full">
                     <div className="draftActions">
-                        <div 
-                            className="draftAction"
-                            onClick={() => this.exportDraft()}
-                        >
+                        <div className="draftAction" onClick={() => this.exportDraft()}>
                             EXPORT
                         </div>
-                        <div 
-                            className="draftAction"
-                            onClick={() => this.editDraft()}
-                        >
+                        <div className="draftAction" onClick={() => this.editDraft()}>
                             SAVE
                         </div>
                     </div>
@@ -127,32 +121,40 @@ class Draft extends StoryCompanion {
                         multiple
                         className="draftInput"
                         value={this.state.description}
-                        onChange={(newDraft) => this.setState({description: newDraft.target.value})}
+                        onChange={newDraft => this.setState({ description: newDraft.target.value })}
                     />
                 </div>
-            )
-        }
-        else if (this.state.draft === null) {
+            );
+        } else if (this.state.selectedDraftId === null) {
             return (
                 <div className="noEntityContainer">
                     <div className="noEntityText">
-                        <div>
-                            Looks like you haven't started a draft yet.
-                        </div>
-                        <div
-                            className="button startDraftButton"
-                            onClick={() => this.createDraft()}
-                        >
+                        <div>Looks like you haven't started a draft yet.</div>
+                        <div className="button startDraftButton" onClick={() => this.createDraft()}>
                             Start A Draft
                         </div>
                     </div>
                 </div>
-            )
-        }
-        else {
+            );
+        } else {
             return null;
         }
     }
 }
 
-export default connect(Actions.mapStateToProps, Actions.mapDispatchToProps)(Draft);
+function mapStateToProps(state) {
+    return {
+        selectedStoryId: state.selectedStoryId,
+        email: state.email,
+        apiKey: state.apiKey,
+    };
+}
+
+const mapDispatchToProps = {
+    showAlert,
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Draft);
