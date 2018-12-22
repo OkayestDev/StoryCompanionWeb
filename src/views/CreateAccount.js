@@ -17,12 +17,6 @@ class CreateAccount extends StoryCompanion {
         this.UserRequests = new UserRequests();
     }
 
-    componentWillMount() {
-        if (this.props.isUserLoggedIn()) {
-            this.props.history.push('/chapters');
-        }
-    }
-
     createAccount = () => {
         const paramsObject = this.createParamsObject();
         this.UserRequests.createAccount(paramsObject)

@@ -2,7 +2,7 @@ import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion.js';
 import UserRequests from '../utils/UserRequests';
 import { connect } from 'react-redux';
-import { showAlert, login } from '../store/Actions.js';
+import { showAlert, login, setTags } from '../store/Actions.js';
 import '../css/Login.css';
 
 class Login extends StoryCompanion {
@@ -29,14 +29,20 @@ class Login extends StoryCompanion {
         }
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.handleEnterKey);
+    }
+
     login = () => {
-        const paramsObject = this.createParamsObject();
+        let paramsObject = this.createParamsObject();
         this.UserRequests.login(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     this.props.login(res.success);
+                    paramsObject = this.createParamsObject();
+                    this.getTags(paramsObject);
                     this.props.history.push('/chapters');
                 }
             })
@@ -92,6 +98,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
     showAlert,
     login,
+    setTags,
 };
 
 export default connect(

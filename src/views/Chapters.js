@@ -256,7 +256,11 @@ class Chapters extends StoryCompanion {
                 </div>
             );
         } else {
-            return null;
+            return (
+                <div>
+                    <b>Edit Components</b> of a story to begin creating chapters
+                </div>
+            );
         }
     }
 }

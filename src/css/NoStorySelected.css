@@ -1,0 +1,9 @@
+.noStoryContainer {
+    width: 100%;
+    height: 90%;
+    color: #cccccc;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

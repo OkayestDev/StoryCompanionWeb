@@ -45,15 +45,17 @@ class Router extends StoryCompanion {
                         <title>Story Companion</title>
                         <DocumentTitle title="Story Companion" />
                         <Route render={props => <HeaderBar {...props} />} />
-                        <Route
-                            render={props => (
-                                <StoriesList
-                                    {...props}
-                                    toggleIsStoryListOpen={this.toggleIsStoryListOpen}
-                                    hidden={!this.state.isStoryListOpen}
-                                />
-                            )}
-                        />
+                        {this.isUserLoggedIn() && (
+                            <Route
+                                render={props => (
+                                    <StoriesList
+                                        {...props}
+                                        toggleIsStoryListOpen={this.toggleIsStoryListOpen}
+                                        hidden={!this.state.isStoryListOpen}
+                                    />
+                                )}
+                            />
+                        )}
                         <Route path="/login" exact render={props => <Login {...props} />} />
                         <Route
                             path="/create_account"

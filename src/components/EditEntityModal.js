@@ -8,70 +8,49 @@ import $ from 'jquery';
 import Confirmation from './Confirmation.js';
 import '../css/EditEntityModal.css';
 
-const supportedUploadFileTypes = [
-    'png',
-    'jpeg',
-    'jpg',
-    'gif'
-];
+const supportedUploadFileTypes = ['png', 'jpeg', 'jpg', 'gif'];
 
 // Stops console errors
 Modal.setAppElement('body');
-
-const modalStyle = {
-    content : {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        width: '550px',
-        height: "auto",
-        maxHeight: "700px",
-        overflow: 'visible',
-        padding: '0px',
-        borderRadius: '8px',
-        borderColor: '#CCCCCC',
-        borderWidth: '3px'
-    }
-};
 
 export default class EditEntityModal extends StoryCompanion {
     constructor() {
         super();
         this.state = {
             isConfirmationOpen: false,
-        }
+        };
     }
 
     uploadImage = () => {
         let reader = new FileReader();
         reader.readAsDataURL(this.uploadedFile.files[0]);
         reader.onload = (file, fileProperties = this.uploadedFile.files[0]) => {
-            if (supportedUploadFileTypes.includes(fileProperties.type.split("/")[1])) {
+            if (supportedUploadFileTypes.includes(fileProperties.type.split('/')[1])) {
                 this.props.imageOnChange(file.currentTarget.result);
+            } else {
+                this.props.showAlert(
+                    'Unsupported file type. We support ' +
+                        supportedUploadFileTypes.join(', ') +
+                        ' for file uploads',
+                    'warning'
+                );
             }
-            else {
-                this.props.showAlert("Unsupported file type. We support " + supportedUploadFileTypes.join(", ") + " for file uploads", "warning");
-            }
-        }
-    }
+        };
+    };
 
     render() {
         return (
             <div>
                 <Modal
+                    closeTimeoutMS={400}
                     isOpen={this.props.isEntityModalOpen}
-                    onRequestClose={() => this.props.onRequestClose()}
-                    style={modalStyle}
+                    onRequestClose={this.props.onRequestClose}
+                    className="modalContainer"
                     contentLabel="Story Modal"
                     shouldCloseOnOverlayClick={true}
                 >
                     <div className="modalHeader">
-                        <div className="modalTitle">
-                            {this.props.title}
-                        </div>
+                        <div className="modalTitle">{this.props.title}</div>
                         <div className="modalIconContainer">
                             <Icon
                                 className="modalCloseIcon hover"
@@ -80,118 +59,108 @@ export default class EditEntityModal extends StoryCompanion {
                                 onClick={() => this.props.onRequestClose()}
                             />
                         </div>
-                    </div> 
+                    </div>
                     <div className="modalContent">
-                    {
-                        'image' in this.props &&
-                        <div className="entityImageContainer">
-                            <div 
-                                className="entityImage hover"
-                                onClick={() => $('#entityImage').click()}
-                            >
-                            {
-                                'image' in this.props && this.props.image !== ''
-                                ?
-                                <img
-                                    className="entityImage"
-                                    src={this.props.image}
-                                    alt=""
+                        {'image' in this.props && (
+                            <div className="entityImageContainer">
+                                <div
+                                    className="entityImage hover"
+                                    onClick={() => $('#entityImage').click()}
+                                >
+                                    {'image' in this.props && this.props.image !== '' ? (
+                                        <img
+                                            className="entityImage"
+                                            src={this.props.image}
+                                            alt=""
+                                        />
+                                    ) : (
+                                        <span className="noImage">Add Image</span>
+                                    )}
+                                </div>
+                                <input
+                                    ref={ref => (this.uploadedFile = ref)}
+                                    type="file"
+                                    hidden
+                                    id="entityImage"
+                                    onChange={() => this.uploadImage()}
                                 />
-                                :
-                                <span className="noImage">
-                                    Add Image
-                                </span>
-                            }
                             </div>
-                            <input
-                                ref={(ref) => this.uploadedFile = ref}
-                                type="file"
-                                hidden
-                                id="entityImage"
-                                onChange={() => this.uploadImage()}
-                            />
-                        </div>
-                    }
+                        )}
                         <div className="inputAndLabelContainer">
-                            <div className="inputLabel">
-                                {this.props.objectName} Name
-                            </div>
+                            <div className="inputLabel">{this.props.objectName} Name</div>
                             <input
                                 value={this.props.name}
                                 className="input"
-                                onChange={(newName) => this.props.nameOnChange(newName.target.value)}
+                                onChange={newName => this.props.nameOnChange(newName.target.value)}
                             />
                         </div>
-                    {
-                        'numberOnChange' in this.props &&
-                        <div className="inputAndLabelContainer">
-                            <div className="inputLabel">
-                                {this.props.objectName} Number
+                        {'numberOnChange' in this.props && (
+                            <div className="inputAndLabelContainer">
+                                <div className="inputLabel">{this.props.objectName} Number</div>
+                                <input
+                                    value={this.props.number}
+                                    className="input"
+                                    onChange={newNumber =>
+                                        this.props.numberOnChange(newNumber.target.value)
+                                    }
+                                />
                             </div>
-                            <input
-                                value={this.props.number}
-                                className="input"
-                                onChange={(newNumber) => this.props.numberOnChange(newNumber.target.value)}
-                            />
-                        </div>    
-                    }
-                    {
-                        'descriptionOnChange' in this.props &&
-                        <div className="inputAndLabelContainer">
-                            <textarea
-                                value={this.props.description}
-                                type="textarea"
-                                placeholder="Description..."
-                                className="description"
-                                onChange={(newDescription) => this.props.descriptionOnChange(newDescription.target.value)}
-                            />
-                        </div>
-                    }
-                    {
-                        'attributeOnChange' in this.props &&
-                        <div className="inputAndLabelContainer">
-                            <textarea
-                                value={this.props.attribute}
-                                type="textarea"
-                                placeholder="Attributes..."
-                                className="description"
-                                onChange={(newAttribute) => this.props.attributeOnChange(newAttribute.target.value)}
-                            />
-                        </div>
-                    }
+                        )}
+                        {'descriptionOnChange' in this.props && (
+                            <div className="inputAndLabelContainer">
+                                <textarea
+                                    value={this.props.description}
+                                    type="textarea"
+                                    placeholder="Description..."
+                                    className="description"
+                                    onChange={newDescription =>
+                                        this.props.descriptionOnChange(newDescription.target.value)
+                                    }
+                                />
+                            </div>
+                        )}
+                        {'attributeOnChange' in this.props && (
+                            <div className="inputAndLabelContainer">
+                                <textarea
+                                    value={this.props.attribute}
+                                    type="textarea"
+                                    placeholder="Attributes..."
+                                    className="description"
+                                    onChange={newAttribute =>
+                                        this.props.attributeOnChange(newAttribute.target.value)
+                                    }
+                                />
+                            </div>
+                        )}
                         <div
                             className="button createEntityButton"
                             onClick={() => this.props.onSave()}
                         >
                             {this.props.saveButtonText}
                         </div>
-                    {
-                        this.props.selectedId === null
-                        ?
-                        null
-                        :
-                        <div
-                            className="button deleteEntityButton"
-                            onClick={() => {
-                                this.setState({isConfirmationOpen: true});
-                            }}
-                        >
-                            {this.props.deleteButtonText}
-                        </div>
-                    }
+                        {this.props.selectedId === null ? null : (
+                            <div
+                                className="button deleteEntityButton"
+                                onClick={() => {
+                                    this.setState({ isConfirmationOpen: true });
+                                }}
+                            >
+                                {this.props.deleteButtonText}
+                            </div>
+                        )}
                     </div>
-                    <ReactTooltip delayShow={500}/>
+                    <ReactTooltip delayShow={500} />
                 </Modal>
                 <Confirmation
                     isOpen={this.state.isConfirmationOpen}
-                    action={this.props.confirmationAction} 
+                    action={this.props.confirmationAction}
                     onConfirm={() => {
-                        this.setState({isConfirmationOpen: false})
-                        this.props.onDelete()
+                        this.setState({ isConfirmationOpen: false });
+                        this.props.onDelete();
                     }}
-                    onCancel={() => this.setState({isConfirmationOpen: false})}
+                    onCancel={() => this.setState({ isConfirmationOpen: false })}
                 />
-            </div> 
-        )
+            </div>
+        );
     }
 }

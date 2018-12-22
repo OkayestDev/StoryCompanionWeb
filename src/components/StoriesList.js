@@ -19,7 +19,6 @@ class StoriesList extends StoryCompanion {
         super(props);
         this.state = this.defaultState();
         this.StoryRequests = new StoryRequests();
-        this.getStories();
     }
 
     defaultState = () => {
@@ -34,10 +33,8 @@ class StoriesList extends StoryCompanion {
         };
     };
 
-    componentWillReceiveProps(props) {
-        if (this.props.userId !== props.userId) {
-            this.getStories();
-        }
+    componentDidMount() {
+        this.getStories();
     }
 
     getStories = () => {

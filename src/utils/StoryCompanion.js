@@ -138,6 +138,17 @@ export default class StoryCompanion extends Component {
         return tagByType;
     };
 
+    sortEntitiesByNumber = entities => {
+        if (typeof entities === 'undefined') {
+            return [];
+        }
+        let entityIds = Object.keys(entities);
+        entityIds.sort(function(a, b) {
+            return entities[a].number - entities[b].number;
+        });
+        return entityIds;
+    };
+
     // Required function of Component
     render() {
         return null;
