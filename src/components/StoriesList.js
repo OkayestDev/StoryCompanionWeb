@@ -4,7 +4,6 @@ import Icon from 'react-icons-kit';
 import { plus } from 'react-icons-kit/fa';
 import { iosBook, iosBookOutline } from 'react-icons-kit/ionicons';
 import StoryRequests from '../utils/StoryRequests.js';
-import ReactTooltip from 'react-tooltip';
 import EditEntityModal from './EditEntityModal.js';
 import StoryListItem from './StoryListItem.js';
 import { connect } from 'react-redux';
@@ -237,7 +236,6 @@ class StoriesList extends StoryCompanion {
                         />
                     </div>
                     <div>{this.renderStories()}</div>
-                    <ReactTooltip delayShow={500} />
                 </div>
             );
         } else if (this.isUserLoggedIn()) {
@@ -252,7 +250,6 @@ class StoriesList extends StoryCompanion {
                             this.props.toggleIsStoryListOpen();
                         }}
                     />
-                    <ReactTooltip delayShow={500} />
                 </div>
             );
         } else {

@@ -66,6 +66,12 @@ class HeaderBar extends StoryCompanion {
             return (
                 <div className="linksContainer">
                     <div
+                        className={'link' + (pathname === '/tags' ? ' activeLink' : '')}
+                        onClick={() => this.redirect('/tags')}
+                    >
+                        Tags
+                    </div>
+                    <div
                         className={'link' + (pathname === '/chapters' ? ' activeLink' : '')}
                         onClick={() => this.redirect('/chapters')}
                     >

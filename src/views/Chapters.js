@@ -257,8 +257,8 @@ class Chapters extends StoryCompanion {
             );
         } else {
             return (
-                <div>
-                    <b>Edit Components</b> of a story to begin creating chapters
+                <div className="editComponentsText">
+                    Edit Components of a story to begin creating chapters
                 </div>
             );
         }

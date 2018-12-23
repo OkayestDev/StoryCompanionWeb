@@ -11,7 +11,11 @@ class Tags extends StoryCompanion {
         this.getTags();
     }
 
-    render() {}
+    renderTags = () => {};
+
+    render() {
+        <div />;
+    }
 }
 
 function mapStateToProps(state) {

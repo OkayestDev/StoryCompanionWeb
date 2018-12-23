@@ -199,7 +199,11 @@ class Notes extends StoryCompanion {
                 </div>
             );
         } else {
-            return null;
+            return (
+                <div className="editComponentsText">
+                    Edit Components of a story to begin creating notes
+                </div>
+            );
         }
     }
 }
