@@ -123,7 +123,7 @@ class StoriesList extends StoryCompanion {
             });
     };
 
-    deleteStory = id => {
+    deleteStory = () => {
         let paramsObject = this.createParamsObject();
         this.StoryRequests.deleteStory(paramsObject)
             .then(res => {
@@ -131,7 +131,7 @@ class StoriesList extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     let tempStories = this.props.stories;
-                    delete tempStories[id];
+                    delete tempStories[this.state.selectedStoryId];
                     this.setState({ ...this.defaultState() });
                     this.props.setStories(tempStories);
                 }

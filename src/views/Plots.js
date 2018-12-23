@@ -90,17 +90,15 @@ class Plots extends StoryCompanion {
             });
     };
 
-    deletePlot = id => {
-        const paramsObject = {
-            plot: id,
-        };
+    deletePlot = () => {
+        const paramsObject = this.createParamsObject();
         this.PlotRequests.deletePlot(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     let tempPlots = this.state.plots;
-                    delete tempPlots[id];
+                    delete tempPlots[this.state.selectedPlotId];
                     this.setState({
                         selectedPlotId: null,
                         plots: tempPlots,

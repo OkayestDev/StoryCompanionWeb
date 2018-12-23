@@ -24,7 +24,10 @@ class Chapters extends StoryCompanion {
         this.getChapters();
     }
 
+    /** @TODO */
     componentWillReceiveProps(props) {
+        console.info('currentProps', this.props);
+        console.info('Incoming props', props);
         if (this.props.selectedStoryId !== props.selectedStoryId) {
             this.getChapters();
         }
@@ -99,17 +102,15 @@ class Chapters extends StoryCompanion {
             });
     };
 
-    deleteChapter = id => {
-        const paramsObject = {
-            chapter: id,
-        };
+    deleteChapter = () => {
+        const paramsObject = this.createParamsObject();
         this.ChapterRequests.deleteChapter(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     let tempChapters = this.state.chapters;
-                    delete tempChapters[id];
+                    delete tempChapters[this.state.selectedChapterId];
                     this.setState({
                         chapters: tempChapters,
                         isChapterModalOpen: false,

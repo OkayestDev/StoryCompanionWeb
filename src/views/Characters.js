@@ -117,17 +117,15 @@ class Characters extends StoryCompanion {
             });
     };
 
-    deleteCharacter = id => {
-        const paramsObject = {
-            chapter: id,
-        };
+    deleteCharacter = () => {
+        const paramsObject = this.createParamsObject();
         this.CharacterRequests.deleteCharacter(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     let tempCharacters = this.state.characters;
-                    delete tempCharacters[id];
+                    delete tempCharacters[this.state.selectedCharacterId];
                     this.setState({
                         isCharacterModalOpen: false,
                         characters: tempCharacters,
@@ -259,7 +257,7 @@ class Characters extends StoryCompanion {
                                 ? this.createCharacter()
                                 : this.editCharacter()
                         }
-                        onDelete={() => this.deleteCharacter(this.state.selectedCharacterId)}
+                        onDelete={() => this.deleteCharacter()}
                         showAlert={this.props.showAlert}
                         saveButtonText={
                             this.state.selectedCharacterId === null

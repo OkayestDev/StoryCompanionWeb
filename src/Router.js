@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
+import Tags from './views/Tags.js';
 import App from './App.js';
 import Settings from './views/Settings.js';
 import Login from './views/Login.js';
@@ -94,6 +95,7 @@ class Router extends StoryCompanion {
                                 exact
                                 render={props => <Settings {...props} />}
                             />
+                            <Route path="/tags" exact render={props => <Tags {...props} />} />
                             <Route path="/" exact render={props => <App {...props} />} />
                         </div>
                     </div>

@@ -4,15 +4,19 @@ import { connect } from 'react-redux';
 import { showAlert, closeAlert } from '../store/Actions.js';
 import '../css/HeaderBar.css';
 
-const loginPathnames = ['', '/', '/login', '/create_account', '/reset_password'];
+const LOGIN_PATHNAMES = ['', '/', '/login', '/create_account', '/reset_password'];
 
-const storyPathnames = ['/chapters', '/characters', '/plots', '/notes', '/draft', '/settings'];
+const STORY_PATHNAMES = [
+    '/chapters',
+    '/characters',
+    '/plots',
+    '/notes',
+    '/draft',
+    '/settings',
+    '/tags',
+];
 
 class HeaderBar extends StoryCompanion {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.canUserViewRoute(this.props);
     }
@@ -22,7 +26,7 @@ class HeaderBar extends StoryCompanion {
     }
 
     canUserViewRoute = props => {
-        if (storyPathnames.includes(props.history.location.pathname) && !this.isUserLoggedIn()) {
+        if (STORY_PATHNAMES.includes(props.history.location.pathname) && !this.isUserLoggedIn()) {
             localStorage.clear();
             this.props.showAlert('You must be logged in to view that page', 'warning');
             props.history.push('/login');
@@ -39,7 +43,7 @@ class HeaderBar extends StoryCompanion {
 
     renderCorrectLinks = () => {
         let pathname = this.props.history.location.pathname;
-        if (loginPathnames.includes(pathname)) {
+        if (LOGIN_PATHNAMES.includes(pathname)) {
             return (
                 <div className="linksContainer">
                     <div
@@ -62,7 +66,7 @@ class HeaderBar extends StoryCompanion {
                     </div>
                 </div>
             );
-        } else if (storyPathnames.includes(pathname)) {
+        } else if (STORY_PATHNAMES.includes(pathname)) {
             return (
                 <div className="linksContainer">
                     <div

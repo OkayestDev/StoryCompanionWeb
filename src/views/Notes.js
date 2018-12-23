@@ -32,6 +32,7 @@ class Notes extends StoryCompanion {
     getNotes = () => {
         if (this.props.selectedStoryId !== null) {
             const paramsObject = this.createParamsObject();
+            console.info(paramsObject);
             this.NoteRequests.getNotes(paramsObject)
                 .then(res => {
                     if ('error' in res) {
@@ -87,17 +88,15 @@ class Notes extends StoryCompanion {
             });
     };
 
-    deleteNote = id => {
-        const paramsObject = {
-            note: id,
-        };
+    deleteNote = () => {
+        const paramsObject = this.createParamsObject();
         this.NoteRequests.deleteNote(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     let tempNotes = this.state.notes;
-                    delete tempNotes[id];
+                    delete tempNotes[this.state.selectedNoteId];
                     this.setState({
                         notes: tempNotes,
                         isNoteModalOpen: false,
@@ -210,7 +209,7 @@ class Notes extends StoryCompanion {
 
 function mapStateToProps(state) {
     return {
-        selectedStoryId: state.selectedSToryId,
+        selectedStoryId: state.selectedStoryId,
         apiKey: state.apiKey,
     };
 }
