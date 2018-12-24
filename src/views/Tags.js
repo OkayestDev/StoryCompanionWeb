@@ -161,16 +161,13 @@ class Tags extends StoryCompanion {
                     dropdown={this.state.type}
                     dropdownList={TAG_TYPES}
                     dropdownOnChange={newType => this.setState({ type: newType })}
+                    dropdownPlaceholder="Type..."
                     onSave={() =>
                         this.state.selectedTagId === null ? this.createTag() : this.editTag()
                     }
                     onDelete={this.deleteTag}
                     showAlert={this.props.showAlert}
-                    saveButtonText={
-                        this.state.selectedTagId === null
-                            ? 'Create Tag'
-                            : 'Edit Tag'
-                    }
+                    saveButtonText={this.state.selectedTagId === null ? 'Create Tag' : 'Edit Tag'}
                     deleteButtonText="Delete Tag"
                     confirmationAction="Delete Tag?"
                 />

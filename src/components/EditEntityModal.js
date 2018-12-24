@@ -7,6 +7,7 @@ import StoryCompanion from '../utils/StoryCompanion.js';
 import $ from 'jquery';
 import Confirmation from './Confirmation.js';
 import '../css/EditEntityModal.css';
+import Dropdown from './Dropdown.js';
 
 const supportedUploadFileTypes = ['png', 'jpeg', 'jpg', 'gif'];
 
@@ -103,6 +104,16 @@ export default class EditEntityModal extends StoryCompanion {
                                     onChange={newNumber =>
                                         this.props.numberOnChange(newNumber.target.value)
                                     }
+                                />
+                            </div>
+                        )}
+                        {'dropdown' in this.props && (
+                            <div className="inputAndLabelContainer">
+                                <Dropdown
+                                    selectedValue={this.props.dropdown}
+                                    list={this.props.dropdownList}
+                                    onChange={this.props.dropdownOnChange}
+                                    placeholder={this.props.dropdownPlaceholder}
                                 />
                             </div>
                         )}
