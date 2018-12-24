@@ -108,18 +108,31 @@ class Tags extends StoryCompanion {
 
     selectTagForEdit = id => {
         this.setState({
-            ...this.props.tag[id],
+            ...this.props.tags[id],
             selectedTagId: id,
+            isTagModalOpen: true,
         });
     };
 
     renderTags = () => {
-        if (this.props.tags === null) {
+        const tags = this.props.tags;
+        if (tags === null) {
             return null;
         }
 
-        const tagIds = Object.keys(this.props.tags);
+        const tagIds = Object.keys(tags);
         if (tagIds.length > 0) {
+            let renderedTags = [];
+            tagIds.forEach((id) => {
+                renderedTags.push(
+                    <div 
+                        onClick={() => this.selectTagForEdit(id)}
+                    >
+                        {tags[id].name}
+                    </div>
+                )
+            })
+            return renderedTags;
         } else {
             return (
                 <div className="noEntityContainer">
@@ -137,6 +150,7 @@ class Tags extends StoryCompanion {
     };
 
     render() {
+        console.info(this.props);
         return (
             <div className="full">
                 <Icon
