@@ -1,6 +1,6 @@
 {
     "name": "storycompanion-web",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "private": false,
     "dependencies": {
         "aws-sdk": "^2.358.0",

@@ -7,7 +7,7 @@ import StoryRequests from '../utils/StoryRequests.js';
 import EditEntityModal from './EditEntityModal.js';
 import StoryListItem from './StoryListItem.js';
 import { connect } from 'react-redux';
-import { showAlert, setStories, editStoryComponents } from '../store/Actions.js';
+import { showAlert, setStories, editStoryComponents, setTags } from '../store/Actions.js';
 import '../css/StoriesList.css';
 
 /**
@@ -35,6 +35,7 @@ class StoriesList extends StoryCompanion {
 
     componentDidMount() {
         this.getStories();
+        this.getTags();
     }
 
     getStories = () => {
@@ -278,6 +279,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
     showAlert,
     setStories,
+    setTags,
     editStoryComponents,
 };
 

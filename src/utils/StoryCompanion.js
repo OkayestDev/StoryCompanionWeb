@@ -129,6 +129,10 @@ export default class StoryCompanion extends Component {
     };
 
     filterTagsByType = type => {
+        if (this.props.tags === null || typeof this.props.tags === 'undefined') {
+            return [];
+        }
+
         let tagIds = Object.keys(this.props.tags);
         let tagByType = {};
         tagIds.forEach(id => {
@@ -143,6 +147,7 @@ export default class StoryCompanion extends Component {
         if (typeof entities === 'undefined') {
             return [];
         }
+
         let entityIds = Object.keys(entities);
         entityIds.sort(function(a, b) {
             return entities[a].number - entities[b].number;
