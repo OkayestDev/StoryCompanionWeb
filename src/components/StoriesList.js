@@ -204,6 +204,10 @@ class StoriesList extends StoryCompanion {
                         descriptionOnChange={newDescription =>
                             this.setState({ description: newDescription })
                         }
+                        dropdown={this.state.selectedTagId}
+                        dropdownList={this.filterTagsByType('Story')}
+                        dropdownOnChange={newTag => this.setState({ selectedTagId: newTag })}
+                        dropdownPlaceholder="Tag..."
                         name={this.state.name}
                         nameOnChange={newName => this.setState({ name: newName })}
                         onSave={() =>
