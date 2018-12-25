@@ -4,7 +4,7 @@ import NoteRequests from '../utils/NoteRequests.js';
 import EditEntityModal from '../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
 import ReactTooltip from 'react-tooltip';
-import { plus } from 'react-icons-kit/fa';
+import { plus, envelope } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
 import { showAlert } from '../store/Actions.js';
 import '../css/Notes.css';
@@ -25,14 +25,13 @@ class Notes extends StoryCompanion {
 
     componentWillReceiveProps(props) {
         if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getNotes();
+            this.getNotes(props);
         }
     }
 
-    getNotes = () => {
+    getNotes = props => {
         if (this.props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject();
-            console.info(paramsObject);
+            const paramsObject = this.createParamsObject(props);
             this.NoteRequests.getNotes(paramsObject)
                 .then(res => {
                     if ('error' in res) {
@@ -109,6 +108,24 @@ class Notes extends StoryCompanion {
             });
     };
 
+    exportNotes = () => {
+        const paramsObject = this.createParamsObject();
+        this.NoteRequests.exportNotes(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.showAlert(
+                        `Successfully emailed notes to ${this.props.email}`,
+                        'success'
+                    );
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to export notes at this time', 'danger');
+            });
+    };
+
     selectNoteForEdit = id => {
         this.setState({
             isNoteModalOpen: true,
@@ -176,10 +193,10 @@ class Notes extends StoryCompanion {
                         }
                         name={this.state.name}
                         nameOnChange={newName => this.setState({ name: newName })}
-                        onSave={() =>
-                            this.state.selectedNoteId === null ? this.createNote() : this.editNote()
+                        onSave={
+                            this.state.selectedNoteId === null ? this.createNote : this.editNote
                         }
-                        onDelete={() => this.deleteNote(this.state.selectedNoteId)}
+                        onDelete={this.deleteNote}
                         showAlert={this.props.showAlert}
                         saveButtonText={
                             this.state.selectedNoteId === null ? 'Create Note' : 'Edit Note'
@@ -188,13 +205,20 @@ class Notes extends StoryCompanion {
                         confirmationAction="Delete Note?"
                     />
                     <Icon
+                        className="icon secondFloatRight"
+                        icon={envelope}
+                        size={28}
+                        onClick={this.exportNotes}
+                        data-tip="Export Notes"
+                    />
+                    <Icon
                         className="icon floatRight"
                         icon={plus}
                         size={28}
-                        onClick={() => this.newNote()}
+                        onClick={this.newNote}
                         data-tip="Create a new note"
                     />
-                    <div className="full">{this.renderNotes()}</div>
+                    <div className="entityContainer">{this.renderNotes()}</div>
                 </div>
             );
         } else {
@@ -211,6 +235,7 @@ function mapStateToProps(state) {
     return {
         selectedStoryId: state.selectedStoryId,
         apiKey: state.apiKey,
+        email: state.email,
     };
 }
 

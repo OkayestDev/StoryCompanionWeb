@@ -62,7 +62,8 @@ export default class StoryCompanion extends Component {
         return false;
     };
 
-    createParamsObject = () => {
+    createParamsObject = (props = null) => {
+        const propsObject = props === null ? this.props : props;
         return {
             plot: 'selectedPlotId' in this.state ? this.state.selectedPlotId : '',
             plotParent: 'plotParent' in this.state ? this.state.plotParent : '',
@@ -74,14 +75,14 @@ export default class StoryCompanion extends Component {
             user:
                 'userId' in this.state
                     ? this.state.userId
-                    : 'userId' in this.props
-                    ? this.props.userId
+                    : 'userId' in propsObject
+                    ? propsObject.userId
                     : '',
             story:
                 'selectedStoryId' in this.state
                     ? this.state.selectedStoryId
-                    : 'selectedStoryId' in this.props
-                    ? this.props.selectedStoryId
+                    : 'selectedStoryId' in propsObject
+                    ? propsObject.selectedStoryId
                     : '',
             tag: 'selectedTagId' in this.state ? this.state.selectedTagId : '',
             type: 'type' in this.state ? this.state.type : '',
@@ -91,13 +92,13 @@ export default class StoryCompanion extends Component {
             email:
                 'email' in this.state
                     ? this.state.email
-                    : 'email' in this.props
-                    ? this.props.email
+                    : 'email' in propsObject
+                    ? propsObject.email
                     : '',
             confirmEmail: 'confirmEmail' in this.state ? this.state.confirmEmail : '',
             password: 'password' in this.state ? this.state.password : '',
             confirmPassword: 'confirmPassword' in this.state ? this.state.confirmPassword : '',
-            apiKey: this.props.apiKey,
+            apiKey: propsObject.apiKey,
         };
     };
 

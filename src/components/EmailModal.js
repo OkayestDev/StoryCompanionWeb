@@ -7,37 +7,18 @@ import '../css/EmailModal.css';
 // Stops console errors
 Modal.setAppElement('body');
 
-const modalStyle = {
-    content : {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        width: '550px',
-        height:  'auto',
-        overflow: 'visible',
-        padding: '0px',
-        borderRadius: '8px',
-        borderColor: '#CCCCCC',
-        borderWidth: '3px'
-    }
-};
-
 export default class EmailModal extends Component {
     render() {
         return (
             <Modal
+                closeTimeoutMS={400}
                 isOpen={this.props.isEmailModalOpen}
-                style={modalStyle}
+                className="modalContainer emailModal"
                 contentLabel="Email Modal"
                 shouldCloseOnOverlayClick={true}
             >
                 <div className="modalHeader">
-                    <div className="modalTitle">
-                        {this.props.title}
-                    </div>
+                    <div className="modalTitle">{this.props.title}</div>
                     <div className="modalIconContainer">
                         <Icon
                             className="modalCloseIcon hover"
@@ -52,16 +33,13 @@ export default class EmailModal extends Component {
                         placeholder={this.props.placeholder}
                         className="emailMessage"
                         value={this.props.message}
-                        onChange={(newMessage) => this.props.messageOnChange(newMessage.target.value)}
+                        onChange={newMessage => this.props.messageOnChange(newMessage.target.value)}
                     />
-                    <div 
-                        className="button"
-                        onClick={() => this.props.onSend()}
-                    >
+                    <div className="button" onClick={() => this.props.onSend()}>
                         Send
                     </div>
                 </div>
             </Modal>
-        )
+        );
     }
 }

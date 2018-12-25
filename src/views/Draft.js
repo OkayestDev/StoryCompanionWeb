@@ -18,13 +18,13 @@ class Draft extends StoryCompanion {
 
     componentWillReceiveProps(props) {
         if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getDraft();
+            this.getDraft(props);
         }
     }
 
-    getDraft() {
+    getDraft(props) {
         if (this.props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject();
+            const paramsObject = this.createParamsObject(props);
             this.DraftRequests.getDrafts(paramsObject)
                 .then(res => {
                     if ('error' in res) {

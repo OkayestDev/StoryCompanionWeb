@@ -24,18 +24,15 @@ class Chapters extends StoryCompanion {
         this.getChapters();
     }
 
-    /** @TODO */
     componentWillReceiveProps(props) {
-        console.info('currentProps', this.props);
-        console.info('Incoming props', props);
         if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getChapters();
+            this.getChapters(props);
         }
     }
 
-    getChapters = () => {
+    getChapters = props => {
         if (this.props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject();
+            const paramsObject = this.createParamsObject(props);
             this.ChapterRequests.getChapters(paramsObject)
                 .then(res => {
                     if ('error' in res) {
@@ -135,17 +132,6 @@ class Chapters extends StoryCompanion {
         return true;
     };
 
-    sortIdsByChapterNumber = chapters => {
-        let chapterIds = Object.keys(chapters);
-        if (chapterIds.length <= 0) {
-            return [];
-        }
-        chapterIds.sort(function(a, b) {
-            return chapters[a].number - chapters[b].number;
-        });
-        return chapterIds;
-    };
-
     newChapter = () => {
         this.setState({
             isChapterModalOpen: true,
@@ -171,7 +157,7 @@ class Chapters extends StoryCompanion {
             return null;
         }
 
-        let chapterIds = this.sortIdsByChapterNumber(this.state.chapters);
+        let chapterIds = this.sortEntitiesByNumber(this.state.chapters);
         if (chapterIds.length > 0) {
             let renderedChapters = [];
             chapterIds.forEach(id => {
@@ -253,7 +239,7 @@ class Chapters extends StoryCompanion {
                         onClick={() => this.newChapter()}
                         data-tip="Create a new chapter"
                     />
-                    <div className="full">{this.renderChapters()}</div>
+                    <div className="entityContainer">{this.renderChapters()}</div>
                 </div>
             );
         } else {

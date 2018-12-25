@@ -26,13 +26,13 @@ class Plots extends StoryCompanion {
 
     componentWillReceiveProps(props) {
         if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getPlots();
+            this.getPlots(props);
         }
     }
 
-    getPlots = () => {
+    getPlots = (props) => {
         if (this.props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject();
+            const paramsObject = this.createParamsObject(props);
             this.PlotRequests.getPlots(paramsObject)
                 .then(res => {
                     if ('error' in res) {
@@ -209,42 +209,18 @@ class Plots extends StoryCompanion {
 
     render() {
         if (this.props.selectedStoryId !== null) {
-            return (
-                <div className="full">
+            return <div className="full">
                     <ReactTooltip delay={500} />
-                    <EditEntityModal
-                        isEntityModalOpen={this.state.isPlotModalOpen}
-                        selectedId={this.state.selectedPlotId}
-                        onRequestClose={() => this.setState({ isPlotModalOpen: false })}
-                        objectName="Plot"
-                        title={this.state.selectedPlotId === null ? 'Create a Plot' : 'Edit Plot'}
-                        name={this.state.name}
-                        nameOnChange={newName => this.setState({ name: newName })}
-                        description={this.state.description}
-                        descriptionOnChange={newDescription =>
-                            this.setState({ description: newDescription })
-                        }
-                        onSave={() =>
-                            this.state.selectedPlotId === null ? this.createPlot() : this.editPlot()
-                        }
-                        onDelete={() => this.deletePlot(this.state.selectedPlotId)}
-                        showAlert={this.props.showAlert}
-                        saveButtonText={
-                            this.state.selectedPlotId === null ? 'Create Plot' : 'Edit Plot'
-                        }
-                        deleteButtonText="Delete Plot"
-                        confirmationAction="Delete Plot?"
-                    />
-                    <Icon
-                        className="icon floatRight"
-                        icon={plus}
-                        size={28}
-                        onClick={() => this.newPlot()}
-                        data-tip="Create a new plot"
-                    />
-                    <div className="full">{this.renderPlots()}</div>
-                </div>
-            );
+                    <EditEntityModal isEntityModalOpen={this.state.isPlotModalOpen} selectedId={this.state.selectedPlotId} onRequestClose={() => this.setState(
+                                { isPlotModalOpen: false }
+                            )} objectName="Plot" title={this.state.selectedPlotId === null ? 'Create a Plot' : 'Edit Plot'} name={this.state.name} nameOnChange={newName => this.setState(
+                                { name: newName }
+                            )} description={this.state.description} descriptionOnChange={newDescription => this.setState(
+                                { description: newDescription }
+                            )} onSave={() => (this.state.selectedPlotId === null ? this.createPlot() : this.editPlot())} onDelete={() => this.deletePlot(this.state.selectedPlotId)} showAlert={this.props.showAlert} saveButtonText={this.state.selectedPlotId === null ? 'Create Plot' : 'Edit Plot'} deleteButtonText="Delete Plot" confirmationAction="Delete Plot?" />
+                    <Icon className="icon floatRight" icon={plus} size={28} onClick={() => this.newPlot()} data-tip="Create a new plot" />
+                    <div className="entityContainer">{this.renderPlots()}</div>
+                </div>;
         } else {
             return (
                 <div className="editComponentsText">

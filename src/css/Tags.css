@@ -1,0 +1,24 @@
+.tagContainer {
+    padding: 5px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tagContainer:hover {
+    background-color: #e4e4e4;
+}
+
+.tagName {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.tagType {
+    font-size: 24px;
+}
+
+.tagDescription {
+    font-size: 16px;
+}

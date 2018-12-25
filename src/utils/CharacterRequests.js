@@ -23,6 +23,6 @@ export default class CharacterRequests {
     };
 
     moveCharacterDown = paramsObject => {
-        return postRequestWithFormData(paramsObject, 'person/move_donw', {}).then(res => res);
+        return postRequestWithFormData(paramsObject, 'person/move_down', {}).then(res => res);
     };
 }

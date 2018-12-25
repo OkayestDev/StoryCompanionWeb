@@ -7,24 +7,6 @@ import { close } from 'react-icons-kit/fa';
 // Stops console errors
 Modal.setAppElement('body');
 
-const modalStyle = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        width: '550px',
-        height: 'auto',
-        overflow: 'visible',
-        padding: '0px',
-        borderRadius: '8px',
-        borderColor: '#CCCCCC',
-        borderWidth: '3px',
-    },
-};
-
 export default class ChangePasswordModal extends Component {
     constructor(props) {
         super(props);
@@ -72,9 +54,10 @@ export default class ChangePasswordModal extends Component {
     render() {
         return (
             <Modal
+                closeTimeoutMS={400}
                 isOpen={this.props.isChangePasswordModalOpen}
                 onRequestClose={() => this.props.onRequestClose()}
-                style={modalStyle}
+                className="modalContainer"
                 contentLabel="Change Password Modal"
                 shouldCloseOnOverlayClick={true}
             >

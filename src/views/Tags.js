@@ -6,6 +6,7 @@ import { plus } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
 import { showAlert, setTags } from '../store/Actions.js';
 import EditEntityModal from '../components/EditEntityModal.js';
+import '../css/Tags.css';
 
 const TAG_TYPES = ['Story', 'Character'];
 
@@ -49,7 +50,7 @@ class Tags extends StoryCompanion {
                         });
                     }
                 })
-                .catch(() => {
+                .catch(error => {
                     this.props.showAlert('Unable to create tag at this time', 'danger');
                 });
         }
@@ -108,7 +109,9 @@ class Tags extends StoryCompanion {
 
     selectTagForEdit = id => {
         this.setState({
-            ...this.props.tags[id],
+            name: this.props.tags[id].name,
+            type: this.props.tags[id].type,
+            description: this.props.tags[id].description,
             selectedTagId: id,
             isTagModalOpen: true,
         });
@@ -119,19 +122,18 @@ class Tags extends StoryCompanion {
         if (tags === null) {
             return null;
         }
-
         const tagIds = Object.keys(tags);
         if (tagIds.length > 0) {
             let renderedTags = [];
-            tagIds.forEach((id) => {
+            tagIds.forEach(id => {
                 renderedTags.push(
-                    <div 
-                        onClick={() => this.selectTagForEdit(id)}
-                    >
-                        {tags[id].name}
+                    <div className="tagContainer" onClick={() => this.selectTagForEdit(id)}>
+                        <div className="tagName">{tags[id].name}</div>
+                        <div className="tagType">{tags[id].type}</div>
+                        <div className="tagDescription">{tags[id].description}</div>
                     </div>
-                )
-            })
+                );
+            });
             return renderedTags;
         } else {
             return (
@@ -150,7 +152,6 @@ class Tags extends StoryCompanion {
     };
 
     render() {
-        console.info(this.props);
         return (
             <div className="full">
                 <Icon
@@ -185,7 +186,7 @@ class Tags extends StoryCompanion {
                     deleteButtonText="Delete Tag"
                     confirmationAction="Delete Tag?"
                 />
-                <div className="full">{this.renderTags()}</div>
+                <div className="entityContainer">{this.renderTags()}</div>
             </div>
         );
     }

@@ -62,10 +62,18 @@ export default class Dropdown extends Component {
         this.setState({ isListHidden: true });
     };
 
+    renderEmptyList = () => {
+        return <div className="dropdownListItem">Nothing to show here!</div>;
+    };
+
     renderList = () => {
         let renderedList = [];
         const list = this.props.list;
         if (list instanceof Array) {
+            if (list.length === 0) {
+                return this.renderEmptyList();
+            }
+
             list.forEach(value => {
                 renderedList.push(
                     <div
@@ -84,6 +92,10 @@ export default class Dropdown extends Component {
         // List is an Object
         else {
             const valueKeys = Object.keys(list);
+            if (valueKeys.length === 0) {
+                return this.renderEmptyList();
+            }
+
             valueKeys.forEach(id => {
                 renderedList.push(
                     <div

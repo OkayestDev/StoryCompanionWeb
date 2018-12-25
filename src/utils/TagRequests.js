@@ -1,21 +1,19 @@
-import { 
-    postRequestWithFormData,
-} from './HelperFunctions.js';
+import { postRequestWithFormData } from './HelperFunctions.js';
 
 export default class TagRequests {
-    getTags = (paramsObject) => {
+    getTags = paramsObject => {
         return postRequestWithFormData(paramsObject, 'tag/view', {}).then(res => res);
-    }
+    };
 
-    createTag = (paramsObject) => {
+    createTag = paramsObject => {
         return postRequestWithFormData(paramsObject, 'tag/creation', {}).then(res => res);
-    }
+    };
 
-    deleteTag = (paramsObject) => {
+    deleteTag = paramsObject => {
         return postRequestWithFormData(paramsObject, 'tag/delete', {}).then(res => res);
-    }
+    };
 
-    editTag = (paramsObject) => {
+    editTag = paramsObject => {
         return postRequestWithFormData(paramsObject, 'tag/edit', {}).then(res => res);
-    }
+    };
 }

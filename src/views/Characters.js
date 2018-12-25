@@ -4,7 +4,7 @@ import CharacterRequests from '../utils/CharacterRequests.js';
 import ReactTooltip from 'react-tooltip';
 import EditEntityModal from '../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
-import { plus } from 'react-icons-kit/fa';
+import { plus, caretUp, caretDown } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
 import { showAlert } from '../store/Actions.js';
 import '../css/Characters.css';
@@ -17,6 +17,8 @@ class Characters extends StoryCompanion {
             description: '',
             image: '',
             attribute: '',
+            number: 0,
+            selectedTagId: null,
             isCharacterModalOpen: false,
             characters: null,
             selectedCharacterId: null,
@@ -27,13 +29,13 @@ class Characters extends StoryCompanion {
 
     componentWillReceiveProps(props) {
         if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getCharacters();
+            this.getCharacters(props);
         }
     }
 
-    getCharacters = () => {
+    getCharacters = props => {
         if (this.props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject();
+            const paramsObject = this.createParamsObject(props);
             this.CharacterRequests.getCharacters(paramsObject)
                 .then(res => {
                     if ('error' in res) {
@@ -138,12 +140,56 @@ class Characters extends StoryCompanion {
             });
     };
 
+    moveCharacterUp = id => {
+        const paramsObject = {
+            apiKey: this.props.apiKey,
+            character: id,
+        };
+        this.CharacterRequests.moveCharacterUp(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    let tempCharacters = this.state.characters;
+                    tempCharacters[id] = res.success;
+                    this.setState({
+                        characters: tempCharacters,
+                    });
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to move character up at this time', 'danger');
+            });
+    };
+
+    moveCharacterDown = id => {
+        const paramsObject = {
+            apiKey: this.props.apiKey,
+            character: id,
+        };
+        this.CharacterRequests.moveCharacterDown(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    let tempCharacters = this.state.characters;
+                    tempCharacters[id] = res.success;
+                    this.setState({ characters: tempCharacters });
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to move character down at this time', 'danger');
+            });
+    };
+
     newCharacter = () => {
         this.setState({
             image: '',
             attribute: '',
             name: '',
             description: '',
+            selectedTagId: '',
+            number: 0,
             isCharacterModalOpen: true,
             selectedCharacterId: null,
         });
@@ -157,7 +203,19 @@ class Characters extends StoryCompanion {
             description: this.state.characters[id].description,
             attribute: this.state.characters[id].attribute,
             image: this.state.characters[id].image,
+            selectedTagId: this.state.characters[id].tag,
+            number: this.state.characters[id].number,
         });
+    };
+
+    handleCharacterUpClicked = (event, id) => {
+        event.stopPropagation();
+        this.moveCharacterUp(id);
+    };
+
+    handleCharacterDownClicked = (event, id) => {
+        event.stopPropagation();
+        this.moveCharacterDown(id);
     };
 
     renderCharacters = () => {
@@ -165,7 +223,8 @@ class Characters extends StoryCompanion {
             return null;
         }
 
-        let characterIds = Object.keys(this.state.characters);
+        let characterIds = this.sortEntitiesByNumber(this.state.characters);
+        characterIds.reverse();
         if (characterIds.length > 0) {
             let renderedIds = [];
             characterIds.forEach(id => {
@@ -175,35 +234,56 @@ class Characters extends StoryCompanion {
                         className="character"
                         onClick={() => this.selectCharacterForEdit(id)}
                     >
-                        <div className="trueCenter">
-                            {this.state.characters[id].image !== '' ? (
-                                <div>
-                                    <img
-                                        className="characterImage"
-                                        src={this.state.characters[id].image}
-                                        alt=""
-                                    />
+                        <div className="characterInfo">
+                            <div className="trueCenter">
+                                {this.state.characters[id].image !== '' ? (
+                                    <div>
+                                        <img
+                                            className="characterImage"
+                                            src={this.state.characters[id].image}
+                                            alt=""
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="noCharacterImage">
+                                        <b>No Image</b>
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+                                <div className="characterName">
+                                    {this.state.characters[id].name}
                                 </div>
-                            ) : (
-                                <div className="noCharacterImage">
-                                    <b>No Image</b>
+                                <div className="characterLabelContainer">
+                                    <div className="characterLabel">Description:</div>
+                                    <div className="characterContent">
+                                        {this.state.characters[id].description}
+                                    </div>
                                 </div>
-                            )}
+                                <div className="characterLabelContainer">
+                                    <div className="characterLabel">Attributes:</div>
+                                    <div className="characterContent">
+                                        {this.state.characters[id].attribute}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <div className="characterName">{this.state.characters[id].name}</div>
-                            <div className="characterLabelContainer">
-                                <div className="characterLabel">Description:</div>
-                                <div className="characterContent">
-                                    {this.state.characters[id].description}
-                                </div>
+                        <div className="characterUpAndDownContainer">
+                            <Icon
+                                icon={caretUp}
+                                size={42}
+                                className="icon"
+                                onClick={event => this.handleCharacterUpClicked(event, id)}
+                            />
+                            <div className="characterNumber">
+                                {this.state.characters[id].number}
                             </div>
-                            <div className="characterLabelContainer">
-                                <div className="characterLabel">Attributes:</div>
-                                <div className="characterContent">
-                                    {this.state.characters[id].attribute}
-                                </div>
-                            </div>
+                            <Icon
+                                icon={caretDown}
+                                size={42}
+                                className="icon"
+                                onClick={event => this.handleCharacterDownClicked(event, id)}
+                            />
                         </div>
                     </div>
                 );
@@ -248,6 +328,10 @@ class Characters extends StoryCompanion {
                         descriptionOnChange={newDescription =>
                             this.setState({ description: newDescription })
                         }
+                        dropdown={this.state.selectedTagId}
+                        dropdownList={this.filterTagsByType('Character')}
+                        dropdownOnChange={newTag => this.setState({ selectedTagId: newTag })}
+                        dropdownPlaceholder="Tag..."
                         attribute={this.state.attribute}
                         attributeOnChange={newAttribute =>
                             this.setState({ attribute: newAttribute })
@@ -274,7 +358,7 @@ class Characters extends StoryCompanion {
                         onClick={() => this.newCharacter()}
                         data-tip="Create a new character"
                     />
-                    <div className="full">{this.renderCharacters()}</div>
+                    <div className="entityContainer">{this.renderCharacters()}</div>
                 </div>
             );
         } else {

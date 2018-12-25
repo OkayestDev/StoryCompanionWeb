@@ -29,6 +29,7 @@ class StoriesList extends StoryCompanion {
             description: '',
             image: '',
             tag: '',
+            selectedTagId: null,
         };
     };
 
@@ -152,6 +153,7 @@ class StoriesList extends StoryCompanion {
             name: this.props.stories[id].name,
             description: this.props.stories[id].description,
             image: this.props.stories[id].image,
+            selectedTagId: this.props.stories[id].tag,
         });
     };
 
@@ -162,6 +164,7 @@ class StoriesList extends StoryCompanion {
             name: '',
             description: '',
             image: '',
+            selectedTagId: null,
         });
     };
 
@@ -235,7 +238,7 @@ class StoriesList extends StoryCompanion {
                             onClick={() => this.newStory()}
                         />
                     </div>
-                    <div>{this.renderStories()}</div>
+                    <div className="entityContainer">{this.renderStories()}</div>
                 </div>
             );
         } else if (this.isUserLoggedIn()) {
