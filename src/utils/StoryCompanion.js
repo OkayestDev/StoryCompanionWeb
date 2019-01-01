@@ -63,6 +63,10 @@ export default class StoryCompanion extends Component {
     };
 
     createParamsObject = (props = null) => {
+        if (typeof this.state === 'undefined') {
+            this.state = {};
+        }
+
         const propsObject = props === null ? this.props : props;
         return {
             plot: 'selectedPlotId' in this.state ? this.state.selectedPlotId : '',

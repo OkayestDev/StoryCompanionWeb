@@ -1,35 +1,16 @@
-import React, { Component } from 'react';
-import UserRequests from '../utils/UserRequests.js';
+import React from 'react';
+import ResetPasswordUtils from './components/ResetPasswordUtils.js';
 import { connect } from 'react-redux';
-import { showAlert } from '../store/Actions.js';
-import '../css/ResetPassword.css';
+import { showAlert } from '../../store/Actions.js';
+import '../../css/ResetPassword.css';
 
-class ResetPassword extends Component {
+class ResetPassword extends ResetPasswordUtils {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
         };
-        this.UserRequests = new UserRequests();
     }
-
-    resetPassword = () => {
-        this.UserRequests.passwordReset(this.state.email)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.props.showAlert(
-                        `Successfully sent temporary password to ${this.state.email}`,
-                        'success'
-                    );
-                    this.setState({ email: '' });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to reset password at this time', 'danger');
-            });
-    };
 
     render() {
         return (

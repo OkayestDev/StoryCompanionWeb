@@ -1,16 +1,15 @@
 import React from 'react';
-import StoryCompanion from '../utils/StoryCompanion.js';
-import TagRequests from '../utils/TagRequests.js';
+import TagsUtils from './components/TagsUtils.js';
 import Icon from 'react-icons-kit';
 import { plus } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
-import { showAlert, setTags } from '../store/Actions.js';
-import EditEntityModal from '../components/EditEntityModal.js';
-import '../css/Tags.css';
+import { showAlert, setTags } from '../../store/Actions.js';
+import EditEntityModal from '../../components/EditEntityModal.js';
+import '../../css/Tags.css';
 
 const TAG_TYPES = ['Story', 'Character'];
 
-class Tags extends StoryCompanion {
+class Tags extends TagsUtils {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,8 +19,6 @@ class Tags extends StoryCompanion {
             selectedTagId: null,
             isTagModalOpen: false,
         };
-        this.TagRequests = new TagRequests();
-        this.getTags();
     }
 
     defaultState = () => {
@@ -31,73 +28,6 @@ class Tags extends StoryCompanion {
             type: '',
             selectedTagId: null,
         };
-    };
-
-    editTag = () => {
-        if (this.props.userId !== null) {
-            const paramsObject = this.createParamsObject();
-            this.TagRequests.editTag(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        let tempTags = this.props.tags;
-                        tempTags[this.state.selectedTagId] = res.success;
-                        this.props.setTags(tempTags);
-                        this.setState({
-                            isTagModalOpen: false,
-                            selectedTagId: null,
-                        });
-                    }
-                })
-                .catch(error => {
-                    this.props.showAlert('Unable to create tag at this time', 'danger');
-                });
-        }
-    };
-
-    deleteTag = () => {
-        if (this.props.userId !== null) {
-            const paramsObject = this.createParamsObject();
-            this.TagRequests.deleteTag(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        let tempTags = this.props.tags;
-                        delete tempTags[this.state.selectedTagId];
-                        this.props.setTags(tempTags);
-                        this.setState({
-                            isTagModalOpen: false,
-                            selectedTagId: null,
-                        });
-                    }
-                })
-                .catch(() => {
-                    this.props.showAlert('Unable to delete tag at this time', 'danger');
-                });
-        }
-    };
-
-    createTag = () => {
-        if (this.props.userId !== null) {
-            const paramsObject = this.createParamsObject();
-            this.TagRequests.createTag(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        this.props.setTags(res.success);
-                        this.setState({
-                            selectedTagId: null,
-                            isTagModalOpen: false,
-                        });
-                    }
-                })
-                .catch(() => {
-                    this.props.showAlert('Unable to create tag at this time', 'danger');
-                });
-        }
     };
 
     newTag = () => {

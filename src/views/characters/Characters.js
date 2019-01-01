@@ -1,15 +1,14 @@
 import React from 'react';
-import StoryCompanion from '../utils/StoryCompanion.js';
-import CharacterRequests from '../utils/CharacterRequests.js';
+import CharactersUtils from './components/CharactersUtils.js';
 import ReactTooltip from 'react-tooltip';
-import EditEntityModal from '../components/EditEntityModal.js';
+import EditEntityModal from '../../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
 import { plus, caretUp, caretDown } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
-import { showAlert } from '../store/Actions.js';
-import '../css/Characters.css';
+import { showAlert } from '../../store/Actions.js';
+import '../../css/Characters.css';
 
-class Characters extends StoryCompanion {
+class Characters extends CharactersUtils {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,164 +22,7 @@ class Characters extends StoryCompanion {
             characters: null,
             selectedCharacterId: null,
         };
-        this.CharacterRequests = new CharacterRequests();
-        this.getCharacters();
     }
-
-    componentWillReceiveProps(props) {
-        if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getCharacters(props);
-        }
-    }
-
-    getCharacters = props => {
-        if (this.props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject(props);
-            this.CharacterRequests.getCharacters(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        this.setState({
-                            characters: res.success,
-                        });
-                    }
-                })
-                .catch(() => {
-                    this.props.showAlert('Unable to fetch Characters at this time', 'danger');
-                });
-        }
-    };
-
-    createCharacter = async () => {
-        var image = '';
-        if (this.state.image.includes('data:image') && this.state.image.includes('base64')) {
-            image = await this.uploadToS3(this.state.image, 'character', this.props.userId);
-        } else {
-            image = this.state.image;
-        }
-
-        // Upload image failed. Show alert and reset image
-        if (typeof image === 'undefined') {
-            image = '';
-            this.props.showAlert('Unable to upload image at this time', 'warning');
-        }
-
-        let paramsObject = this.createParamsObject();
-        paramsObject['image'] = image;
-        this.CharacterRequests.createCharacter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.setState({
-                        isCharacterModalOpen: false,
-                        characters: res.success,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to create character at this time', 'danger');
-            });
-    };
-
-    editCharacter = async () => {
-        var image = '';
-        if (this.state.image.includes('data:image') && this.state.image.includes('base64')) {
-            image = await this.uploadToS3(this.state.image, 'character', this.props.userId);
-        } else {
-            image = this.state.image;
-        }
-
-        // Upload image failed. Show alert and reset image
-        if (typeof image === 'undefined') {
-            image = '';
-            this.props.showAlert('Unable to upload image at this time', 'warning');
-        }
-
-        let paramsObject = this.createParamsObject();
-        paramsObject['image'] = image;
-        this.CharacterRequests.editCharacter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    let tempCharacters = this.state.characters;
-                    tempCharacters[this.state.selectedCharacterId] = res.success;
-                    this.setState({
-                        characters: tempCharacters,
-                        selectedCharacterId: null,
-                        isCharacterModalOpen: false,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to edit character at this time', 'warning');
-            });
-    };
-
-    deleteCharacter = () => {
-        const paramsObject = this.createParamsObject();
-        this.CharacterRequests.deleteCharacter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    let tempCharacters = this.state.characters;
-                    delete tempCharacters[this.state.selectedCharacterId];
-                    this.setState({
-                        isCharacterModalOpen: false,
-                        characters: tempCharacters,
-                        selectedCharacterId: null,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to delete character at this time', 'danger');
-            });
-    };
-
-    moveCharacterUp = id => {
-        const paramsObject = {
-            apiKey: this.props.apiKey,
-            character: id,
-        };
-        this.CharacterRequests.moveCharacterUp(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    let tempCharacters = this.state.characters;
-                    tempCharacters[id] = res.success;
-                    this.setState({
-                        characters: tempCharacters,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to move character up at this time', 'danger');
-            });
-    };
-
-    moveCharacterDown = id => {
-        const paramsObject = {
-            apiKey: this.props.apiKey,
-            character: id,
-        };
-        this.CharacterRequests.moveCharacterDown(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    let tempCharacters = this.state.characters;
-                    tempCharacters[id] = res.success;
-                    this.setState({ characters: tempCharacters });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to move character down at this time', 'danger');
-            });
-    };
 
     newCharacter = () => {
         this.setState({

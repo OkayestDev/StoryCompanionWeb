@@ -1,11 +1,10 @@
 import React from 'react';
-import StoryCompanion from '../utils/StoryCompanion.js';
-import UserRequests from '../utils/UserRequests';
+import LoginUtils from './components/LoginUtils.js';
 import { connect } from 'react-redux';
-import { showAlert, login, setTags } from '../store/Actions.js';
-import '../css/Login.css';
+import { showAlert, login, setTags } from '../../store/Actions.js';
+import '../../css/Login.css';
 
-class Login extends StoryCompanion {
+class Login extends LoginUtils {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,43 +12,7 @@ class Login extends StoryCompanion {
             email: '',
             password: '',
         };
-        this.UserRequests = new UserRequests();
-        window.addEventListener('keydown', this.handleEnterKey);
     }
-
-    handleEnterKey = event => {
-        if (event.key === 'Enter') {
-            this.login();
-        }
-    };
-
-    componentWillMount() {
-        if (this.isUserLoggedIn()) {
-            this.props.history.push('/chapters');
-        }
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleEnterKey);
-    }
-
-    login = () => {
-        let paramsObject = this.createParamsObject();
-        this.UserRequests.login(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.props.login(res.success);
-                    paramsObject = this.createParamsObject();
-                    this.getTags(paramsObject);
-                    this.props.history.push('/chapters');
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to login at this time', 'danger');
-            });
-    };
 
     render() {
         return (

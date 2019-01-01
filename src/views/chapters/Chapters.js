@@ -1,136 +1,26 @@
 import React from 'react';
-import StoryCompanion from '../utils/StoryCompanion.js';
-import ChapterRequests from '../utils/ChapterRequests.js';
-import EditEntityModal from '../components/EditEntityModal.js';
+import EditEntityModal from '../../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
 import ReactTooltip from 'react-tooltip';
 import { plus } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
-import { showAlert } from '../store/Actions.js';
-import '../css/Chapters.css';
+import { showAlert } from '../../store/Actions.js';
+import ChaptersUtils from './components/ChaptersUtils.js';
+import '../../css/Chapters.css';
 
-class Chapters extends StoryCompanion {
+class Chapters extends ChaptersUtils {
     constructor(props) {
         super(props);
         this.state = {
             number: '',
             name: '',
             description: '',
+            content: '',
             selectedChapterId: null,
             isChapterModalOpen: false,
             chapters: null,
         };
-        this.ChapterRequests = new ChapterRequests();
-        this.getChapters();
     }
-
-    componentWillReceiveProps(props) {
-        if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getChapters(props);
-        }
-    }
-
-    getChapters = props => {
-        if (this.props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject(props);
-            this.ChapterRequests.getChapters(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        this.setState({
-                            chapters: res.success,
-                        });
-                    }
-                })
-                .catch(() => {
-                    this.props.showAlert('Unable to fetch chapters at this time', 'danger');
-                });
-        }
-    };
-
-    createChapter = () => {
-        if (!this.validateChapter()) {
-            return;
-        }
-
-        const paramsObject = this.createParamsObject();
-        this.ChapterRequests.createChapter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.setState({
-                        chapters: res.success,
-                        isChapterModalOpen: false,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to create Chapter at this time', 'danger');
-            });
-    };
-
-    editChapter = () => {
-        if (!this.validateChapter()) {
-            return;
-        }
-
-        const paramsObject = this.createParamsObject();
-        this.ChapterRequests.editChapter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    let tempChapters = this.state.chapters;
-                    tempChapters[this.state.selectedChapterId] = res.success;
-                    this.setState({
-                        chapters: tempChapters,
-                        name: '',
-                        description: '',
-                        number: '',
-                        selectedChapterId: null,
-                        isChapterModalOpen: false,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to edit chapter at this time', 'danger');
-            });
-    };
-
-    deleteChapter = () => {
-        const paramsObject = this.createParamsObject();
-        this.ChapterRequests.deleteChapter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    let tempChapters = this.state.chapters;
-                    delete tempChapters[this.state.selectedChapterId];
-                    this.setState({
-                        chapters: tempChapters,
-                        isChapterModalOpen: false,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to delete chapter at this time', 'danger');
-            });
-    };
-
-    validateChapter = () => {
-        if (isNaN(this.state.number)) {
-            this.props.showAlert('Please provide a number for the chapter', 'warning');
-            return false;
-        }
-
-        if (this.state.name === '') {
-            this.props.showAlert('Please provide a name for the chapter', 'warning');
-            return false;
-        }
-        return true;
-    };
 
     newChapter = () => {
         this.setState({
@@ -139,6 +29,7 @@ class Chapters extends StoryCompanion {
             number: '',
             description: '',
             name: '',
+            content: '',
         });
     };
 
@@ -149,6 +40,7 @@ class Chapters extends StoryCompanion {
             number: this.state.chapters[id].number,
             description: this.state.chapters[id].description,
             name: this.state.chapters[id].name,
+            content: '',
         });
     };
 

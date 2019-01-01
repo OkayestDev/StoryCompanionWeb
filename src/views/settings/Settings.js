@@ -1,13 +1,12 @@
 import React from 'react';
-import StoryCompanion from '../utils/StoryCompanion';
-import SettingsRequest from '../utils/SettingsRequests.js';
-import EmailModal from '../components/EmailModal';
-import ChangePasswordModal from '../components/ChangePasswordModal.js';
+import SettingsUtils from './components/SettingsUtils';
+import EmailModal from '../../components/EmailModal';
+import ChangePasswordModal from '../../components/ChangePasswordModal.js';
 import { connect } from 'react-redux';
-import { showAlert, logout } from '../store/Actions.js';
-import '../css/Settings.css';
+import { showAlert, logout } from '../../store/Actions.js';
+import '../../css/Settings.css';
 
-class Settings extends StoryCompanion {
+class Settings extends SettingsUtils {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,7 +16,6 @@ class Settings extends StoryCompanion {
             emailTitle: 'Submit a Bug',
             message: '',
         };
-        this.SettingsRequests = new SettingsRequest();
     }
 
     openBug = () => {
@@ -38,60 +36,8 @@ class Settings extends StoryCompanion {
         });
     };
 
-    sendBug = () => {
-        let paramsObject = {
-            user: this.props.userId,
-            description: this.state.message,
-        };
-        this.SettingsRequests.bug(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.props.showAlert('Successfully sent bug. Thank you!', 'success');
-                    this.setState({
-                        message: '',
-                        isEmailModalOpen: false,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to submit bug at this time', 'danger');
-            });
-    };
-
-    sendFeatureRequest = () => {
-        let paramsObject = {
-            user: this.props.userId,
-            description: this.state.message,
-        };
-        this.SettingsRequests.feature(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.props.showAlert(
-                        'Successfully sent feature request. Thank you!',
-                        'success'
-                    );
-                    this.setState({
-                        message: '',
-                        isEmailModalOpen: false,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to submit feature at this time', 'danger');
-            });
-    };
-
     openPassword = () => {
         this.setState({ isChangePasswordModalOpen: true });
-    };
-
-    logout = () => {
-        this.props.logout();
-        this.props.history.push('/login');
     };
 
     render() {

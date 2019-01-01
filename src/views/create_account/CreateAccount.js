@@ -1,11 +1,10 @@
 import React from 'react';
-import StoryCompanion from '../utils/StoryCompanion.js';
-import UserRequests from '../utils/UserRequests.js';
+import CreateAccountUtils from './components/CreateAccountUtils.js';
 import { connect } from 'react-redux';
-import { showAlert } from '../store/Actions.js';
-import '../css/CreateAccount.css';
+import { showAlert } from '../../store/Actions.js';
+import '../../css/CreateAccount.css';
 
-class CreateAccount extends StoryCompanion {
+class CreateAccount extends CreateAccountUtils {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,41 +13,7 @@ class CreateAccount extends StoryCompanion {
             password: '',
             confirmPassword: '',
         };
-        this.UserRequests = new UserRequests();
     }
-
-    createAccount = () => {
-        const paramsObject = this.createParamsObject();
-        this.UserRequests.createAccount(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.props.showAlert(
-                        'Successfully created account. Logging you in now!',
-                        'success'
-                    );
-                    setTimeout(() => {
-                        this.UserRequests.login(this.state.email, this.state.password)
-                            .then(res => {
-                                if ('error' in res) {
-                                    this.props.showAlert(res.error, 'warning');
-                                } else {
-                                    this.props.AppStore.setValue(res.success);
-                                    this.props.updateAppStore(this.AppStore);
-                                    this.props.history.push('/chapters');
-                                }
-                            })
-                            .catch(() => {
-                                this.props.showAlert('Unable to login at this time', 'danger');
-                            });
-                    }, 2000);
-                }
-            })
-            .catch(error => {
-                this.props.showAlert('Unable to create account at this time', 'danger');
-            });
-    };
 
     render() {
         return (
