@@ -31,7 +31,8 @@ class StoriesList extends StoriesListUtils {
         };
     };
 
-    selectStoryForComponents = id => {
+    selectStoryForComponents = (event, id) => {
+        event.stopPropagation();
         this.props.editStoryComponents(id);
     };
 
@@ -66,7 +67,7 @@ class StoriesList extends StoriesListUtils {
                         isSelectedStory={id === this.props.selectStoryForEdit}
                         id={id}
                         story={this.props.stories[id]}
-                        selectStoryForComponents={() => this.selectStoryForComponents(id)}
+                        selectStoryForComponents={event => this.selectStoryForComponents(event, id)}
                         selectStoryForEdit={() => this.selectStoryForEdit(id)}
                     />
                 </div>

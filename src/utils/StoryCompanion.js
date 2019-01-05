@@ -76,6 +76,7 @@ export default class StoryCompanion extends Component {
             character: 'selectedCharacterId' in this.state ? this.state.selectedCharacterId : '',
             chapter: 'selectedChapterId' in this.state ? this.state.selectedChapterId : '',
             number: 'number' in this.state ? this.state.number : '',
+            content: 'content' in this.state ? this.state.content : '',
             user:
                 'userId' in this.state
                     ? this.state.userId

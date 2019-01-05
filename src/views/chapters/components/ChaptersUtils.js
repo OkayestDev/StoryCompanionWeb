@@ -5,7 +5,6 @@ export default class ChaptersUtils extends StoryCompanion {
     constructor(props) {
         super(props);
         this.ChapterRequests = new ChapterRequests();
-        console.info(props);
         this.getChapters(props);
     }
 
@@ -104,9 +103,41 @@ export default class ChaptersUtils extends StoryCompanion {
             });
     };
 
-    writeChapter = () => {};
+    writeChapter = () => {
+        const paramsObject = this.createParamsObject();
+        this.ChapterRequests.writeChapter(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    let tempChapters = this.state.chapters;
+                    tempChapters[this.state.selectedChapterId] = res.success;
+                    this.setState({
+                        chapters: tempChapters,
+                        isWritingChapter: false,
+                    });
+                    this.props.showAlert('Successfully saved chapter', 'success');
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to save chapter at this time', 'danger');
+            });
+    };
 
-    exportChapter = () => {};
+    exportChapter = () => {
+        const paramsObject = this.createParamsObject();
+        this.ChapterRequests.exportChapter(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.showAlert(res.success, 'success');
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to export chapters at this time', 'danger');
+            });
+    };
 
     validateChapter = () => {
         if (isNaN(this.state.number)) {

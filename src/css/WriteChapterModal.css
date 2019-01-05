@@ -1,0 +1,20 @@
+.writeChapterModal {
+    width: 1280px !important;
+    height: 90%;
+}
+
+.writeChapterSave {
+    padding-right: 25px;
+}
+
+.contentContainer {
+    width: 97.2% !important;
+    height: 87%;
+    padding: 10px;
+}
+
+.contentTextArea {
+    width: 100% !important;
+    height: 100%;
+    resize: none;
+}

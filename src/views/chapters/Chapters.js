@@ -2,9 +2,10 @@ import React from 'react';
 import EditEntityModal from '../../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
 import ReactTooltip from 'react-tooltip';
-import { plus } from 'react-icons-kit/fa';
+import { plus, pencil, envelope } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
 import { showAlert } from '../../store/Actions.js';
+import WriteChapter from './components/WriteChapter.js';
 import ChaptersUtils from './components/ChaptersUtils.js';
 import '../../css/Chapters.css';
 
@@ -18,6 +19,7 @@ class Chapters extends ChaptersUtils {
             content: '',
             selectedChapterId: null,
             isChapterModalOpen: false,
+            isWritingChapter: false,
             chapters: null,
         };
     }
@@ -37,11 +39,21 @@ class Chapters extends ChaptersUtils {
         this.setState({
             isChapterModalOpen: true,
             selectedChapterId: id,
-            number: this.state.chapters[id].number,
-            description: this.state.chapters[id].description,
-            name: this.state.chapters[id].name,
-            content: '',
+            ...this.state.chapters[id],
         });
+    };
+
+    selectChapterForWrite = (event, id) => {
+        event.stopPropagation();
+        this.setState({
+            selectedChapterId: id,
+            isWritingChapter: true,
+            ...this.state.chapters[id],
+        });
+    };
+
+    handleChapterContentChanged = value => {
+        this.setState({ content: value.target.value });
     };
 
     renderChapters = () => {
@@ -62,6 +74,12 @@ class Chapters extends ChaptersUtils {
                         <div className="chapterNumberAndNameContainer">
                             <div className="chapterNumber">{this.state.chapters[id].number}.</div>
                             <div className="chapterName">{this.state.chapters[id].name}</div>
+                            <div
+                                className="chapterWriteContainer"
+                                onClick={event => this.selectChapterForWrite(event, id)}
+                            >
+                                <Icon className="icon" icon={pencil} size={28} />
+                            </div>
                         </div>
                         <div className="chapterDescription">
                             {this.state.chapters[id].description}
@@ -124,13 +142,31 @@ class Chapters extends ChaptersUtils {
                         deleteButtonText="Delete Chapter"
                         confirmationAction="Delete Chapter?"
                     />
-                    <Icon
-                        className="icon floatRight"
-                        icon={plus}
-                        size={28}
-                        onClick={() => this.newChapter()}
-                        data-tip="Create a new chapter"
+                    <WriteChapter
+                        isOpen={this.state.isWritingChapter}
+                        chapterContent={this.state.content}
+                        chapterName={this.state.name}
+                        chapterNumber={this.state.number}
+                        writeChapter={this.writeChapter}
+                        chapterContentOnChange={this.handleChapterContentChanged}
+                        onRequestClose={() => this.setState({ isWritingChapter: false })}
                     />
+                    <div className="floatRightContainer">
+                        <Icon
+                            className="icon exportChaptersIcon"
+                            icon={envelope}
+                            size={28}
+                            onClick={this.exportChapter}
+                            data-tip="Export chapters"
+                        />
+                        <Icon
+                            className="icon"
+                            icon={plus}
+                            size={28}
+                            onClick={this.newChapter}
+                            data-tip="Create a new chapter"
+                        />
+                    </div>
                     <div className="entityContainer">{this.renderChapters()}</div>
                 </div>
             );

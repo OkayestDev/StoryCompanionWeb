@@ -57,7 +57,7 @@ export default class EditEntityModal extends StoryCompanion {
                                 className="modalCloseIcon hover"
                                 icon={close}
                                 size={35}
-                                onClick={() => this.props.onRequestClose()}
+                                onClick={this.props.onRequestClose}
                             />
                         </div>
                     </div>

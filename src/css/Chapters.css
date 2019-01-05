@@ -1,5 +1,5 @@
 .chapterContainer {
-    border-bottom: 2px solid #CCCCCC;
+    border-bottom: 2px solid #cccccc;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -9,7 +9,7 @@
 }
 
 .chapterContainer:hover {
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
 }
 
 .chapterNumberAndNameContainer {
@@ -26,10 +26,21 @@
 .chapterName {
     font-weight: bold;
     font-size: 36px;
+    margin-right: 15px;
+}
+
+.chapterWriteContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.exportChaptersIcon {
+    margin-right: 15px;
 }
 
 .chapterDescription {
-    white-space: nowrap; 
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
