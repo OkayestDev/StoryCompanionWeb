@@ -8,33 +8,49 @@ export default class StoriesListUtils extends StoryCompanion {
     }
 
     componentDidMount() {
+        this.props.resetStory();
         this.getStories();
         this.getTags();
     }
 
+    resetStory = () => {
+        this.props.resetStory();
+    };
+
+    newStory = () => {
+        this.props.newStory();
+    };
+
+    selectStory = id => {
+        this.props.selectStory(id);
+    };
+
+    selectStoryToEditComponents = id => {
+        this.props.selectStory(id);
+        this.props.navigation.navigate('StoryTab');
+    };
+
     getStories = () => {
-        if (this.props.userId !== null) {
-            let paramsObject = this.createParamsObject();
-            this.StoryRequests.getStories(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        this.props.setStories(res.success);
-                    }
-                })
-                .catch(() => {
-                    this.props.showAlert('Unable to fetch stories at this time', 'danger');
-                });
-        }
+        let paramsObject = this.createParamsObject();
+        this.StoryRequests.getStories(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.setStories(res.success);
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to get response from server', 'warning');
+            });
     };
 
     createStory = async () => {
         var image = '';
-        if (this.state.image.includes('data:image') && this.state.image.includes('base64')) {
-            image = await this.uploadToS3(this.state.image, 'story', this.props.userId);
+        if (this.props.image.includes('data:image') && this.props.image.includes('base64')) {
+            image = await this.uploadToS3(this.props.image, 'story', this.props.userId);
         } else {
-            image = this.state.image;
+            image = this.props.image;
         }
 
         // Upload image failed. Show alert and reset image to avoid post error
@@ -42,7 +58,6 @@ export default class StoriesListUtils extends StoryCompanion {
             image = '';
             this.props.showAlert('Unable to upload image at this time', 'warning');
         }
-
         let paramsObject = this.createParamsObject();
         paramsObject['image'] = image;
         this.StoryRequests.createStory(paramsObject)
@@ -50,25 +65,21 @@ export default class StoriesListUtils extends StoryCompanion {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    this.props.showAlert(
-                        'Successfully created new story, ' + this.state.name,
-                        'success'
-                    );
-                    this.setState({ ...this.defaultState() });
+                    this.resetStory();
                     this.props.setStories(res.success);
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to create story at this time', 'danger');
+                this.props.showAlert('Unable to create story at this time', 'warning');
             });
     };
 
     editStory = async () => {
         var image = '';
-        if (this.state.image.includes('data:image') && this.state.image.includes('base64')) {
-            image = await this.uploadToS3(this.state.image, 'story', this.props.userId);
+        if (this.props.image.includes('data:image') && this.props.image.includes('base64')) {
+            image = await this.uploadToS3(this.props.image, 'story', this.props.userId);
         } else {
-            image = this.state.image;
+            image = this.props.image;
         }
 
         // Upload image failed. Show alert and reset image to avoid post error
@@ -76,7 +87,6 @@ export default class StoriesListUtils extends StoryCompanion {
             image = '';
             this.props.showAlert('Unable to upload image at this time', 'warning');
         }
-
         let paramsObject = this.createParamsObject();
         paramsObject['image'] = image;
         this.StoryRequests.editStory(paramsObject)
@@ -84,18 +94,14 @@ export default class StoriesListUtils extends StoryCompanion {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    this.props.showAlert(
-                        'Successfully edited story, ' + this.state.name,
-                        'success'
-                    );
                     let tempStories = this.props.stories;
-                    tempStories[this.state.selectedStoryId] = res.success;
-                    this.setState({ ...this.defaultState() });
-                    this.props.setStories(res.success);
+                    tempStories[this.props.selectedStoryId] = res.success;
+                    this.resetStory();
+                    this.props.setStories(tempStories);
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to edit at this time', 'danger');
+                this.props.showAlert('Unable to edit story at this time', 'warning');
             });
     };
 
@@ -107,13 +113,13 @@ export default class StoriesListUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     let tempStories = this.props.stories;
-                    delete tempStories[this.state.selectedStoryId];
-                    this.setState({ ...this.defaultState() });
+                    delete tempStories[this.props.selectedStoryId];
+                    this.resetStory();
                     this.props.setStories(tempStories);
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to delete story at this time', 'danger');
+                this.props.showAlert('Unable to delet story at this time', 'danger');
             });
     };
 }

@@ -3,7 +3,8 @@ import TagsUtils from './components/TagsUtils.js';
 import Icon from 'react-icons-kit';
 import { plus } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
-import { showAlert, setTags } from '../../store/Actions.js';
+import { showAlert, setTags } from '../../actions/Actions.js';
+import * as tagActions from '../../actions/TagActions.js';
 import EditEntityModal from '../../components/EditEntityModal.js';
 import '../../css/Tags.css';
 
@@ -124,13 +125,14 @@ class Tags extends TagsUtils {
 
 function mapStateToProps(state) {
     return {
-        tags: state.tags,
+        ...state.tagsStore,
         userId: state.userId,
         apiKey: state.apiKey,
     };
 }
 
 const mapDispatchToProps = {
+    ...tagActions,
     showAlert,
     setTags,
 };

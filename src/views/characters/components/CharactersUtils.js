@@ -1,141 +1,51 @@
-import StoryCompanion from '../../../utils/StoryCompanion.js';
 import CharacterRequests from '../../../utils/CharacterRequests.js';
+import StoryCompanion from '../../../utils/StoryCompanion.js';
 
-export default class CharacterUtils extends StoryCompanion {
+export default class CharactersUtils extends StoryCompanion {
     constructor(props) {
         super(props);
         this.CharacterRequests = new CharacterRequests();
-        this.getCharacters(props);
     }
 
-    componentWillReceiveProps(props) {
-        if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getCharacters(props);
-        }
+    componentDidMount() {
+        this.props.resetCharacter();
+        this.getCharacters();
+        this.getTags();
     }
 
-    getCharacters = props => {
-        if (props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject(props);
-            this.CharacterRequests.getCharacters(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        this.setState({
-                            characters: res.success,
-                        });
-                    }
-                })
-                .catch(() => {
-                    this.props.showAlert('Unable to fetch Characters at this time', 'danger');
-                });
-        }
+    resetCharacter = () => {
+        this.removeNavigationActions();
+        this.props.resetCharacter();
     };
 
-    createCharacter = async () => {
-        var image = '';
-        if (this.state.image.includes('data:image') && this.state.image.includes('base64')) {
-            image = await this.uploadToS3(this.state.image, 'character', this.props.userId);
-        } else {
-            image = this.state.image;
-        }
-
-        // Upload image failed. Show alert and reset image
-        if (typeof image === 'undefined') {
-            image = '';
-            this.props.showAlert('Unable to upload image at this time', 'warning');
-        }
-
-        let paramsObject = this.createParamsObject();
-        paramsObject['image'] = image;
-        this.CharacterRequests.createCharacter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.setState({
-                        isCharacterModalOpen: false,
-                        characters: res.success,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to create character at this time', 'danger');
-            });
+    newCharacter = () => {
+        this.setNavigationActions(this.resetCharacter, this.createCharacter, null);
+        this.props.newCharacter();
     };
 
-    editCharacter = async () => {
-        var image = '';
-        if (this.state.image.includes('data:image') && this.state.image.includes('base64')) {
-            image = await this.uploadToS3(this.state.image, 'character', this.props.userId);
-        } else {
-            image = this.state.image;
-        }
-
-        // Upload image failed. Show alert and reset image
-        if (typeof image === 'undefined') {
-            image = '';
-            this.props.showAlert('Unable to upload image at this time', 'warning');
-        }
-
-        let paramsObject = this.createParamsObject();
-        paramsObject['image'] = image;
-        this.CharacterRequests.editCharacter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    let tempCharacters = this.state.characters;
-                    tempCharacters[this.state.selectedCharacterId] = res.success;
-                    this.setState({
-                        characters: tempCharacters,
-                        selectedCharacterId: null,
-                        isCharacterModalOpen: false,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to edit character at this time', 'warning');
-            });
+    selectCharacter = id => {
+        this.setNavigationActions(
+            this.resetCharacter,
+            this.editCharacter,
+            this.props.openConfirmation
+        );
+        this.props.selectCharacter(id);
     };
 
-    deleteCharacter = () => {
-        const paramsObject = this.createParamsObject();
-        this.CharacterRequests.deleteCharacter(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    let tempCharacters = this.state.characters;
-                    delete tempCharacters[this.state.selectedCharacterId];
-                    this.setState({
-                        isCharacterModalOpen: false,
-                        characters: tempCharacters,
-                        selectedCharacterId: null,
-                    });
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to delete character at this time', 'danger');
-            });
-    };
-
-    moveCharacterUp = id => {
+    moveCharacterDown = id => {
         const paramsObject = {
-            apiKey: this.props.apiKey,
             character: id,
+            apiKey: this.props.apiKey,
         };
-        this.CharacterRequests.moveCharacterUp(paramsObject)
+        this.CharacterRequests.moveCharacterDown(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    let tempCharacters = this.state.characters;
+                    let tempCharacters = this.props.characters;
                     tempCharacters[id] = res.success;
-                    this.setState({
-                        characters: tempCharacters,
-                    });
+                    this.props.setCharacters(tempCharacters);
+                    this.forceUpdate();
                 }
             })
             .catch(() => {
@@ -143,23 +53,121 @@ export default class CharacterUtils extends StoryCompanion {
             });
     };
 
-    moveCharacterDown = id => {
+    moveCharacterUp = id => {
         const paramsObject = {
-            apiKey: this.props.apiKey,
             character: id,
+            apiKey: this.props.apiKey,
         };
-        this.CharacterRequests.moveCharacterDown(paramsObject)
+        this.CharacterRequests.moveCharacterUp(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert('Unable to move character up at this time', 'warning');
+                } else {
+                    let tempCharacters = this.props.characters;
+                    tempCharacters[id] = res.success;
+                    this.props.setCharacters(tempCharacters);
+                    this.forceUpdate();
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to move character up at this time', 'danger');
+            });
+    };
+
+    getCharacters = () => {
+        let paramsObject = this.createParamsObject();
+        this.CharacterRequests.getCharacters(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    let tempCharacters = this.state.characters;
-                    tempCharacters[id] = res.success;
-                    this.setState({ characters: tempCharacters });
+                    this.props.setCharacters(res.success);
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to move character down at this time', 'danger');
+                this.props.showAlert('Unable to get a response from server', 'danger');
+            });
+    };
+
+    createCharacter = async () => {
+        var image = '';
+        if (this.props.image.includes('data:image') && this.props.image.includes('base64')) {
+            image = await this.uploadToS3(this.props.image, 'character', this.props.userId);
+        } else {
+            image = this.props.image;
+        }
+
+        // Upload image failed. Show alert and reset image
+        if (typeof image === 'undefined') {
+            image = '';
+            this.props.showAlert('Unable to upload image at this time', 'warning');
+        }
+        let paramsObject = this.createParamsObject();
+        paramsObject['image'] = image;
+        this.CharacterRequests.createCharacter(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.setCharacters(res.success);
+                    this.props.resetCharacter();
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to get a response from server', 'danger');
+            });
+    };
+
+    editCharacter = async () => {
+        var image = '';
+        if (this.props.image.includes('data:image') && this.props.image.includes('base64')) {
+            image = await this.uploadToS3(this.props.image, 'character', this.props.userId);
+        } else {
+            image = this.props.image;
+        }
+
+        // Upload image failed. Show alert and reset image
+        if (typeof image === 'undefined') {
+            image = '';
+            this.props.showAlert('Unable to upload image at this time', 'warning');
+        }
+        let paramsObject = this.createParamsObject();
+        paramsObject['image'] = image;
+        this.CharacterRequests.editCharacter(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    let tempCharacters = this.props.characters;
+                    tempCharacters[this.props.selectedCharacterId] = res.success;
+                    this.props.setCharacters(tempCharacters);
+                    this.props.resetCharacter();
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to get a response from server', 'danger');
+            });
+    };
+
+    deleteCharacter = () => {
+        let paramsObject = this.createParamsObject();
+        this.CharacterRequests.deleteCharacter(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    let tempCharacters = this.props.characters;
+                    delete tempCharacters[this.props.selectedCharacterId];
+                    this.setprops({
+                        characters: tempCharacters,
+                        ...this.resetCharacter(),
+                    });
+                    this.props.setCharacters(tempCharacters);
+                    this.props.resetCharacter();
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to get a response from server', 'danger');
             });
     };
 }

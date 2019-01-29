@@ -3,7 +3,8 @@ import SettingsUtils from './components/SettingsUtils';
 import EmailModal from '../../components/EmailModal';
 import ChangePasswordModal from '../../components/ChangePasswordModal.js';
 import { connect } from 'react-redux';
-import { showAlert, logout } from '../../store/Actions.js';
+import { showAlert, logout } from '../../actions/Actions.js';
+import * as settingsAction from '../../actions/SettingsActions.js';
 import '../../css/Settings.css';
 
 class Settings extends SettingsUtils {
@@ -90,6 +91,7 @@ class Settings extends SettingsUtils {
 
 function mapStateToProps(state) {
     return {
+        ...state.settingsStore,
         email: state.email,
         userId: state.userId,
         apiKey: state.apiKey,
@@ -97,6 +99,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+    ...settingsActions,
     showAlert,
     logout,
 };

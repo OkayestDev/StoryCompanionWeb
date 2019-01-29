@@ -4,7 +4,8 @@ import Icon from 'react-icons-kit';
 import ReactTooltip from 'react-tooltip';
 import { plus, pencil, envelope } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
-import { showAlert } from '../../store/Actions.js';
+import { showAlert } from '../../actions/Actions.js';
+import * as chapterActions from '../../actions/ChapterActions.js';
 import WriteChapter from './components/WriteChapter.js';
 import ChaptersUtils from './components/ChaptersUtils.js';
 import '../../css/Chapters.css';
@@ -182,13 +183,15 @@ class Chapters extends ChaptersUtils {
 
 function mapStateToProps(state) {
     return {
-        selectedStoryId: state.selectedStoryId,
-        userId: state.userId,
-        apiKey: state.apiKey,
+        ...state.chaptersStore,
+        selectedStoryId: state.appStore.selectedStoryId,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
     };
 }
 
 const mapDispatchToProps = {
+    ...chapterActions,
     showAlert,
 };
 

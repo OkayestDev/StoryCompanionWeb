@@ -5,7 +5,8 @@ import Icon from 'react-icons-kit';
 import ReactTooltip from 'react-tooltip';
 import { plus, envelope } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
-import { showAlert } from '../../store/Actions.js';
+import { showAlert } from '../../actions/Actions.js';
+import * as noteActions from '../../actions/NoteActions.js';
 import '../../css/Notes.css';
 
 class Notes extends NotesUtils {
@@ -127,6 +128,7 @@ class Notes extends NotesUtils {
 
 function mapStateToProps(state) {
     return {
+        ...state.notesStore,
         selectedStoryId: state.selectedStoryId,
         apiKey: state.apiKey,
         email: state.email,
@@ -134,6 +136,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+    ...noteActions,
     showAlert,
 };
 

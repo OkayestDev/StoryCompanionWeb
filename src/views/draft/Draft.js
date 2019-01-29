@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { showAlert } from '../../store/Actions.js';
+import { showAlert } from '../../actions/Actions.js';
 import DraftUtils from './components/DraftUtils.js';
+import * as draftActions from '../../actions/DraftActions.js';
 import '../../css/Draft.css';
 
 class Draft extends DraftUtils {
@@ -61,6 +62,7 @@ class Draft extends DraftUtils {
 
 function mapStateToProps(state) {
     return {
+        ...state.draftStore,
         selectedStoryId: state.selectedStoryId,
         email: state.email,
         apiKey: state.apiKey,
@@ -68,6 +70,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+    ...draftActions,
     showAlert,
 };
 

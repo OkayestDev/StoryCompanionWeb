@@ -5,7 +5,8 @@ import EditEntityModal from '../../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
 import { plus, caretUp, caretDown } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
-import { showAlert } from '../../store/Actions.js';
+import { showAlert } from '../../actions/Actions.js';
+import * as characterActions from '../../actions/CharacterActions.js';
 import '../../css/Characters.css';
 
 class Characters extends CharactersUtils {
@@ -215,6 +216,7 @@ class Characters extends CharactersUtils {
 
 function mapStateToProps(state) {
     return {
+        ...state.charactersStore,
         selectedStoryId: state.selectedStoryId,
         userId: state.userId,
         apiKey: state.apiKey,
@@ -223,6 +225,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+    ...characterActions,
     showAlert,
 };
 

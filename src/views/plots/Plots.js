@@ -5,7 +5,8 @@ import Icon from 'react-icons-kit';
 import { plus } from 'react-icons-kit/fa';
 import ReactTooltip from 'react-tooltip';
 import { connect } from 'react-redux';
-import { showAlert } from '../../store/Actions.js';
+import { showAlert } from '../../actions/Actions.js';
+import * as plotActions from '../../actions/PlotActions.js';
 import '../../css/Plots.css';
 
 class Plots extends PlotsUtils {
@@ -167,12 +168,14 @@ class Plots extends PlotsUtils {
 
 function mapStateToProps(state) {
     return {
+        ...state.plotsStore,
         selectedStoryId: state.selectedStoryId,
         apiKey: state.apiKey,
     };
 }
 
 const mapDispatchToProps = {
+    ...plotActions,
     showAlert,
 };
 

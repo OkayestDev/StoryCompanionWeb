@@ -1,72 +1,84 @@
 import StoryCompanion from '../../../utils/StoryCompanion.js';
 import DraftRequests from '../../../utils/DraftRequests.js';
+import { Keyboard } from 'react-native';
 
 export default class DraftUtils extends StoryCompanion {
     constructor(props) {
         super(props);
         this.DraftRequests = new DraftRequests();
-        this.getDraft(props);
     }
 
-    componentWillReceiveProps(props) {
-        if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getDraft(props);
-        }
+    componentDidMount() {
+        this.getDrafts();
     }
 
-    getDraft(props) {
-        if (props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject(props);
-            this.DraftRequests.getDrafts(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        if ('id' in res.success) {
-                            this.setState({
-                                selectedDraftId: res.success.id,
-                                description: res.success.description,
-                            });
-                        } else {
-                            this.setState({
-                                selectedDraftId: null,
-                                description: '',
-                            });
-                        }
+    // Only allowing one draft per story at this time
+    getDrafts = () => {
+        let paramsObject = this.createParamsObject();
+        this.DraftRequests.getDrafts(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.setDraft(res.success);
+                    if ('id' in res.success) {
+                        this.props.navigation.setParams({
+                            onSave: this.editDraft,
+                            onExport: this.exportDraft,
+                        });
                     }
-                })
-                .catch(() => {
-                    this.props.showAlert('Unable to fetch draft at this time', 'danger');
-                });
-        }
-    }
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to get a response from server', 'danger');
+            });
+    };
+
+    exportDraft = () => {
+        let paramsObject = this.createParamsObject();
+        this.DraftRequests.exportDraft(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.showAlert(res.success, 'success');
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to export draft at this time', 'danger');
+            });
+    };
 
     createDraft = () => {
-        const paramsObject = this.createParamsObject();
+        let paramsObject = this.createParamsObject();
         this.DraftRequests.createDraft(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    this.setState({
-                        selectedDraftId: res.success.id,
-                        description: res.success.description,
+                    this.props.setDraft(res.success);
+                    this.props.navigation.setParams({
+                        onSave: this.editDraft,
+                        onExport: this.exportDraft,
                     });
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to create a draft at this time', 'danger');
+                this.props.showAlert('Unable to create draft at this time', 'danger');
             });
     };
 
+    // We only have one draft per story
     editDraft = () => {
-        const paramsObject = this.createParamsObject();
+        Keyboard.dismiss();
+        let paramsObject = this.createParamsObject();
         this.DraftRequests.editDraft(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    this.props.showAlert('Successfully saved draft', 'success');
+                    this.props.setDraft(res.success);
+                    this.props.showAlert('Successfully saved draft changes!', 'success');
                 }
             })
             .catch(() => {
@@ -74,21 +86,19 @@ export default class DraftUtils extends StoryCompanion {
             });
     };
 
-    exportDraft = () => {
-        const paramsObject = this.createParamsObject();
-        this.DraftRequests.exportDraft(paramsObject)
+    deleteDraft = () => {
+        let paramsObject = this.createParamsObject();
+        this.DraftRequests.editDraft(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    this.props.showAlert(
-                        `Successfully emailed draft to ${this.props.email}`,
-                        'success'
-                    );
+                    // As of right now - we only allow one draft. set to an empty array
+                    this.props.setDraft([]);
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to export draft at this time', 'danger');
+                this.props.showAlert('Unable to edit draft at this time', 'danger');
             });
     };
 }

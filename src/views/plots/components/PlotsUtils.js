@@ -5,93 +5,98 @@ export default class PlotsUtils extends StoryCompanion {
     constructor(props) {
         super(props);
         this.PlotRequests = new PlotRequests();
-        this.getPlots(props);
     }
 
-    componentWillReceiveProps(props) {
-        if (this.props.selectedStoryId !== props.selectedStoryId) {
-            this.getPlots(props);
-        }
+    componentDidMount() {
+        this.props.resetPlot();
+        this.getPlots();
     }
 
-    getPlots = props => {
-        if (props.selectedStoryId !== null) {
-            const paramsObject = this.createParamsObject(props);
-            this.PlotRequests.getPlots(paramsObject)
-                .then(res => {
-                    if ('error' in res) {
-                        this.props.showAlert(res.error, 'warning');
-                    } else {
-                        this.setState({
-                            plots: res.success,
-                        });
-                    }
-                })
-                .catch(() => {
-                    this.props.showAlert('Unable to fetch plots at this time', 'danger');
-                });
-        }
+    resetPlot = () => {
+        this.removeNavigationActions();
+        this.props.resetPlot();
     };
 
-    createPlot = () => {
-        const paramsObject = this.createParamsObject();
-        this.PlotRequests.createPlot(paramsObject)
+    newPlot = () => {
+        this.setNavigationActions(this.resetPlot, this.createPlot, null);
+        this.props.newPlot();
+    };
+
+    selectPlot = id => {
+        this.setNavigationActions(this.resetPlot, this.editPlot, this.props.openConfirmation);
+        this.props.selectPlot(id);
+    };
+
+    addChildPlot = parentId => {
+        this.setNavigationActions(this.cancelPlotEdit, this.createPlot, null);
+        this.props.addChildPlot(parentId);
+    };
+
+    getPlots = () => {
+        let paramsObject = this.createParamsObject();
+        this.PlotRequests.getPlots(paramsObject)
             .then(res => {
                 if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
+                    this.props.showAlert(res.error, 'danger');
                 } else {
-                    this.setState({
-                        isPlotModalOpen: false,
-                        plots: res.success,
-                    });
+                    this.props.setPlots(res.success);
+                    this.resetPlot();
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to create plot at this time', 'danger');
+                this.props.showAlert('Unable to get a response from server', 'danger');
+            });
+    };
+
+    createPlot = () => {
+        let paramsObject = this.createParamsObject();
+        this.PlotRequests.createPlot(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'danger');
+                } else {
+                    this.props.setPlots(res.success);
+                    this.resetPlot();
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to get a response from the server', 'danger');
             });
     };
 
     editPlot = () => {
-        const paramsObject = this.createParamsObject();
+        let paramsObject = this.createParamsObject();
         this.PlotRequests.editPlot(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    let tempPlots = this.state.plots;
-                    tempPlots[this.state.selectedPlotId] = res.success;
-                    this.setState({
-                        plots: tempPlots,
-                        isPlotModalOpen: false,
-                        selectedPlotId: null,
-                        name: '',
-                        description: '',
-                    });
+                    let tempPlots = this.props.plots;
+                    tempPlots[this.props.selectedPlotId] = res.success;
+                    this.props.setPlots(tempPlots);
+                    this.resetPlot();
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to edit plot at this time', 'danger');
+                this.props.showAlert('Unable to get response from server', 'danger');
             });
     };
 
     deletePlot = () => {
-        const paramsObject = this.createParamsObject();
+        let paramsObject = this.createParamsObject();
         this.PlotRequests.deletePlot(paramsObject)
             .then(res => {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    let tempPlots = this.state.plots;
-                    delete tempPlots[this.state.selectedPlotId];
-                    this.setState({
-                        selectedPlotId: null,
-                        plots: tempPlots,
-                        isPlotModalOpen: false,
-                    });
+                    let tempPlots = this.props.plots;
+                    delete tempPlots[this.props.selectedPlotId];
+                    this.props.setPlots(tempPlots);
+                    this.resetPlot();
                 }
             })
             .catch(() => {
-                this.props.showAlert('Unable to delete plot at this time', 'danger');
+                this.props.showAlert('Unable to get response from server', 'danger');
             });
     };
 }

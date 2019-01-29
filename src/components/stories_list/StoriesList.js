@@ -6,7 +6,9 @@ import { iosBook, iosBookOutline } from 'react-icons-kit/ionicons';
 import EditEntityModal from '../EditEntityModal.js';
 import StoryListItem from './components/StoryListItem.js';
 import { connect } from 'react-redux';
-import { showAlert, setStories, editStoryComponents, setTags } from '../../store/Actions.js';
+import * as storyActions from '../../actions/StoryActions.js';
+import { showAlert, setStories, editStoryComponents } from '../../actions/Actions.js';
+import { setTags } from '../../actions/TagActions.js';
 import '../../css/StoriesList.css';
 
 /**
