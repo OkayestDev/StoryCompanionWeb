@@ -8,25 +8,21 @@ import '../../css/Draft.css';
 class Draft extends DraftUtils {
     constructor(props) {
         super(props);
-        this.state = {
-            selectedDraftId: 'none',
-            description: '',
-        };
     }
 
     render() {
         if (
             this.props.selectedStoryId !== null &&
-            this.state.selectedDraftId !== 'none' &&
-            this.state.selectedDraftId !== null
+            this.props.selectedDraftId !== 'none' &&
+            this.props.selectedDraftId !== null
         ) {
             return (
                 <div className="full">
                     <div className="draftActions">
-                        <div className="draftAction" onClick={() => this.exportDraft()}>
+                        <div className="draftAction" onClick={this.exportDraft}>
                             EXPORT
                         </div>
-                        <div className="draftAction" onClick={() => this.editDraft()}>
+                        <div className="draftAction" onClick={this.editDraft}>
                             SAVE
                         </div>
                     </div>
@@ -34,17 +30,17 @@ class Draft extends DraftUtils {
                         type="textarea"
                         multiple
                         className="draftInput"
-                        value={this.state.description}
-                        onChange={newDraft => this.setState({ description: newDraft.target.value })}
+                        value={this.props.description}
+                        onChange={this.props.handleDescriptionChanged}
                     />
                 </div>
             );
-        } else if (this.state.selectedDraftId === null) {
+        } else if (this.props.selectedDraftId === null) {
             return (
                 <div className="noEntityContainer">
                     <div className="noEntityText">
                         <div>Looks like you haven't started a draft yet.</div>
-                        <div className="button startDraftButton" onClick={() => this.createDraft()}>
+                        <div className="button startDraftButton" onClick={this.createDraft}>
                             Start A Draft
                         </div>
                     </div>
@@ -63,9 +59,9 @@ class Draft extends DraftUtils {
 function mapStateToProps(state) {
     return {
         ...state.draftStore,
-        selectedStoryId: state.selectedStoryId,
-        email: state.email,
-        apiKey: state.apiKey,
+        selectedStoryId: state.storiesStore.selectedStoryId,
+        email: state.appStore.email,
+        apiKey: state.appStore.apiKey,
     };
 }
 

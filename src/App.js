@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { showAlert } from './store/Actions.js';
+import { showAlert } from './actions/Actions.js';
 
 class App extends Component {
     componentWillMount() {

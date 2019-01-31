@@ -1,7 +1,7 @@
 import React from 'react';
 import StoryCompanion from '../utils/StoryCompanion.js';
 import { connect } from 'react-redux';
-import { showAlert, closeAlert } from '../store/Actions.js';
+import { showAlert, closeAlert } from '../actions/Actions.js';
 import '../css/HeaderBar.css';
 
 const LOGIN_PATHNAMES = ['', '/', '/login', '/create_account', '/reset_password'];

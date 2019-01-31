@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Icon from 'react-icons-kit';
-import { pencil } from 'react-icons-kit/fa';
 import '../../../css/StoryListItem.css';
 
 export default class StoryListItem extends Component {

@@ -13,21 +13,17 @@ export default class StoriesListUtils extends StoryCompanion {
         this.getTags();
     }
 
-    resetStory = () => {
-        this.props.resetStory();
-    };
-
-    newStory = () => {
-        this.props.newStory();
-    };
-
-    selectStory = id => {
+    selectStory = (event, id) => {
+        event.stopPropagation();
         this.props.selectStory(id);
     };
 
     selectStoryToEditComponents = id => {
         this.props.selectStory(id);
-        this.props.navigation.navigate('StoryTab');
+    };
+
+    selectStoryToEdit = id => {
+        this.props.selectStoryForEdit(id);
     };
 
     getStories = () => {
@@ -65,7 +61,7 @@ export default class StoriesListUtils extends StoryCompanion {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'warning');
                 } else {
-                    this.resetStory();
+                    this.props.resetStory();
                     this.props.setStories(res.success);
                 }
             })
@@ -96,7 +92,7 @@ export default class StoriesListUtils extends StoryCompanion {
                 } else {
                     let tempStories = this.props.stories;
                     tempStories[this.props.selectedStoryId] = res.success;
-                    this.resetStory();
+                    this.props.resetStory();
                     this.props.setStories(tempStories);
                 }
             })
@@ -114,7 +110,7 @@ export default class StoriesListUtils extends StoryCompanion {
                 } else {
                     let tempStories = this.props.stories;
                     delete tempStories[this.props.selectedStoryId];
-                    this.resetStory();
+                    this.props.resetStory();
                     this.props.setStories(tempStories);
                 }
             })

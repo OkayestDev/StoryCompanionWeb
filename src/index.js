@@ -3,26 +3,19 @@ import ReactDOM from 'react-dom';
 import './css/index.css';
 import Router from './Router.js';
 import * as serviceWorker from './serviceWorker';
-import { AppStore, Persistor } from './store/AppStore.js';
+import { AppStore, Persistor } from './stores/AppStore.js';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 // @TODO implement a loading screen
 function loading() {
-    return (
-        <div>
-            loading!
-        </div>
-    );
+    return <div>loading!</div>;
 }
 
 ReactDOM.render(
     <Provider store={AppStore}>
-        <PersistGate 
-            persistor={Persistor}
-            loading={loading()}
-        >
-            <Router/>   
+        <PersistGate persistor={Persistor} loading={loading()}>
+            <Router />
         </PersistGate>
     </Provider>,
     document.getElementById('root')

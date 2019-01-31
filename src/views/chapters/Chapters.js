@@ -13,77 +13,35 @@ import '../../css/Chapters.css';
 class Chapters extends ChaptersUtils {
     constructor(props) {
         super(props);
-        this.state = {
-            number: '',
-            name: '',
-            description: '',
-            content: '',
-            selectedChapterId: null,
-            isChapterModalOpen: false,
-            isWritingChapter: false,
-            chapters: null,
-        };
     }
 
-    newChapter = () => {
-        this.setState({
-            isChapterModalOpen: true,
-            selectedChapterId: null,
-            number: '',
-            description: '',
-            name: '',
-            content: '',
-        });
-    };
-
-    selectChapterForEdit = id => {
-        this.setState({
-            isChapterModalOpen: true,
-            selectedChapterId: id,
-            ...this.state.chapters[id],
-        });
-    };
-
-    selectChapterForWrite = (event, id) => {
-        event.stopPropagation();
-        this.setState({
-            selectedChapterId: id,
-            isWritingChapter: true,
-            ...this.state.chapters[id],
-        });
-    };
-
-    handleChapterContentChanged = value => {
-        this.setState({ content: value.target.value });
-    };
-
     renderChapters = () => {
-        if (this.state.chapters === null) {
+        if (this.props.chapters === null) {
             return null;
         }
 
-        let chapterIds = this.sortEntitiesByNumber(this.state.chapters);
+        let chapterIds = this.sortEntitiesByNumber(this.props.chapters);
         if (chapterIds.length > 0) {
             let renderedChapters = [];
             chapterIds.forEach(id => {
                 renderedChapters.push(
                     <div
                         className="chapterContainer"
-                        onClick={() => this.selectChapterForEdit(id)}
+                        onClick={() => this.props.selectChapter(id)}
                         key={id}
                     >
                         <div className="chapterNumberAndNameContainer">
-                            <div className="chapterNumber">{this.state.chapters[id].number}.</div>
-                            <div className="chapterName">{this.state.chapters[id].name}</div>
+                            <div className="chapterNumber">{this.props.chapters[id].number}.</div>
+                            <div className="chapterName">{this.props.chapters[id].name}</div>
                             <div
                                 className="chapterWriteContainer"
-                                onClick={event => this.selectChapterForWrite(event, id)}
+                                onClick={event => this.selectChapterForWriteContent(event, id)}
                             >
                                 <Icon className="icon" icon={pencil} size={28} />
                             </div>
                         </div>
                         <div className="chapterDescription">
-                            {this.state.chapters[id].description}
+                            {this.props.chapters[id].description}
                         </div>
                     </div>
                 );
@@ -111,32 +69,30 @@ class Chapters extends ChaptersUtils {
                 <div className="full">
                     <ReactTooltip delay={500} />
                     <EditEntityModal
-                        isEntityModalOpen={this.state.isChapterModalOpen}
-                        selectedId={this.state.selectedChapterId}
-                        onRequestClose={() => this.setState({ isChapterModalOpen: false })}
+                        isEntityModalOpen={this.props.isChapterModalOpen}
+                        selectedId={this.props.selectedChapterId}
+                        onRequestClose={this.props.resetChapter}
                         objectName="Chapter"
                         title={
-                            this.state.selectedChapterId === null
+                            this.props.selectedChapterId === null
                                 ? 'Create a Chapter'
                                 : 'Edit Chapter'
                         }
-                        description={this.state.description}
-                        descriptionOnChange={newDescription =>
-                            this.setState({ description: newDescription })
-                        }
-                        name={this.state.name}
-                        nameOnChange={newName => this.setState({ name: newName })}
-                        number={this.state.number}
-                        numberOnChange={newNumber => this.setState({ number: newNumber })}
+                        description={this.props.description}
+                        descriptionOnChange={this.props.handleDescriptionChanged}
+                        name={this.props.name}
+                        nameOnChange={this.props.handleNameChanged}
+                        number={this.props.number}
+                        numberOnChange={this.props.handleNumberChanged}
                         onSave={() =>
-                            this.state.selectedChapterId === null
+                            this.props.selectedChapterId === null
                                 ? this.createChapter()
                                 : this.editChapter()
                         }
-                        onDelete={() => this.deleteChapter(this.state.selectedChapterId)}
+                        onDelete={() => this.deleteChapter(this.props.selectedChapterId)}
                         showAlert={this.props.showAlert}
                         saveButtonText={
-                            this.state.selectedChapterId === null
+                            this.props.selectedChapterId === null
                                 ? 'Create Chapter'
                                 : 'Edit Chapter'
                         }
@@ -144,13 +100,13 @@ class Chapters extends ChaptersUtils {
                         confirmationAction="Delete Chapter?"
                     />
                     <WriteChapter
-                        isOpen={this.state.isWritingChapter}
-                        chapterContent={this.state.content}
-                        chapterName={this.state.name}
-                        chapterNumber={this.state.number}
+                        isOpen={this.props.isWritingChapter}
+                        chapterContent={this.props.content}
+                        chapterName={this.props.name}
+                        chapterNumber={this.props.number}
                         writeChapter={this.writeChapter}
                         chapterContentOnChange={this.handleChapterContentChanged}
-                        onRequestClose={() => this.setState({ isWritingChapter: false })}
+                        onRequestClose={this.props.closeChapterContentModal}
                     />
                     <div className="floatRightContainer">
                         <Icon
@@ -181,12 +137,12 @@ class Chapters extends ChaptersUtils {
     }
 }
 
-function mapStateToProps(state) {
+function mappropsToProps(props) {
     return {
-        ...state.chaptersStore,
-        selectedStoryId: state.appStore.selectedStoryId,
-        userId: state.appStore.userId,
-        apiKey: state.appStore.apiKey,
+        ...props.chaptersStore,
+        selectedStoryId: props.appStore.selectedStoryId,
+        userId: props.appStore.userId,
+        apiKey: props.appStore.apiKey,
     };
 }
 
@@ -196,6 +152,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-    mapStateToProps,
+    mappropsToProps,
     mapDispatchToProps
 )(Chapters);

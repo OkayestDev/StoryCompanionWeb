@@ -4,83 +4,52 @@ import EmailModal from '../../components/EmailModal';
 import ChangePasswordModal from '../../components/ChangePasswordModal.js';
 import { connect } from 'react-redux';
 import { showAlert, logout } from '../../actions/Actions.js';
-import * as settingsAction from '../../actions/SettingsActions.js';
+import * as settingsActions from '../../actions/SettingsActions.js';
 import '../../css/Settings.css';
 
 class Settings extends SettingsUtils {
     constructor(props) {
         super(props);
-        this.state = {
-            isEmailModalOpen: false,
-            isPasswordChangeModalOpen: false,
-            emailType: null,
-            emailTitle: 'Submit a Bug',
-            message: '',
-        };
     }
-
-    openBug = () => {
-        this.setState({
-            isEmailModalOpen: true,
-            emailType: 'bug',
-            emailTitle: 'Submitting a Bug',
-            message: '',
-        });
-    };
-
-    openFeature = () => {
-        this.setState({
-            isEmailModalOpen: true,
-            emailType: 'feature',
-            emailTitle: 'Submitting a Feature',
-            message: '',
-        });
-    };
-
-    openPassword = () => {
-        this.setState({ isChangePasswordModalOpen: true });
-    };
 
     render() {
         return (
             <div className="full settingsContainer">
                 <ChangePasswordModal
-                    isChangePasswordModalOpen={this.state.isChangePasswordModalOpen}
-                    onRequestClose={() => this.setState({ isChangePasswordModalOpen: false })}
+                    isChangePasswordModalOpen={this.props.isChangingPassword}
+                    onRequestClose={this.props.resetSettings}
                     showAlert={this.props.showAlert}
                     userId={this.props.userId}
                 />
                 <EmailModal
-                    isEmailModalOpen={this.state.isEmailModalOpen}
-                    onRequestClose={() => this.setState({ isEmailModalOpen: false })}
-                    title={this.state.emailTitle}
+                    isEmailModalOpen={this.props.isSubmittingBug || this.props.isSubmittingFeature}
+                    onRequestClose={this.props.resetSettings}
+                    title={this.props.emailTitle}
                     placeholder={
-                        this.state.emailType === 'feature'
+                        this.props.isSubmittingFeature
                             ? 'Feature Description...'
                             : 'Bug Description...'
                     }
                     onSend={() =>
-                        this.state.emailType === 'feature'
-                            ? this.sendFeatureRequest()
-                            : this.sendBug()
+                        this.props.isSubmittingFeature ? this.sendFeatureRequest() : this.sendBug()
                     }
-                    message={this.state.message}
-                    messageOnChange={newMessage => this.setState({ message: newMessage })}
+                    message={this.props.description}
+                    messageOnChange={this.props.handleDescriptionChanged}
                 />
                 <div>
                     <img src="/logo.png" className="settingsLogo" alt="" />
                 </div>
                 <div className="settings">
-                    <div onClick={() => this.openPassword()} className="button settingsButton">
+                    <div onClick={this.props.changingPassword} className="button settingsButton">
                         Change Password
                     </div>
-                    <div onClick={() => this.openBug()} className="button settingsButton">
+                    <div onClick={this.props.submittingBug} className="button settingsButton">
                         Submit a Bug
                     </div>
-                    <div onClick={() => this.openFeature()} className="button settingsButton">
+                    <div onClick={this.props.submittingFeature} className="button settingsButton">
                         Feature Request
                     </div>
-                    <div onClick={() => this.logout()} className="button settingsButton">
+                    <div onClick={this.props.logout} className="button settingsButton">
                         Logout
                     </div>
                 </div>
@@ -92,9 +61,9 @@ class Settings extends SettingsUtils {
 function mapStateToProps(state) {
     return {
         ...state.settingsStore,
-        email: state.email,
-        userId: state.userId,
-        apiKey: state.apiKey,
+        email: state.appStore.email,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
     };
 }
 

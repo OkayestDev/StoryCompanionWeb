@@ -12,50 +12,13 @@ import '../../css/Plots.css';
 class Plots extends PlotsUtils {
     constructor(props) {
         super(props);
-        this.state = {
-            name: '',
-            description: '',
-            plotParent: '',
-            plots: null,
-            isPlotModalOpen: false,
-            selectedPlotId: null,
-        };
     }
-
-    newPlot = () => {
-        this.setState({
-            isPlotModalOpen: true,
-            name: '',
-            plotParent: '',
-            description: '',
-        });
-    };
-
-    selectPlotForEdit = id => {
-        this.setState({
-            isPlotModalOpen: true,
-            name: this.state.plots[id].name,
-            description: this.state.plots[id].description,
-            plotParent: this.state.plots[id].plot,
-            selectedPlotId: id,
-        });
-    };
-
-    selectToAddChildPlot = id => {
-        this.setState({
-            plotParent: id,
-            isPlotModalOpen: true,
-            name: '',
-            description: '',
-            selectedPlotId: null,
-        });
-    };
 
     returnPlot = (styleName = 'parentPlots', id, addIcon = true) => {
         return (
             <div className={'plot ' + styleName}>
-                <div className="plotName" onClick={() => this.selectPlotForEdit(id)}>
-                    {this.state.plots[id].name}
+                <div className="plotName" onClick={() => this.props.selectPlot(id)}>
+                    {this.props.plots[id].name}
                 </div>
                 {addIcon && (
                     <Icon
@@ -63,7 +26,7 @@ class Plots extends PlotsUtils {
                         icon={plus}
                         size={30}
                         data-tip="Add Child Plot"
-                        onClick={() => this.selectToAddChildPlot(id)}
+                        onClick={() => this.props.addChildPlot(id)}
                     />
                 )}
             </div>
@@ -71,27 +34,27 @@ class Plots extends PlotsUtils {
     };
 
     renderPlots = () => {
-        if (this.state.plots === null) {
+        if (this.props.plots === null) {
             return null;
         }
 
-        let plotIds = Object.keys(this.state.plots);
+        let plotIds = Object.keys(this.props.plots);
         if (plotIds.length > 0) {
             let renderedPlots = [];
             plotIds.forEach(id => {
-                if (this.state.plots[id].plot !== '') {
+                if (this.props.plots[id].plot !== '') {
                     return;
                 } else {
                     renderedPlots.push(this.returnPlot('plotParent', id));
                     let parentOneId = id;
                     // Render Children one
                     plotIds.forEach(id => {
-                        if (this.state.plots[id].plot === parentOneId) {
+                        if (this.props.plots[id].plot === parentOneId) {
                             renderedPlots.push(this.returnPlot('childOnePlots', id));
                             // Render childrenTwo
                             let parentTwoId = id;
                             plotIds.forEach(id => {
-                                if (this.state.plots[id].plot === parentTwoId) {
+                                if (this.props.plots[id].plot === parentTwoId) {
                                     renderedPlots.push(this.returnPlot('childTwoPlots', id, false));
                                 }
                             });
@@ -124,24 +87,22 @@ class Plots extends PlotsUtils {
                 <div className="full">
                     <ReactTooltip delay={500} />
                     <EditEntityModal
-                        isEntityModalOpen={this.state.isPlotModalOpen}
-                        selectedId={this.state.selectedPlotId}
-                        onRequestClose={() => this.setState({ isPlotModalOpen: false })}
+                        isEntityModalOpen={this.props.isPlotModalOpen}
+                        selectedId={this.props.selectedPlotId}
+                        onRequestClose={this.props.closePlotModal}
                         objectName="Plot"
-                        title={this.state.selectedPlotId === null ? 'Create a Plot' : 'Edit Plot'}
-                        name={this.state.name}
-                        nameOnChange={newName => this.setState({ name: newName })}
-                        description={this.state.description}
-                        descriptionOnChange={newDescription =>
-                            this.setState({ description: newDescription })
-                        }
+                        title={this.props.selectedPlotId === null ? 'Create a Plot' : 'Edit Plot'}
+                        name={this.props.name}
+                        nameOnChange={this.props.handleNameChanged}
+                        description={this.props.description}
+                        descriptionOnChange={this.props.handleDescriptionChanged}
                         onSave={() =>
-                            this.state.selectedPlotId === null ? this.createPlot() : this.editPlot()
+                            this.props.selectedPlotId === null ? this.createPlot() : this.editPlot()
                         }
-                        onDelete={() => this.deletePlot(this.state.selectedPlotId)}
+                        onDelete={() => this.deletePlot(this.props.selectedPlotId)}
                         showAlert={this.props.showAlert}
                         saveButtonText={
-                            this.state.selectedPlotId === null ? 'Create Plot' : 'Edit Plot'
+                            this.props.selectedPlotId === null ? 'Create Plot' : 'Edit Plot'
                         }
                         deleteButtonText="Delete Plot"
                         confirmationAction="Delete Plot?"
@@ -169,8 +130,8 @@ class Plots extends PlotsUtils {
 function mapStateToProps(state) {
     return {
         ...state.plotsStore,
-        selectedStoryId: state.selectedStoryId,
-        apiKey: state.apiKey,
+        selectedStoryId: state.storiesStore.selectedStoryId,
+        apiKey: state.appStore.apiKey,
     };
 }
 

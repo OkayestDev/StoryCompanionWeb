@@ -41,6 +41,10 @@ export const setChapters = payload => ({
     payload,
 });
 
+export const closeChapterContentModal = () => ({
+    type: 'CLOSE_CHAPTER_CONTENT_MODAL',
+});
+
 export const openConfirmation = () => ({
     type: 'OPEN_CHAPTER_CONFIRMATION',
 });

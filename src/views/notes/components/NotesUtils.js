@@ -12,21 +12,6 @@ export default class NotesUtils extends StoryCompanion {
         this.getNotes();
     }
 
-    resetNote = () => {
-        this.removeNavigationActions();
-        this.props.resetNote();
-    };
-
-    newNote = () => {
-        this.setNavigationActions(this.resetNote, this.createNote, null);
-        this.props.newNote();
-    };
-
-    selectNote = id => {
-        this.setNavigationActions(this.resetNote, this.editNote, this.props.openConfirmation);
-        this.props.selectNote(id);
-    };
-
     getNotes = () => {
         let paramsObject = this.createParamsObject();
         this.NoteRequests.getNotes(paramsObject)
@@ -35,7 +20,7 @@ export default class NotesUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     this.props.setNotes(res.success);
-                    this.resetNote();
+                    this.props.resetNote();
                 }
             })
             .catch(() => {
@@ -51,7 +36,7 @@ export default class NotesUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'danger');
                 } else {
                     this.props.setNotes(res.success);
-                    this.resetNote();
+                    this.props.resetNote();
                 }
             })
             .catch(() => {
@@ -69,7 +54,7 @@ export default class NotesUtils extends StoryCompanion {
                     let tempNotes = this.props.notes;
                     tempNotes[this.props.selectedNoteId] = res.success;
                     this.props.setNotes(tempNotes);
-                    this.resetNote();
+                    this.props.resetNote();
                 }
             })
             .catch(() => {
@@ -87,7 +72,7 @@ export default class NotesUtils extends StoryCompanion {
                     let tempNotes = this.props.notes;
                     delete tempNotes[this.props.selectedNoteId];
                     this.props.setNotes(tempNotes);
-                    this.resetNote();
+                    this.props.resetNote();
                 }
             })
             .catch(() => {

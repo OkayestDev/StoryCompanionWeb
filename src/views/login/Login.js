@@ -1,7 +1,8 @@
 import React from 'react';
 import LoginUtils from './components/LoginUtils.js';
 import { connect } from 'react-redux';
-import { showAlert, login, setTags } from '../../store/Actions.js';
+import { showAlert, login } from '../../actions/Actions.js';
+import { setTags } from '../../actions/TagActions.js';
 import '../../css/Login.css';
 
 class Login extends LoginUtils {
@@ -53,8 +54,8 @@ class Login extends LoginUtils {
 
 function mapStateToProps(state) {
     return {
-        apiKey: state.apiKey,
-        userId: state.userId,
+        apiKey: state.appStore.apiKey,
+        userId: state.appStore.userId,
     };
 }
 

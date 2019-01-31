@@ -2,13 +2,12 @@ import { createStore } from 'redux';
 
 const INITIAL_STATE = {
     description: '',
-    selectedDraftId: '',
+    selectedDraftId: 'none',
     draft: null,
 };
 
 export const draftReducer = (state = INITIAL_STATE, action) => {
     let newState = state;
-
     switch (action.type) {
         case 'HANDLE_DRAFT_DESCRIPTION_CHANGED':
             newState = {
@@ -24,14 +23,13 @@ export const draftReducer = (state = INITIAL_STATE, action) => {
                     'description' in action.payload
                         ? action.payload.description
                         : state.description,
-                selectedDraftId: 'id' in action.payload ? action.payload.id : state.selectedDraftId,
+                selectedDraftId: 'id' in action.payload ? action.payload.id : null,
             };
             break;
         default:
             newState = state;
             break;
     }
-
     return newState;
 };
 

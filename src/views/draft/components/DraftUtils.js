@@ -1,6 +1,5 @@
 import StoryCompanion from '../../../utils/StoryCompanion.js';
 import DraftRequests from '../../../utils/DraftRequests.js';
-import { Keyboard } from 'react-native';
 
 export default class DraftUtils extends StoryCompanion {
     constructor(props) {
@@ -21,12 +20,6 @@ export default class DraftUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     this.props.setDraft(res.success);
-                    if ('id' in res.success) {
-                        this.props.navigation.setParams({
-                            onSave: this.editDraft,
-                            onExport: this.exportDraft,
-                        });
-                    }
                 }
             })
             .catch(() => {
@@ -57,10 +50,6 @@ export default class DraftUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     this.props.setDraft(res.success);
-                    this.props.navigation.setParams({
-                        onSave: this.editDraft,
-                        onExport: this.exportDraft,
-                    });
                 }
             })
             .catch(() => {
@@ -70,7 +59,6 @@ export default class DraftUtils extends StoryCompanion {
 
     // We only have one draft per story
     editDraft = () => {
-        Keyboard.dismiss();
         let paramsObject = this.createParamsObject();
         this.DraftRequests.editDraft(paramsObject)
             .then(res => {

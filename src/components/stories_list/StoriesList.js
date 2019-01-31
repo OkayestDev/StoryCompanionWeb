@@ -7,7 +7,7 @@ import EditEntityModal from '../EditEntityModal.js';
 import StoryListItem from './components/StoryListItem.js';
 import { connect } from 'react-redux';
 import * as storyActions from '../../actions/StoryActions.js';
-import { showAlert, setStories, editStoryComponents } from '../../actions/Actions.js';
+import { showAlert } from '../../actions/Actions.js';
 import { setTags } from '../../actions/TagActions.js';
 import '../../css/StoriesList.css';
 
@@ -17,48 +17,7 @@ import '../../css/StoriesList.css';
 class StoriesList extends StoriesListUtils {
     constructor(props) {
         super(props);
-        this.state = this.defaultState();
     }
-
-    defaultState = () => {
-        return {
-            isStoryModalOpen: false,
-            selectedStoryId: null,
-            isConfirmationOpen: true,
-            name: '',
-            description: '',
-            image: '',
-            tag: '',
-            selectedTagId: null,
-        };
-    };
-
-    selectStoryForComponents = (event, id) => {
-        event.stopPropagation();
-        this.props.editStoryComponents(id);
-    };
-
-    selectStoryForEdit = id => {
-        this.setState({
-            isStoryModalOpen: true,
-            selectedStoryId: id,
-            name: this.props.stories[id].name,
-            description: this.props.stories[id].description,
-            image: this.props.stories[id].image,
-            selectedTagId: this.props.stories[id].tag,
-        });
-    };
-
-    newStory = () => {
-        this.setState({
-            isStoryModalOpen: true,
-            selectedStoryId: null,
-            name: '',
-            description: '',
-            image: '',
-            selectedTagId: null,
-        });
-    };
 
     renderStories = () => {
         let storiesList = [];
@@ -69,8 +28,8 @@ class StoriesList extends StoriesListUtils {
                         isSelectedStory={id === this.props.selectStoryForEdit}
                         id={id}
                         story={this.props.stories[id]}
-                        selectStoryForComponents={event => this.selectStoryForComponents(event, id)}
-                        selectStoryForEdit={() => this.selectStoryForEdit(id)}
+                        selectStoryForComponents={event => this.selectStory(event, id)}
+                        selectStoryForEdit={() => this.props.selectStoryForEdit(id)}
                     />
                 </div>
             );
@@ -79,38 +38,40 @@ class StoriesList extends StoriesListUtils {
     };
 
     render() {
-        if (this.isUserLoggedIn() && !this.props.hidden) {
+        if (this.isUserLoggedIn() && !this.props.isStoryListOpen) {
             return (
                 <div className="storiesList">
                     <EditEntityModal
-                        isEntityModalOpen={this.state.isStoryModalOpen}
-                        selectedId={this.state.selectedStoryId}
-                        onRequestClose={() => this.setState({ isStoryModalOpen: false })}
+                        isEntityModalOpen={this.props.isStoryModalOpen}
+                        selectedId={this.props.selectedStoryIdForEdit}
+                        onRequestClose={this.props.closeStoryModal}
                         objectName="Story"
                         title={
-                            this.state.selectedStoryId === null ? 'Create a Story' : 'Edit Story'
+                            this.props.selectedStoryIdForEdit === null
+                                ? 'Create a Story'
+                                : 'Edit Story'
                         }
-                        image={this.state.image}
-                        imageOnChange={image => this.setState({ image: image })}
-                        description={this.state.description}
-                        descriptionOnChange={newDescription =>
-                            this.setState({ description: newDescription })
-                        }
-                        dropdown={this.state.selectedTagId}
+                        image={this.props.image}
+                        imageOnChange={this.props.handleImageChanged}
+                        description={this.props.description}
+                        descriptionOnChange={this.props.handleDescriptionChanged}
+                        dropdown={this.props.selectedTagId}
                         dropdownList={this.filterTagsByType('Story')}
-                        dropdownOnChange={newTag => this.setState({ selectedTagId: newTag })}
+                        dropdownOnChange={this.props.handleTagChanged}
                         dropdownPlaceholder="Tag..."
-                        name={this.state.name}
-                        nameOnChange={newName => this.setState({ name: newName })}
+                        name={this.props.name}
+                        nameOnChange={this.props.handleNameChanged}
                         onSave={() =>
-                            this.state.selectedStoryId === null
+                            this.props.selectedStoryIdForEdit === null
                                 ? this.createStory()
                                 : this.editStory()
                         }
-                        onDelete={() => this.deleteStory(this.state.selectedStoryId)}
+                        onDelete={() => this.deleteStory(this.props.selectedStoryId)}
                         showAlert={this.props.showAlert}
                         saveButtonText={
-                            this.state.selectedStoryId === null ? 'Create Story' : 'Edit Story'
+                            this.props.selectedStoryIdForEdit === null
+                                ? 'Create Story'
+                                : 'Edit Story'
                         }
                         deleteButtonText="Delete Story"
                         confirmationAction="Delete Story?"
@@ -144,9 +105,7 @@ class StoriesList extends StoriesListUtils {
                         icon={iosBook}
                         size={30}
                         data-tip="Open Stories List"
-                        onClick={() => {
-                            this.props.toggleIsStoryListOpen();
-                        }}
+                        onClick={this.props.toggleIsStoryListOpen()}
                     />
                 </div>
             );
@@ -158,7 +117,7 @@ class StoriesList extends StoriesListUtils {
 
 function mapStateToProps(state) {
     return {
-        stories: state.stories,
+        ...state.storiesStore,
         selectedStoryId: state.selectedStoryId,
         userId: state.userId,
         apiKey: state.apiKey,
@@ -167,10 +126,9 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+    ...storyActions,
     showAlert,
-    setStories,
     setTags,
-    editStoryComponents,
 };
 
 export default connect(

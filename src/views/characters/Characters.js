@@ -12,44 +12,7 @@ import '../../css/Characters.css';
 class Characters extends CharactersUtils {
     constructor(props) {
         super(props);
-        this.state = {
-            name: '',
-            description: '',
-            image: '',
-            attribute: '',
-            number: 0,
-            selectedTagId: null,
-            isCharacterModalOpen: false,
-            characters: null,
-            selectedCharacterId: null,
-        };
     }
-
-    newCharacter = () => {
-        this.setState({
-            image: '',
-            attribute: '',
-            name: '',
-            description: '',
-            selectedTagId: '',
-            number: 0,
-            isCharacterModalOpen: true,
-            selectedCharacterId: null,
-        });
-    };
-
-    selectCharacterForEdit = id => {
-        this.setState({
-            isCharacterModalOpen: true,
-            selectedCharacterId: id,
-            name: this.state.characters[id].name,
-            description: this.state.characters[id].description,
-            attribute: this.state.characters[id].attribute,
-            image: this.state.characters[id].image,
-            selectedTagId: this.state.characters[id].tag,
-            number: this.state.characters[id].number,
-        });
-    };
 
     handleCharacterUpClicked = (event, id) => {
         event.stopPropagation();
@@ -62,11 +25,11 @@ class Characters extends CharactersUtils {
     };
 
     renderCharacters = () => {
-        if (this.state.characters === null) {
+        if (this.props.characters === null) {
             return null;
         }
 
-        let characterIds = this.sortEntitiesByNumber(this.state.characters);
+        let characterIds = this.sortEntitiesByNumber(this.props.characters);
         characterIds.reverse();
         if (characterIds.length > 0) {
             let renderedIds = [];
@@ -75,15 +38,15 @@ class Characters extends CharactersUtils {
                     <div
                         key={id}
                         className="character"
-                        onClick={() => this.selectCharacterForEdit(id)}
+                        onClick={() => this.props.selectCharacter(id)}
                     >
                         <div className="characterInfo">
                             <div className="trueCenter">
-                                {this.state.characters[id].image !== '' ? (
+                                {this.props.characters[id].image !== '' ? (
                                     <div>
                                         <img
                                             className="characterImage"
-                                            src={this.state.characters[id].image}
+                                            src={this.props.characters[id].image}
                                             alt=""
                                         />
                                     </div>
@@ -95,18 +58,18 @@ class Characters extends CharactersUtils {
                             </div>
                             <div>
                                 <div className="characterName">
-                                    {this.state.characters[id].name}
+                                    {this.props.characters[id].name}
                                 </div>
                                 <div className="characterLabelContainer">
                                     <div className="characterLabel">Description:</div>
                                     <div className="characterContent">
-                                        {this.state.characters[id].description}
+                                        {this.props.characters[id].description}
                                     </div>
                                 </div>
                                 <div className="characterLabelContainer">
                                     <div className="characterLabel">Attributes:</div>
                                     <div className="characterContent">
-                                        {this.state.characters[id].attribute}
+                                        {this.props.characters[id].attribute}
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +82,7 @@ class Characters extends CharactersUtils {
                                 onClick={event => this.handleCharacterUpClicked(event, id)}
                             />
                             <div className="characterNumber">
-                                {this.state.characters[id].number}
+                                {this.props.characters[id].number}
                             </div>
                             <Icon
                                 icon={caretDown}
@@ -154,40 +117,36 @@ class Characters extends CharactersUtils {
                 <div className="full">
                     <ReactTooltip delay={500} />
                     <EditEntityModal
-                        isEntityModalOpen={this.state.isCharacterModalOpen}
-                        selectedId={this.state.selectedCharacterId}
-                        onRequestClose={() => this.setState({ isCharacterModalOpen: false })}
+                        isEntityModalOpen={this.props.isCharacterModalOpen}
+                        selectedId={this.props.selectedCharacterId}
+                        onRequestClose={this.props.resetCharacter}
                         objectName="Character"
                         title={
-                            this.state.selectedCharacterId === null
+                            this.props.selectedCharacterId === null
                                 ? 'Create a Character'
                                 : 'Edit Character'
                         }
-                        image={this.state.image}
-                        imageOnChange={newImage => this.setState({ image: newImage })}
-                        name={this.state.name}
-                        nameOnChange={newName => this.setState({ name: newName })}
-                        description={this.state.description}
-                        descriptionOnChange={newDescription =>
-                            this.setState({ description: newDescription })
-                        }
-                        dropdown={this.state.selectedTagId}
+                        image={this.props.image}
+                        imageOnChange={this.props.handleImageChanged}
+                        name={this.props.name}
+                        nameOnChange={this.props.handleNameChanged}
+                        description={this.props.description}
+                        descriptionOnChange={this.props.handleDescriptionChanged}
+                        dropdown={this.props.selectedTagId}
                         dropdownList={this.filterTagsByType('Character')}
-                        dropdownOnChange={newTag => this.setState({ selectedTagId: newTag })}
+                        dropdownOnChange={this.props.handleTagChanged}
                         dropdownPlaceholder="Tag..."
-                        attribute={this.state.attribute}
-                        attributeOnChange={newAttribute =>
-                            this.setState({ attribute: newAttribute })
-                        }
+                        attribute={this.props.attribute}
+                        attributeOnChange={this.props.handleAttributeChanged}
                         onSave={() =>
-                            this.state.selectedCharacterId === null
+                            this.props.selectedCharacterId === null
                                 ? this.createCharacter()
                                 : this.editCharacter()
                         }
                         onDelete={() => this.deleteCharacter()}
                         showAlert={this.props.showAlert}
                         saveButtonText={
-                            this.state.selectedCharacterId === null
+                            this.props.selectedCharacterId === null
                                 ? 'Create Character'
                                 : 'Edit Character'
                         }
@@ -217,10 +176,10 @@ class Characters extends CharactersUtils {
 function mapStateToProps(state) {
     return {
         ...state.charactersStore,
-        selectedStoryId: state.selectedStoryId,
-        userId: state.userId,
-        apiKey: state.apiKey,
-        tags: state.tags,
+        selectedStoryId: state.stoiresStore.selectedStoryId,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
+        tags: state.appStore.tags,
     };
 }
 

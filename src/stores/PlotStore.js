@@ -5,13 +5,13 @@ const INITIAL_STATE = {
     description: '',
     plotParent: null,
     selectedPlotId: null,
+    isPlotModalOpen: false,
     plots: null,
     isConfirmationModalOpen: false,
 };
 
 export const plotReducer = (state = INITIAL_STATE, action) => {
     let newState = state;
-
     switch (action.type) {
         case 'HANDLE_PLOT_NAME_CHANGED':
             newState = {
@@ -32,12 +32,14 @@ export const plotReducer = (state = INITIAL_STATE, action) => {
                 description: '',
                 plotParent: null,
                 selectedPlotId: null,
+                isPlotModalOpen: false,
             };
             break;
         case 'NEW_PLOT':
             newState = {
                 ...state,
-                selectedPlotId: 'new',
+                selectedPlotId: null,
+                isPlotModalOpen: true,
             };
             break;
         case 'SELECT_PLOT':
@@ -48,6 +50,19 @@ export const plotReducer = (state = INITIAL_STATE, action) => {
                 plotParent: plot.plot,
                 name: plot.name,
                 description: plot.description,
+                isPlotModalOpen: true,
+            };
+            break;
+        case 'OPEN_PLOT_MODAL':
+            newState = {
+                ...state,
+                isPlotModalOpen: true,
+            };
+            break;
+        case 'CLOSE_PLOT_MODAL':
+            newState = {
+                ...state,
+                isPlotModalOpen: false,
             };
             break;
         case 'SET_PLOTS':
@@ -81,7 +96,6 @@ export const plotReducer = (state = INITIAL_STATE, action) => {
             newState = state;
             break;
     }
-
     return newState;
 };
 

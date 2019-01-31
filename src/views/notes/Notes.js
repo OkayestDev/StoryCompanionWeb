@@ -12,45 +12,21 @@ import '../../css/Notes.css';
 class Notes extends NotesUtils {
     constructor(props) {
         super(props);
-        this.state = {
-            name: '',
-            description: '',
-            selectedNoteId: null,
-            isNoteModalOpen: false,
-            notes: null,
-        };
     }
 
-    selectNoteForEdit = id => {
-        this.setState({
-            isNoteModalOpen: true,
-            name: this.state.notes[id].name,
-            description: this.state.notes[id].description,
-            selectedNoteId: id,
-        });
-    };
-
-    newNote = () => {
-        this.setState({
-            isNoteModalOpen: true,
-            name: '',
-            description: '',
-        });
-    };
-
     renderNotes = () => {
-        if (this.state.notes === null) {
+        if (this.props.notes === null) {
             return null;
         }
 
-        let noteIds = Object.keys(this.state.notes);
+        let noteIds = Object.keys(this.props.notes);
         if (noteIds.length > 0) {
             let renderedNotes = [];
             noteIds.forEach(id => {
                 renderedNotes.push(
-                    <div className="note" key={id} onClick={() => this.selectNoteForEdit(id)}>
-                        <div className="noteName">{this.state.notes[id].name}</div>
-                        <div className="noteDescription">{this.state.notes[id].description}</div>
+                    <div className="note" key={id} onClick={() => this.props.selectNote(id)}>
+                        <div className="noteName">{this.props.notes[id].name}</div>
+                        <div className="noteDescription">{this.props.notes[id].description}</div>
                     </div>
                 );
             });
@@ -77,24 +53,22 @@ class Notes extends NotesUtils {
                 <div className="full">
                     <ReactTooltip delay={500} />
                     <EditEntityModal
-                        isEntityModalOpen={this.state.isNoteModalOpen}
-                        selectedId={this.state.selectedNoteId}
-                        onRequestClose={() => this.setState({ isNoteModalOpen: false })}
+                        isEntityModalOpen={this.props.isNoteModalOpen}
+                        selectedId={this.props.selectedNoteId}
+                        onRequestClose={this.props.resetNote}
                         objectName="Note"
-                        title={this.state.selectedNoteId === null ? 'Create a Note' : 'Edit Note'}
-                        description={this.state.description}
-                        descriptionOnChange={newDescription =>
-                            this.setState({ description: newDescription })
-                        }
-                        name={this.state.name}
-                        nameOnChange={newName => this.setState({ name: newName })}
+                        title={this.props.selectedNoteId === null ? 'Create a Note' : 'Edit Note'}
+                        description={this.props.description}
+                        descriptionOnChange={this.props.handleDescriptionChanged}
+                        name={this.props.name}
+                        nameOnChange={this.props.handleNameChanged}
                         onSave={
-                            this.state.selectedNoteId === null ? this.createNote : this.editNote
+                            this.props.selectedNoteId === null ? this.createNote : this.editNote
                         }
                         onDelete={this.deleteNote}
                         showAlert={this.props.showAlert}
                         saveButtonText={
-                            this.state.selectedNoteId === null ? 'Create Note' : 'Edit Note'
+                            this.props.selectedNoteId === null ? 'Create Note' : 'Edit Note'
                         }
                         deleteButtonText="Delete Note"
                         confirmationAction="Delete Note?"
@@ -129,9 +103,9 @@ class Notes extends NotesUtils {
 function mapStateToProps(state) {
     return {
         ...state.notesStore,
-        selectedStoryId: state.selectedStoryId,
-        apiKey: state.apiKey,
-        email: state.email,
+        selectedStoryId: state.storiesStore.selectedStoryId,
+        apiKey: state.appStore.apiKey,
+        email: state.appStore.email,
     };
 }
 

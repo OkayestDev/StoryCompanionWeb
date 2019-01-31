@@ -12,26 +12,6 @@ export default class PlotsUtils extends StoryCompanion {
         this.getPlots();
     }
 
-    resetPlot = () => {
-        this.removeNavigationActions();
-        this.props.resetPlot();
-    };
-
-    newPlot = () => {
-        this.setNavigationActions(this.resetPlot, this.createPlot, null);
-        this.props.newPlot();
-    };
-
-    selectPlot = id => {
-        this.setNavigationActions(this.resetPlot, this.editPlot, this.props.openConfirmation);
-        this.props.selectPlot(id);
-    };
-
-    addChildPlot = parentId => {
-        this.setNavigationActions(this.cancelPlotEdit, this.createPlot, null);
-        this.props.addChildPlot(parentId);
-    };
-
     getPlots = () => {
         let paramsObject = this.createParamsObject();
         this.PlotRequests.getPlots(paramsObject)
@@ -40,7 +20,7 @@ export default class PlotsUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'danger');
                 } else {
                     this.props.setPlots(res.success);
-                    this.resetPlot();
+                    this.props.resetPlot();
                 }
             })
             .catch(() => {
@@ -56,7 +36,7 @@ export default class PlotsUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'danger');
                 } else {
                     this.props.setPlots(res.success);
-                    this.resetPlot();
+                    this.props.resetPlot();
                 }
             })
             .catch(() => {
@@ -74,7 +54,7 @@ export default class PlotsUtils extends StoryCompanion {
                     let tempPlots = this.props.plots;
                     tempPlots[this.props.selectedPlotId] = res.success;
                     this.props.setPlots(tempPlots);
-                    this.resetPlot();
+                    this.props.resetPlot();
                 }
             })
             .catch(() => {
@@ -92,7 +72,7 @@ export default class PlotsUtils extends StoryCompanion {
                     let tempPlots = this.props.plots;
                     delete tempPlots[this.props.selectedPlotId];
                     this.props.setPlots(tempPlots);
-                    this.resetPlot();
+                    this.props.resetPlot();
                 }
             })
             .catch(() => {

@@ -8,6 +8,7 @@ const INITIAL_STATE = {
     chapters: null,
     selectedChapterId: null,
     isWritingChapter: false,
+    isChapterModalOpen: false,
     isConfirmationModalOpen: false,
 };
 
@@ -43,7 +44,8 @@ export const chapterReducer = (state = INITIAL_STATE, action) => {
         case 'NEW_CHAPTER':
             newState = {
                 ...state,
-                selectedChapterId: 'new',
+                selectedChapterId: null,
+                isChapterModalOpen: true,
             };
             break;
         case 'SELECT_CHAPTER':
@@ -55,6 +57,7 @@ export const chapterReducer = (state = INITIAL_STATE, action) => {
                 number: String(state.chapters[id].number),
                 description: state.chapters[id].description,
                 content: state.chapters[id].content,
+                isChapterModalOpen: true,
             };
             break;
         case 'SELECT_CHAPTER_TO_WRITE_CONTENT':
@@ -78,12 +81,31 @@ export const chapterReducer = (state = INITIAL_STATE, action) => {
                 content: '',
                 selectedChapterId: null,
                 isWritingChapter: false,
+                isChapterModalOpen: false,
             };
             break;
         case 'SET_CHAPTERS':
             newState = {
                 ...state,
                 chapters: action.payload,
+            };
+            break;
+        case 'CLOSE_CHAPTER_CONTENT_MODAL':
+            newState = {
+                ...state,
+                isWritingChapter: false,
+            };
+            break;
+        case 'OPEN_CHAPTER_MODAL':
+            newState = {
+                ...state,
+                isChapterModalOpen: true,
+            };
+            break;
+        case 'CLOSE_CHAPTER_MODAL':
+            newState = {
+                ...state,
+                isChapterModalOpen: false,
             };
             break;
         case 'OPEN_CHAPTER_CONFIRMATION':

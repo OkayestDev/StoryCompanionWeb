@@ -62,48 +62,51 @@ export default class StoryCompanion extends Component {
         return false;
     };
 
-    createParamsObject = (props = null) => {
-        if (typeof this.state === 'undefined') {
+    createParamsObject = () => {
+        if (this.state === null || typeof this.state === 'undefined') {
             this.state = {};
         }
 
-        const propsObject = props === null ? this.props : props;
         return {
-            plot: 'selectedPlotId' in this.state ? this.state.selectedPlotId : '',
-            plotParent: 'plotParent' in this.state ? this.state.plotParent : '',
-            draft: 'selectedDraftId' in this.state ? this.state.selectedDraftId : '',
-            note: 'selectedNoteId' in this.state ? this.state.selectedNoteId : '',
-            character: 'selectedCharacterId' in this.state ? this.state.selectedCharacterId : '',
-            chapter: 'selectedChapterId' in this.state ? this.state.selectedChapterId : '',
-            number: 'number' in this.state ? this.state.number : '',
-            content: 'content' in this.state ? this.state.content : '',
-            user:
-                'userId' in this.state
-                    ? this.state.userId
-                    : 'userId' in propsObject
-                    ? propsObject.userId
-                    : '',
-            story:
-                'selectedStoryId' in this.state
-                    ? this.state.selectedStoryId
-                    : 'selectedStoryId' in propsObject
-                    ? propsObject.selectedStoryId
-                    : '',
-            tag: 'selectedTagId' in this.state ? this.state.selectedTagId : '',
-            type: 'type' in this.state ? this.state.type : '',
-            description: 'description' in this.state ? this.state.description : '',
-            attribute: 'attribute' in this.state ? this.state.attribute : '',
-            name: 'name' in this.state ? this.state.name : '',
+            plot: 'selectedPlotId' in this.props ? this.props.selectedPlotId : '',
+            plotParent: 'plotParent' in this.props ? this.props.plotParent : '',
+            draft: 'selectedDraftId' in this.props ? this.props.selectedDraftId : '',
+            note: 'selectedNoteId' in this.props ? this.props.selectedNoteId : '',
+            character: 'selectedCharacterId' in this.props ? this.props.selectedCharacterId : '',
+            chapter: 'selectedChapterId' in this.props ? this.props.selectedChapterId : '',
+            number: 'number' in this.props ? this.props.number : '',
+            content: 'content' in this.props ? this.props.content : '',
+            user: 'userId' in this.props ? this.props.userId : '',
+            story: 'selectedStoryId' in this.props ? this.props.selectedStoryId : '',
+            genre: 'genre' in this.props ? this.props.genre : '',
+            tag: 'selectedTagId' in this.props ? this.props.selectedTagId : '',
+            type: 'type' in this.props ? this.props.type : '',
+            description: 'description' in this.props ? this.props.description : '',
+            attribute: 'attribute' in this.props ? this.props.attribute : '',
+            name: 'name' in this.props ? this.props.name : '',
+            age: 'age' in this.props ? this.props.age : '',
+            storyRole: 'storyRole' in this.props ? this.props.storyRole : '',
+            goal: 'goal' in this.props ? this.props.goal : '',
             email:
-                'email' in this.state
+                'email' in this.props
+                    ? this.props.email
+                    : 'email' in this.state
                     ? this.state.email
-                    : 'email' in propsObject
-                    ? propsObject.email
                     : '',
             confirmEmail: 'confirmEmail' in this.state ? this.state.confirmEmail : '',
-            password: 'password' in this.state ? this.state.password : '',
-            confirmPassword: 'confirmPassword' in this.state ? this.state.confirmPassword : '',
-            apiKey: propsObject.apiKey,
+            password:
+                'password' in this.props
+                    ? this.props.password
+                    : 'password' in this.state
+                    ? this.state.password
+                    : '',
+            confirmPassword:
+                'confirmPassword' in this.props
+                    ? this.props.confirmPassword
+                    : 'confirmPassword' in this.state
+                    ? this.state.confirmPassword
+                    : '',
+            apiKey: 'apiKey' in this.props ? this.props.apiKey : '',
         };
     };
 
@@ -114,21 +117,13 @@ export default class StoryCompanion extends Component {
             this.TagRequests.getTags(paramsObject)
                 .then(res => {
                     if ('error' in res) {
-                        this.setState({
-                            globalAlertVisible: true,
-                            globalAlertType: 'danger',
-                            globalAlertMessage: 'Unable to fetch tags at this time',
-                        });
+                        this.props.showAlert('Unable to fetch tags at this time', 'danger');
                     } else {
                         this.props.setTags(res.success);
                     }
                 })
                 .catch(() => {
-                    this.setState({
-                        globalAlertVisible: true,
-                        globalAlertType: 'danger',
-                        globalAlertMessage: 'Unable to fetch tags at this time',
-                    });
+                    this.props.showAlert('Unable to fetch tags at this time', 'danger');
                 });
         }
     };

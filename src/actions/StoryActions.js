@@ -23,6 +23,18 @@ export const handleTagChanged = payload => ({
     payload,
 });
 
+export const openStoryModal = () => ({
+    type: 'OPEN_STORY_MODAL',
+});
+
+export const closeStoryModal = () => ({
+    type: 'CLOSE_STORY_MODAL',
+});
+
+export const toggleIsStoryListOpen = () => ({
+    type: 'TOGGLE_IS_STORY_LIST_OPEN',
+});
+
 export const resetStory = () => ({
     type: 'RESET_STORY',
 });
@@ -33,6 +45,11 @@ export const newStory = () => ({
 
 export const selectStory = id => ({
     type: 'SELECT_STORY',
+    payload: id,
+});
+
+export const selectStoryForEdit = id => ({
+    type: 'SELECT_STORY_FOR_EDIT',
     payload: id,
 });
 

@@ -5,6 +5,7 @@ const INITIAL_STATE = {
     description: '',
     notes: null,
     selectedNoteId: null,
+    isNoteModalOpen: false,
     isConfirmationModalOpen: false,
 };
 
@@ -29,6 +30,7 @@ export const noteReducer = (state = INITIAL_STATE, action) => {
                 name: '',
                 description: '',
                 selectedNoteId: null,
+                isNoteModalOpen: false,
             };
             break;
         case 'SET_NOTES':
@@ -44,12 +46,14 @@ export const noteReducer = (state = INITIAL_STATE, action) => {
                 name: note.name,
                 description: note.description,
                 selectedNoteId: action.payload,
+                isNoteModalOpen: true,
             };
             break;
         case 'NEW_NOTE':
             newState = {
                 ...state,
-                selectedNoteId: 'new',
+                selectedNoteId: null,
+                isNoteModalOpen: true,
             };
             break;
         case 'OPEN_NOTE_CONFIRMATION':

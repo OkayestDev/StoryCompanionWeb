@@ -7,6 +7,9 @@ const INITIAL_STATE = {
     genre: '',
     selectedTagId: null,
     selectedStoryId: null,
+    selectedStoryIdForEdit: null,
+    isStoryModalOpen: false,
+    isStoryListOpen: true,
     stories: null,
     isConfirmationModalOpen: false,
 };
@@ -44,6 +47,25 @@ export const storyReducer = (state = INITIAL_STATE, action) => {
                 selectedTagId: action.payload,
             };
             break;
+        case 'OPEN_STORY_MODAL':
+            newState = {
+                ...state,
+                isStoryModalOpen: true,
+            };
+            break;
+        case 'CLOSE_STORY_MODAL':
+            newState = {
+                ...state,
+                isStoryModalOpen: false,
+                selectedStoryIdForEdit: null,
+            };
+            break;
+        case 'TOGGLE_IS_STORY_LIST_OPEN':
+            newState = {
+                ...state,
+                isStoryListOpen: !state.isStoryListOpen,
+            };
+            break;
         case 'RESET_STORY':
             newState = {
                 ...state,
@@ -52,13 +74,15 @@ export const storyReducer = (state = INITIAL_STATE, action) => {
                 image: '',
                 genre: '',
                 selectedTagId: null,
+                selectedStoryIdForEdit: null,
                 selectedStoryId: null,
             };
             break;
         case 'NEW_STORY':
             newState = {
                 ...state,
-                selectedStoryId: 'new',
+                selectedStoryIdForEdit: null,
+                isStoryModalOpen: true,
             };
             break;
         case 'SELECT_STORY':
@@ -71,6 +95,19 @@ export const storyReducer = (state = INITIAL_STATE, action) => {
                 description: story.description,
                 selectedTagId: story.tag,
                 selectedStoryId: action.payload,
+            };
+            break;
+        case 'SELECT_STORY_FOR_EDIT':
+            let storyToEdit = state.stores[action.payload];
+            newState = {
+                ...state,
+                name: storyToEdit.name,
+                image: storyToEdit.image,
+                genre: storyToEdit.genre,
+                description: storyToEdit.description,
+                selectedTagId: storyToEdit.tag,
+                selectedStoryIdForEdit: action.payload,
+                isStoryModalOpen: true,
             };
             break;
         case 'SET_STORIES':

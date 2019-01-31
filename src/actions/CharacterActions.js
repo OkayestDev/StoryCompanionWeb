@@ -48,6 +48,14 @@ export const selectCharacter = id => ({
     payload: id,
 });
 
+export const openCharacterModal = () => ({
+    type: 'OPEN_CHARACTER_MODAL',
+});
+
+export const closeCharacterModal = () => ({
+    type: 'CLOSE_CHARACTER_MODAL',
+});
+
 export const resetCharacter = () => ({
     type: 'RESET_CHARACTER',
 });

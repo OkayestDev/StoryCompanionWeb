@@ -21,6 +21,14 @@ export const selectPlot = id => ({
     payload: id,
 });
 
+export const openPlotModal = () => ({
+    type: 'OPEN_PLOT_MODAL',
+});
+
+export const closePlotModal = () => ({
+    type: 'CLOSE_PLOT_MODAL',
+});
+
 export const setPlots = payload => ({
     type: 'SET_PLOTS',
     payload,

@@ -3,7 +3,7 @@ import Icon from 'react-icons-kit';
 import { smileO, warning, ban, close } from 'react-icons-kit/fa';
 import StoryCompanion from '../utils/StoryCompanion.js';
 import { connect } from 'react-redux';
-import { showAlert, closeAlert } from '../store/Actions.js';
+import { showAlert, closeAlert } from '../actions/Actions.js';
 import '../css/GlobalAlert.css';
 
 // @TODO set timeout for showing global alert

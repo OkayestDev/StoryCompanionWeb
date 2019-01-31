@@ -12,23 +12,8 @@ export default class ChapterUtils extends StoryCompanion {
         this.getChapters();
     }
 
-    resetChapter = () => {
-        this.removeNavigationActions();
-        this.props.resetChapter();
-    };
-
-    newChapter = () => {
-        this.setNavigationActions(this.resetChapter, this.createChapter, null);
-        this.props.newChapter();
-    };
-
-    selectChapter = id => {
-        this.setNavigationActions(this.resetChapter, this.editChapter, this.props.openConfirmation);
-        this.props.selectChapter(id);
-    };
-
-    selectChapterToWriteContent = id => {
-        this.setNavigationActions(this.resetChapter, this.writeChapter);
+    selectChapterToWriteContent = (event, id) => {
+        event.stopPropagation();
         this.props.selectChapterToWriteContent(id);
     };
 
@@ -55,7 +40,7 @@ export default class ChapterUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     this.props.setChapters(res.success);
-                    this.resetChapter();
+                    this.props.resetChapter();
                 }
             })
             .catch(() => {
@@ -73,7 +58,7 @@ export default class ChapterUtils extends StoryCompanion {
                     let tempChapters = this.props.chapters;
                     tempChapters[this.props.selectedChapterId] = res.success;
                     this.props.setChapters(tempChapters);
-                    this.resetChapter();
+                    this.props.resetChapter();
                 }
             })
             .catch(() => {
@@ -90,7 +75,7 @@ export default class ChapterUtils extends StoryCompanion {
                 let tempChapters = this.props.chapters;
                 delete tempChapters[this.props.selectedChapterId];
                 this.props.setChapters(tempChapters);
-                this.resetChapter();
+                this.props.resetChapter();
             }
         });
     };

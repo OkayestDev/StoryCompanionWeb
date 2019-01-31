@@ -3,7 +3,7 @@ import TagsUtils from './components/TagsUtils.js';
 import Icon from 'react-icons-kit';
 import { plus } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
-import { showAlert, setTags } from '../../actions/Actions.js';
+import { showAlert } from '../../actions/Actions.js';
 import * as tagActions from '../../actions/TagActions.js';
 import EditEntityModal from '../../components/EditEntityModal.js';
 import '../../css/Tags.css';
@@ -13,40 +13,7 @@ const TAG_TYPES = ['Story', 'Character'];
 class Tags extends TagsUtils {
     constructor(props) {
         super(props);
-        this.state = {
-            name: '',
-            description: '',
-            type: '',
-            selectedTagId: null,
-            isTagModalOpen: false,
-        };
     }
-
-    defaultState = () => {
-        return {
-            name: '',
-            description: '',
-            type: '',
-            selectedTagId: null,
-        };
-    };
-
-    newTag = () => {
-        this.setState({
-            ...this.defaultState(),
-            isTagModalOpen: true,
-        });
-    };
-
-    selectTagForEdit = id => {
-        this.setState({
-            name: this.props.tags[id].name,
-            type: this.props.tags[id].type,
-            description: this.props.tags[id].description,
-            selectedTagId: id,
-            isTagModalOpen: true,
-        });
-    };
 
     renderTags = () => {
         const tags = this.props.tags;
@@ -58,7 +25,7 @@ class Tags extends TagsUtils {
             let renderedTags = [];
             tagIds.forEach(id => {
                 renderedTags.push(
-                    <div className="tagContainer" onClick={() => this.selectTagForEdit(id)}>
+                    <div className="tagContainer" onClick={() => this.props.selectTag(id)}>
                         <div className="tagName">{tags[id].name}</div>
                         <div className="tagType">{tags[id].type}</div>
                         <div className="tagDescription">{tags[id].description}</div>
@@ -93,27 +60,25 @@ class Tags extends TagsUtils {
                     data-tip="Create a new tag"
                 />
                 <EditEntityModal
-                    isEntityModalOpen={this.state.isTagModalOpen}
-                    selectedId={this.state.selectedTagId}
-                    onRequestClose={() => this.setState({ isTagModalOpen: false })}
+                    isEntityModalOpen={this.props.isTagModalOpen}
+                    selectedId={this.props.selectedTagId}
+                    onRequestClose={this.props.closeTagModal}
                     objectName="Tag"
-                    title={this.state.selectedTagId === null ? 'Create a Tag' : 'Edit Tag'}
-                    name={this.state.name}
-                    nameOnChange={newName => this.setState({ name: newName })}
-                    description={this.state.description}
-                    descriptionOnChange={newDescription =>
-                        this.setState({ description: newDescription })
-                    }
-                    dropdown={this.state.type}
+                    title={this.props.selectedTagId === null ? 'Create a Tag' : 'Edit Tag'}
+                    name={this.props.name}
+                    nameOnChange={this.props.handleNameChanged}
+                    description={this.props.description}
+                    descriptionOnChange={this.props.handleDescriptionChanged}
+                    dropdown={this.props.type}
                     dropdownList={TAG_TYPES}
-                    dropdownOnChange={newType => this.setState({ type: newType })}
+                    dropdownOnChange={this.props.handleTypeChanged}
                     dropdownPlaceholder="Type..."
                     onSave={() =>
-                        this.state.selectedTagId === null ? this.createTag() : this.editTag()
+                        this.props.selectedTagId === null ? this.createTag() : this.editTag()
                     }
                     onDelete={this.deleteTag}
                     showAlert={this.props.showAlert}
-                    saveButtonText={this.state.selectedTagId === null ? 'Create Tag' : 'Edit Tag'}
+                    saveButtonText={this.props.selectedTagId === null ? 'Create Tag' : 'Edit Tag'}
                     deleteButtonText="Delete Tag"
                     confirmationAction="Delete Tag?"
                 />
@@ -126,15 +91,14 @@ class Tags extends TagsUtils {
 function mapStateToProps(state) {
     return {
         ...state.tagsStore,
-        userId: state.userId,
-        apiKey: state.apiKey,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
     };
 }
 
 const mapDispatchToProps = {
     ...tagActions,
     showAlert,
-    setTags,
 };
 
 export default connect(

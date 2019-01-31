@@ -1,7 +1,7 @@
 import React from 'react';
 import ResetPasswordUtils from './components/ResetPasswordUtils.js';
 import { connect } from 'react-redux';
-import { showAlert } from '../../store/Actions.js';
+import { showAlert } from '../../actions/Actions.js';
 import '../../css/ResetPassword.css';
 
 class ResetPassword extends ResetPasswordUtils {

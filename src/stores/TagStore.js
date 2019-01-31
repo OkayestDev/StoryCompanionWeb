@@ -6,12 +6,12 @@ const INITIAL_STATE = {
     description: '',
     type: '',
     tags: null,
+    isTagModalOpen: false,
     isConfirmationModalOpen: false,
 };
 
 export const tagReducer = (state = INITIAL_STATE, action) => {
     let newState = state;
-
     switch (action.type) {
         case 'HANDLE_TAG_NAME_CHANGED':
             newState = {
@@ -31,6 +31,18 @@ export const tagReducer = (state = INITIAL_STATE, action) => {
                 type: action.payload,
             };
             break;
+        case 'OPEN_TAG_MODAL':
+            newState = {
+                ...state,
+                isTagModalOpen: true,
+            };
+            break;
+        case 'CLOSE_TAG_MODAL':
+            newState = {
+                ...state,
+                isTagModalOpen: false,
+            };
+            break;
         case 'RESET_TAG':
             newState = {
                 ...state,
@@ -38,17 +50,18 @@ export const tagReducer = (state = INITIAL_STATE, action) => {
                 name: '',
                 description: '',
                 type: '',
+                isTagModalOpen: false,
             };
             break;
         case 'SELECT_TAG':
             let id = action.payload;
-            console.info(state);
             newState = {
                 ...state,
                 selectedTagId: id,
                 name: state.tags[id].name,
                 description: state.tags[id].description,
                 type: state.tags[id].type,
+                isTagModalOpen: true,
             };
             break;
         case 'SET_TAGS':
@@ -60,7 +73,8 @@ export const tagReducer = (state = INITIAL_STATE, action) => {
         case 'NEW_TAG':
             newState = {
                 ...state,
-                selectedTagId: 'new',
+                selectedTagId: null,
+                isTagModalOpen: true,
             };
             break;
         case 'OPEN_TAG_CONFIRMATION':
@@ -79,7 +93,6 @@ export const tagReducer = (state = INITIAL_STATE, action) => {
             newState = state;
             break;
     }
-
     return newState;
 };
 

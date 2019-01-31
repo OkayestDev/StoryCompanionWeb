@@ -13,6 +13,14 @@ export const handleTypeChanged = payload => ({
     payload,
 });
 
+export const openTagModal = () => ({
+    type: 'OPEN_TAG_MODAL',
+});
+
+export const closeTagModal = () => ({
+    type: 'CLOSE_TAG_MODAL',
+});
+
 export const resetTag = () => ({
     type: 'RESET_TAG',
 });

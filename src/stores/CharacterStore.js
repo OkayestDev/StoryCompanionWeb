@@ -12,6 +12,7 @@ const INITIAL_STATE = {
     characters: null,
     selectedCharacterId: null,
     selectedTagId: null,
+    isCharacterModalOpen: false,
     isConfirmationModalOpen: false,
 };
 
@@ -86,6 +87,19 @@ export const characterReducer = (state = INITIAL_STATE, action) => {
                 goal: character.goal,
                 storyRole: character.storyRole,
                 selectedTagId: character.tag,
+                isCharacterModalOpen: true,
+            };
+            break;
+        case 'OPEN_CHARACTER_MODAL':
+            newState = {
+                ...state,
+                isCharacterModalOpen: true,
+            };
+            break;
+        case 'CLOSE_CHARACTER_MODAL':
+            newState = {
+                ...state,
+                isCharacterModalOpen: false,
             };
             break;
         case 'RESET_CHARACTER':
@@ -101,12 +115,14 @@ export const characterReducer = (state = INITIAL_STATE, action) => {
                 goal: '',
                 selectedTagId: null,
                 selectedCharacterId: null,
+                isCharacterModalOpen: false,
             };
             break;
         case 'NEW_CHARACTER':
             newState = {
                 ...state,
-                selectedCharacterId: 'new',
+                selectedCharacterId: null,
+                isPlotModalOpen: true,
             };
             break;
         case 'SET_CHARACTERS':

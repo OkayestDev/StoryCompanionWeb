@@ -17,7 +17,7 @@ import GlobalAlert from './components/GlobalAlert.js';
 import StoryCompanion from './utils/StoryCompanion.js';
 import StoriesList from './components/stories_list/StoriesList.js';
 import { connect } from 'react-redux';
-import { showAlert } from './store/Actions.js';
+import { showAlert } from './actions/Actions.js';
 import Ad from './components/Ad.js';
 import './css/Router.css';
 import './css/CommonTheme.css';
