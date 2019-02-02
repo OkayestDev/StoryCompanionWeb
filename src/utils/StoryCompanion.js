@@ -64,6 +64,16 @@ export default class StoryCompanion extends Component {
         return false;
     };
 
+    getSelectedStoryId = () => {
+        if ('selectedStoryIdForEdit' in this.props && this.props.selectedStoryIdForEdit !== null) {
+            return this.props.selectedStoryIdForEdit;
+        } else if ('selectedStoryId' in this.props && this.props.selectedStoryId !== null) {
+            return this.props.selectedStoryId;
+        } else {
+            return '';
+        }
+    };
+
     createParamsObject = () => {
         if (this.state === null || typeof this.state === 'undefined') {
             this.state = {};
@@ -79,7 +89,7 @@ export default class StoryCompanion extends Component {
             number: 'number' in this.props ? this.props.number : '',
             content: 'content' in this.props ? this.props.content : '',
             user: 'userId' in this.props ? this.props.userId : '',
-            story: 'selectedStoryId' in this.props ? this.props.selectedStoryId : '',
+            story: this.getSelectedStoryId(),
             genre: 'genre' in this.props ? this.props.genre : '',
             tag: 'selectedTagId' in this.props ? this.props.selectedTagId : '',
             type: 'type' in this.props ? this.props.type : '',

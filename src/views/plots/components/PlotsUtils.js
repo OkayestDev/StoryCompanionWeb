@@ -7,6 +7,16 @@ export default class PlotsUtils extends StoryCompanion {
         this.PlotRequests = new PlotRequests();
     }
 
+    componentDidUpdate(nextProps) {
+        if (
+            this.props.selectedStoryId !== null &&
+            nextProps.selectedStoryId !== this.props.selectedStoryId
+        ) {
+            this.props.resetPlot();
+            this.getPlots();
+        }
+    }
+
     componentDidMount() {
         this.props.resetPlot();
         if (this.props.selectedStoryId !== null) {

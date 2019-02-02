@@ -26,6 +26,9 @@ export const draftReducer = (state = INITIAL_STATE, action) => {
                 selectedDraftId: 'id' in action.payload ? action.payload.id : null,
             };
             break;
+        case 'RESET_DRAFT':
+            newState = INITIAL_STATE;
+            break;
         default:
             newState = state;
             break;

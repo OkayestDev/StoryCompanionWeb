@@ -170,9 +170,10 @@ class Characters extends CharactersUtils {
                         imageOnChange={this.props.handleImageChanged}
                         oneLineInputs={this.oneLineInputs()}
                         multiLineInputs={this.multiLineInputs()}
+                        dropdown={this.props.selectedTagId}
                         dropdownList={this.filterTagsByType('Character')}
                         dropdownOnChange={this.props.handleTagChanged}
-                        dropdownPlaceholder="Tag..."
+                        dropdownName="Tag"
                         attribute={this.props.attribute}
                         attributeOnChange={this.props.handleAttributeChanged}
                         onSave={() =>
@@ -212,7 +213,7 @@ function mapStateToProps(state) {
         selectedStoryId: state.storyStore.selectedStoryId,
         userId: state.appStore.userId,
         apiKey: state.appStore.apiKey,
-        tags: state.appStore.tags,
+        tags: state.tagStore.tags,
     };
 }
 

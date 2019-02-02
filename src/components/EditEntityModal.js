@@ -8,6 +8,7 @@ import $ from 'jquery';
 import Confirmation from './Confirmation.js';
 import '../css/EditEntityModal.css';
 import Dropdown from './Dropdown.js';
+import uuid from 'uuid';
 
 const supportedUploadFileTypes = ['png', 'jpeg', 'jpg', 'gif'];
 
@@ -43,7 +44,7 @@ export default class EditEntityModal extends StoryCompanion {
         let renderedInputs = [];
         this.props.oneLineInputs.forEach(input => {
             renderedInputs.push(
-                <div className="entityModalInputAndLabelContainer">
+                <div className="entityModalInputAndLabelContainer" key={input.name}>
                     <div className="entityModalInputLabel">{input.name}</div>
                     <input
                         value={input.value}
@@ -61,7 +62,7 @@ export default class EditEntityModal extends StoryCompanion {
         let renderedInputs = [];
         this.props.multiLineInputs.forEach(input => {
             renderedInputs.push(
-                <div className="entityModalInputAndLabelContainer">
+                <div className="entityModalInputAndLabelContainer" key={input.name}>
                     <div className="entityModalInputLabel">{input.name}</div>
                     <textarea
                         value={input.value}
@@ -125,6 +126,19 @@ export default class EditEntityModal extends StoryCompanion {
                             </div>
                         )}
                         {this.renderOneLineInputs()}
+                        {'dropdown' in this.props && (
+                            <div className="entityModalInputAndLabelContainer">
+                                <div className="entityModalInputLabel">
+                                    {this.props.dropdownName}
+                                </div>
+                                <Dropdown
+                                    selectedValue={this.props.dropdown}
+                                    list={this.props.dropdownList}
+                                    onChange={this.props.dropdownOnChange}
+                                    placeholder={this.props.dropdownName + '...'}
+                                />
+                            </div>
+                        )}
                         {this.renderMultiLineInputs()}
                         <div
                             className="button createEntityButton"

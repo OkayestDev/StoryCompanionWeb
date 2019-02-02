@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { showAlert } from '../../actions/Actions.js';
 import * as tagActions from '../../actions/TagActions.js';
 import EditEntityModal from '../../components/EditEntityModal.js';
+import uuid from 'uuid';
 import '../../css/Tags.css';
 
 const TAG_TYPES = ['Story', 'Character'];
@@ -41,7 +42,11 @@ class Tags extends TagsUtils {
             let renderedTags = [];
             tagIds.forEach(id => {
                 renderedTags.push(
-                    <div className="tagContainer" onClick={() => this.props.selectTag(id)}>
+                    <div
+                        className="tagContainer"
+                        onClick={() => this.props.selectTag(id)}
+                        key={uuid.v4()}
+                    >
                         <div className="tagName">{this.props.tags[id].name}</div>
                         <div className="tagType">{this.props.tags[id].type}</div>
                         <div className="tagDescription">{this.props.tags[id].description}</div>
@@ -86,7 +91,7 @@ class Tags extends TagsUtils {
                     dropdown={this.props.type}
                     dropdownList={TAG_TYPES}
                     dropdownOnChange={this.props.handleTypeChanged}
-                    dropdownPlaceholder="Type..."
+                    dropdownName="Type"
                     onSave={() =>
                         this.props.selectedTagId === null ? this.createTag() : this.editTag()
                     }

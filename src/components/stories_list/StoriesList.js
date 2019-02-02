@@ -78,6 +78,10 @@ class StoriesList extends StoriesListUtils {
                         imageOnChange={this.props.handleImageChanged}
                         oneLineInputs={this.oneLineInputs()}
                         multiLineInputs={this.multiLineInputs()}
+                        dropdown={this.props.selectedTagId}
+                        dropdownList={this.filterTagsByType('Story')}
+                        dropdownOnChange={this.props.handleTagChanged}
+                        dropdownName="Tag"
                         onSave={() =>
                             this.props.selectedStoryIdForEdit === null
                                 ? this.createStory()
@@ -137,7 +141,7 @@ function mapStateToProps(state) {
         ...state.storyStore,
         userId: state.appStore.userId,
         apiKey: state.appStore.apiKey,
-        tags: state.appStore.tags,
+        tags: state.tagStore.tags,
     };
 }
 

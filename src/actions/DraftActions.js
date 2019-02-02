@@ -7,3 +7,7 @@ export const setDraft = payload => ({
     type: 'SET_DRAFT',
     payload,
 });
+
+export const resetDraft = () => ({
+    type: 'RESET_DRAFT',
+});

@@ -24,10 +24,6 @@ export default class StoriesListUtils extends StoryCompanion {
         this.props.selectStory(id);
     };
 
-    selectStoryToEdit = id => {
-        this.props.selectStoryForEdit(id);
-    };
-
     createStory = async () => {
         var image = '';
         if (this.props.image.includes('data:image') && this.props.image.includes('base64')) {
@@ -78,7 +74,7 @@ export default class StoriesListUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     let tempStories = this.props.stories;
-                    tempStories[this.props.selectedStoryId] = res.success;
+                    tempStories[this.props.selectedStoryIdForEdit] = res.success;
                     this.props.resetStory();
                     this.props.setStories(tempStories);
                 }
@@ -96,7 +92,7 @@ export default class StoriesListUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     let tempStories = this.props.stories;
-                    delete tempStories[this.props.selectedStoryId];
+                    delete tempStories[this.props.selectedStoryIdForEdit];
                     this.props.resetStory();
                     this.props.setStories(tempStories);
                 }

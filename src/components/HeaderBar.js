@@ -14,6 +14,7 @@ const STORY_PATHNAMES = [
     '/draft',
     '/settings',
     '/tags',
+    '/prompt',
 ];
 
 class HeaderBar extends StoryCompanion {
@@ -69,6 +70,12 @@ class HeaderBar extends StoryCompanion {
         } else if (STORY_PATHNAMES.includes(pathname)) {
             return (
                 <div className="linksContainer">
+                    <div
+                        className={'link' + (pathname === '/prompt' ? ' activeLink' : '')}
+                        onClick={() => this.redirect('/prompt')}
+                    >
+                        Prompt
+                    </div>
                     <div
                         className={'link' + (pathname === '/tags' ? ' activeLink' : '')}
                         onClick={() => this.redirect('/tags')}
@@ -138,8 +145,8 @@ class HeaderBar extends StoryCompanion {
 
 function mapStateToProps(state) {
     return {
-        userId: state.userId,
-        apiKey: state.apiKey,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
     };
 }
 

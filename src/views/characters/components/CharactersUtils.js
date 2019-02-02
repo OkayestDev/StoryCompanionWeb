@@ -7,6 +7,16 @@ export default class CharactersUtils extends StoryCompanion {
         this.CharacterRequests = new CharacterRequests();
     }
 
+    componentDidUpdate(nextProps) {
+        if (
+            this.props.selectedStoryId !== null &&
+            nextProps.selectedStoryId !== this.props.selectedStoryId
+        ) {
+            this.props.resetCharacter();
+            this.getCharacters();
+        }
+    }
+
     componentDidMount() {
         this.props.resetCharacter();
         if (this.props.selectedStoryId !== null) {

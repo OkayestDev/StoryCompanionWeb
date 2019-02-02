@@ -7,6 +7,16 @@ export default class DraftUtils extends StoryCompanion {
         this.DraftRequests = new DraftRequests();
     }
 
+    componentDidUpdate(nextProps) {
+        if (
+            this.props.selectedStoryId !== null &&
+            nextProps.selectedStoryId !== this.props.selectedStoryId
+        ) {
+            this.props.resetDraft();
+            this.getDrafts();
+        }
+    }
+
     componentDidMount() {
         if (this.props.selectedStoryId !== null) {
             this.getDrafts();
