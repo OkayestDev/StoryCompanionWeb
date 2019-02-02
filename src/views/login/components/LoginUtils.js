@@ -33,11 +33,13 @@ export default class LoginUtils extends StoryCompanion {
                 } else {
                     this.props.login(res.success);
                     paramsObject = this.createParamsObject();
+                    this.getStories(paramsObject);
                     this.getTags(paramsObject);
                     this.props.history.push('/chapters');
                 }
             })
-            .catch(() => {
+            .catch(error => {
+                console.info(error);
                 this.props.showAlert('Unable to login at this time', 'danger');
             });
     };

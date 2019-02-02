@@ -39,6 +39,43 @@ export default class EditEntityModal extends StoryCompanion {
         };
     };
 
+    renderOneLineInputs = () => {
+        let renderedInputs = [];
+        this.props.oneLineInputs.forEach(input => {
+            renderedInputs.push(
+                <div className="entityModalInputAndLabelContainer">
+                    <div className="entityModalInputLabel">{input.name}</div>
+                    <input
+                        value={input.value}
+                        placeholder={input.name + '...'}
+                        className="editEntityOneLineInput"
+                        onChange={value => input.onChange(value.target.value)}
+                    />
+                </div>
+            );
+        });
+        return renderedInputs;
+    };
+
+    renderMultiLineInputs = () => {
+        let renderedInputs = [];
+        this.props.multiLineInputs.forEach(input => {
+            renderedInputs.push(
+                <div className="entityModalInputAndLabelContainer">
+                    <div className="entityModalInputLabel">{input.name}</div>
+                    <textarea
+                        value={input.value}
+                        type="textarea"
+                        placeholder={input.name + '...'}
+                        className="entityModalMultiLineInput"
+                        onChange={value => input.onChange(value.target.value)}
+                    />
+                </div>
+            );
+        });
+        return renderedInputs;
+    };
+
     render() {
         return (
             <div>
@@ -46,7 +83,7 @@ export default class EditEntityModal extends StoryCompanion {
                     closeTimeoutMS={400}
                     isOpen={this.props.isEntityModalOpen}
                     onRequestClose={this.props.onRequestClose}
-                    className="modalContainer"
+                    className="editEntityModalContainer"
                     contentLabel="Story Modal"
                     shouldCloseOnOverlayClick={true}
                 >
@@ -61,7 +98,7 @@ export default class EditEntityModal extends StoryCompanion {
                             />
                         </div>
                     </div>
-                    <div className="modalContent">
+                    <div className="editEntityModalContent">
                         {'image' in this.props && (
                             <div className="entityImageContainer">
                                 <div
@@ -87,62 +124,8 @@ export default class EditEntityModal extends StoryCompanion {
                                 />
                             </div>
                         )}
-                        <div className="inputAndLabelContainer">
-                            <div className="inputLabel">{this.props.objectName} Name</div>
-                            <input
-                                value={this.props.name}
-                                className="input"
-                                onChange={newName => this.props.nameOnChange(newName.target.value)}
-                            />
-                        </div>
-                        {'numberOnChange' in this.props && (
-                            <div className="inputAndLabelContainer">
-                                <div className="inputLabel">{this.props.objectName} Number</div>
-                                <input
-                                    value={this.props.number}
-                                    className="input"
-                                    onChange={newNumber =>
-                                        this.props.numberOnChange(newNumber.target.value)
-                                    }
-                                />
-                            </div>
-                        )}
-                        {'dropdown' in this.props && (
-                            <div className="inputAndLabelContainer">
-                                <Dropdown
-                                    selectedValue={this.props.dropdown}
-                                    list={this.props.dropdownList}
-                                    onChange={this.props.dropdownOnChange}
-                                    placeholder={this.props.dropdownPlaceholder}
-                                />
-                            </div>
-                        )}
-                        {'descriptionOnChange' in this.props && (
-                            <div className="inputAndLabelContainer">
-                                <textarea
-                                    value={this.props.description}
-                                    type="textarea"
-                                    placeholder="Description..."
-                                    className="description"
-                                    onChange={newDescription =>
-                                        this.props.descriptionOnChange(newDescription.target.value)
-                                    }
-                                />
-                            </div>
-                        )}
-                        {'attributeOnChange' in this.props && (
-                            <div className="inputAndLabelContainer">
-                                <textarea
-                                    value={this.props.attribute}
-                                    type="textarea"
-                                    placeholder="Attributes..."
-                                    className="description"
-                                    onChange={newAttribute =>
-                                        this.props.attributeOnChange(newAttribute.target.value)
-                                    }
-                                />
-                            </div>
-                        )}
+                        {this.renderOneLineInputs()}
+                        {this.renderMultiLineInputs()}
                         <div
                             className="button createEntityButton"
                             onClick={() => this.props.onSave()}

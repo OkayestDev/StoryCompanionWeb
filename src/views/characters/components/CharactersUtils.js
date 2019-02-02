@@ -9,14 +9,11 @@ export default class CharactersUtils extends StoryCompanion {
 
     componentDidMount() {
         this.props.resetCharacter();
-        this.getCharacters();
-        this.getTags();
+        if (this.props.selectedStoryId !== null) {
+            this.getCharacters();
+            this.getTags();
+        }
     }
-
-    resetCharacter = () => {
-        this.removeNavigationActions();
-        this.props.resetCharacter();
-    };
 
     newCharacter = () => {
         this.setNavigationActions(this.resetCharacter, this.createCharacter, null);
@@ -158,10 +155,6 @@ export default class CharactersUtils extends StoryCompanion {
                 } else {
                     let tempCharacters = this.props.characters;
                     delete tempCharacters[this.props.selectedCharacterId];
-                    this.setprops({
-                        characters: tempCharacters,
-                        ...this.resetCharacter(),
-                    });
                     this.props.setCharacters(tempCharacters);
                     this.props.resetCharacter();
                 }

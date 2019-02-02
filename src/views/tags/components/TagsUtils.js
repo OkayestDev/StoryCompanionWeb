@@ -9,7 +9,9 @@ export default class TagUtils extends StoryCompanion {
 
     componentDidMount() {
         this.props.resetTag();
-        this.getTags();
+        if (this.props.selectedStoryId !== null) {
+            this.getTags();
+        }
     }
 
     getTags = () => {

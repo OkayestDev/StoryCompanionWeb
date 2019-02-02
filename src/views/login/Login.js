@@ -3,6 +3,7 @@ import LoginUtils from './components/LoginUtils.js';
 import { connect } from 'react-redux';
 import { showAlert, login } from '../../actions/Actions.js';
 import { setTags } from '../../actions/TagActions.js';
+import { setStories } from '../../actions/StoryActions.js';
 import '../../css/Login.css';
 
 class Login extends LoginUtils {
@@ -63,6 +64,7 @@ const mapDispatchToProps = {
     showAlert,
     login,
     setTags,
+    setStories,
 };
 
 export default connect(

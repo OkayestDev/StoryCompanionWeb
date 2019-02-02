@@ -19,6 +19,29 @@ class StoriesList extends StoriesListUtils {
         super(props);
     }
 
+    oneLineInputs = () => [
+        {
+            name: 'Story Name',
+            value: this.props.name,
+            onChange: this.props.handleNameChanged,
+            type: 'default',
+        },
+        {
+            name: 'Genre',
+            value: this.props.genre,
+            onChange: this.props.handleGenreChanged,
+            type: 'default',
+        },
+    ];
+
+    multiLineInputs = () => [
+        {
+            name: 'Summary',
+            value: this.props.description,
+            onChange: this.props.handleDescriptionChanged,
+        },
+    ];
+
     renderStories = () => {
         let storiesList = [];
         for (let id in this.props.stories) {
@@ -38,7 +61,7 @@ class StoriesList extends StoriesListUtils {
     };
 
     render() {
-        if (this.isUserLoggedIn() && !this.props.isStoryListOpen) {
+        if (this.isUserLoggedIn() && this.props.isStoryListOpen) {
             return (
                 <div className="storiesList">
                     <EditEntityModal
@@ -53,14 +76,8 @@ class StoriesList extends StoriesListUtils {
                         }
                         image={this.props.image}
                         imageOnChange={this.props.handleImageChanged}
-                        description={this.props.description}
-                        descriptionOnChange={this.props.handleDescriptionChanged}
-                        dropdown={this.props.selectedTagId}
-                        dropdownList={this.filterTagsByType('Story')}
-                        dropdownOnChange={this.props.handleTagChanged}
-                        dropdownPlaceholder="Tag..."
-                        name={this.props.name}
-                        nameOnChange={this.props.handleNameChanged}
+                        oneLineInputs={this.oneLineInputs()}
+                        multiLineInputs={this.multiLineInputs()}
                         onSave={() =>
                             this.props.selectedStoryIdForEdit === null
                                 ? this.createStory()
@@ -91,7 +108,7 @@ class StoriesList extends StoriesListUtils {
                             icon={plus}
                             size={28}
                             data-tip="Create Story"
-                            onClick={() => this.newStory()}
+                            onClick={this.props.newStory}
                         />
                     </div>
                     <div className="entityContainer">{this.renderStories()}</div>
@@ -105,7 +122,7 @@ class StoriesList extends StoriesListUtils {
                         icon={iosBook}
                         size={30}
                         data-tip="Open Stories List"
-                        onClick={this.props.toggleIsStoryListOpen()}
+                        onClick={this.props.toggleIsStoryListOpen}
                     />
                 </div>
             );
@@ -117,11 +134,10 @@ class StoriesList extends StoriesListUtils {
 
 function mapStateToProps(state) {
     return {
-        ...state.storiesStore,
-        selectedStoryId: state.selectedStoryId,
-        userId: state.userId,
-        apiKey: state.apiKey,
-        tags: state.tags,
+        ...state.storyStore,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
+        tags: state.appStore.tags,
     };
 }
 

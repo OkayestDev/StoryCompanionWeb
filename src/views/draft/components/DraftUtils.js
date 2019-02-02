@@ -8,7 +8,9 @@ export default class DraftUtils extends StoryCompanion {
     }
 
     componentDidMount() {
-        this.getDrafts();
+        if (this.props.selectedStoryId !== null) {
+            this.getDrafts();
+        }
     }
 
     // Only allowing one draft per story at this time

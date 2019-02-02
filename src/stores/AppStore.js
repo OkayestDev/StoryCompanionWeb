@@ -24,7 +24,7 @@ const INITIAL_STATE = {
     apiKey: null,
     email: null,
     userId: null,
-    globalAlertVisible: false,
+    showGlobalAlert: false,
     globalAlertType: '',
     globalAlertMessage: '',
 };
@@ -47,7 +47,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         case 'SHOW_ALERT':
             newState = {
                 ...state,
-                globalAlertVisible: true,
+                showGlobalAlert: true,
                 globalAlertType: action.payload.type,
                 globalAlertMessage: action.payload.message,
             };
@@ -55,7 +55,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         case 'CLOSE_ALERT':
             newState = {
                 ...state,
-                globalAlertVisible: false,
+                showGlobalAlert: false,
             };
             break;
         default:

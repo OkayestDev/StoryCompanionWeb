@@ -2,8 +2,8 @@
     z-index: 10;
     position: relative;
     top: 0;
-    width: 100%;
-    height: 60px;
+    width: 700px;
+    height: 70px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -14,6 +14,7 @@
     width: 50%;
     font-weight: bold;
     font-size: 36px;
+    padding-left: 15px;
 }
 
 .confirmationButtonContainer {
@@ -24,12 +25,11 @@
 }
 
 .confirmationYesButton {
-    background-color: #4CAF4F !important;
-    width: 100px;
+    background-color: #4caf4f !important;
+    width: 125px;
 }
 
 .confirmationNoButton {
-    background-color: #EB5C52 !important;
-    width: 100px;
+    background-color: #eb5c52 !important;
+    width: 125px;
 }
-

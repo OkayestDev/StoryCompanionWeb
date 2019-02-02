@@ -7,12 +7,30 @@ import ReactTooltip from 'react-tooltip';
 import { connect } from 'react-redux';
 import { showAlert } from '../../actions/Actions.js';
 import * as plotActions from '../../actions/PlotActions.js';
+import EditComponentsNotice from '../../components/EditComponentsNotice.js';
 import '../../css/Plots.css';
 
 class Plots extends PlotsUtils {
     constructor(props) {
         super(props);
     }
+
+    oneLineInputs = () => [
+        {
+            name: 'Plot Name',
+            value: this.props.name,
+            onChange: this.props.handleNameChanged,
+            type: 'default',
+        },
+    ];
+
+    multiLineInputs = () => [
+        {
+            name: 'Description',
+            value: this.props.description,
+            onChange: this.props.handleDescriptionChanged,
+        },
+    ];
 
     returnPlot = (styleName = 'parentPlots', id, addIcon = true) => {
         return (
@@ -92,10 +110,8 @@ class Plots extends PlotsUtils {
                         onRequestClose={this.props.closePlotModal}
                         objectName="Plot"
                         title={this.props.selectedPlotId === null ? 'Create a Plot' : 'Edit Plot'}
-                        name={this.props.name}
-                        nameOnChange={this.props.handleNameChanged}
-                        description={this.props.description}
-                        descriptionOnChange={this.props.handleDescriptionChanged}
+                        oneLineInputs={this.oneLineInputs()}
+                        multiLineInputs={this.multiLineInputs()}
                         onSave={() =>
                             this.props.selectedPlotId === null ? this.createPlot() : this.editPlot()
                         }
@@ -111,26 +127,22 @@ class Plots extends PlotsUtils {
                         className="icon floatRight"
                         icon={plus}
                         size={28}
-                        onClick={() => this.newPlot()}
+                        onClick={this.props.newPlot}
                         data-tip="Create a new plot"
                     />
                     <div className="entityContainer">{this.renderPlots()}</div>
                 </div>
             );
         } else {
-            return (
-                <div className="editComponentsText">
-                    Edit Components of a story to begin creating plots
-                </div>
-            );
+            return <EditComponentsNotice objectName="plot" />;
         }
     }
 }
 
 function mapStateToProps(state) {
     return {
-        ...state.plotsStore,
-        selectedStoryId: state.storiesStore.selectedStoryId,
+        ...state.plotStore,
+        selectedStoryId: state.storyStore.selectedStoryId,
         apiKey: state.appStore.apiKey,
     };
 }

@@ -16,11 +16,6 @@ export default class PromptUtils extends StoryCompanion {
         }
     }
 
-    resetPrompt = () => {
-        this.removeNavigationActions();
-        this.props.resetPrompt();
-    };
-
     handleDownVotePressed = () => {
         this.props.openConfirmation({
             title: 'Down Vote Prompt?',
@@ -78,7 +73,7 @@ export default class PromptUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     this.props.showAlert(res.success, 'success');
-                    this.resetPrompt();
+                    this.props.resetPrompt();
                 }
             })
             .catch(() => this.props.showAlert('Unable to create prompt at this time', 'danger'));

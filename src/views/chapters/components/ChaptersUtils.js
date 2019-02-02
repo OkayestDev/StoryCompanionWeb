@@ -9,7 +9,9 @@ export default class ChapterUtils extends StoryCompanion {
 
     componentDidMount() {
         this.props.resetChapter();
-        this.getChapters();
+        if (this.props.selectedStoryId !== null) {
+            this.getChapters();
+        }
     }
 
     selectChapterToWriteContent = (event, id) => {

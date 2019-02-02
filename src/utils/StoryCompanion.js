@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import TagRequests from './TagRequests.js';
+import StoryRequests from './StoryRequests.js';
 import AWS from 'aws-sdk';
 
 AWS.config.update({
@@ -12,6 +13,7 @@ export default class StoryCompanion extends Component {
     constructor(props) {
         super(props);
         this.TagRequests = new TagRequests();
+        this.StoryRequests = new StoryRequests();
     }
 
     /**
@@ -108,6 +110,21 @@ export default class StoryCompanion extends Component {
                     : '',
             apiKey: 'apiKey' in this.props ? this.props.apiKey : '',
         };
+    };
+
+    getStories = () => {
+        let paramsObject = this.createParamsObject();
+        this.StoryRequests.getStories(paramsObject)
+            .then(res => {
+                if ('error' in res) {
+                    this.props.showAlert(res.error, 'warning');
+                } else {
+                    this.props.setStories(res.success);
+                }
+            })
+            .catch(() => {
+                this.props.showAlert('Unable to get response from server', 'warning');
+            });
     };
 
     getTags = () => {

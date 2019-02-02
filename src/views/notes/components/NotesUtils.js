@@ -9,7 +9,9 @@ export default class NotesUtils extends StoryCompanion {
 
     componentDidMount() {
         this.props.resetNote();
-        this.getNotes();
+        if (this.props.selectedStoryId !== null) {
+            this.getNotes();
+        }
     }
 
     getNotes = () => {

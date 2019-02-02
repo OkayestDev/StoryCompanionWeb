@@ -43,7 +43,7 @@ class GlobalAlert extends StoryCompanion {
                             className="globalAlertClose"
                             icon={close}
                             size={40}
-                            onClick={() => this.props.closeAlert()}
+                            onClick={this.props.closeAlert}
                         />
                     </div>
                 </div>
@@ -56,9 +56,9 @@ class GlobalAlert extends StoryCompanion {
 
 function mapStateToProps(state) {
     return {
-        showGlobalAlert: state.showGlobalAlert,
-        globalAlertType: state.globalAlertType,
-        globalAlertMessage: state.globalAlertMessage,
+        showGlobalAlert: state.appStore.showGlobalAlert,
+        globalAlertType: state.appStore.globalAlertType,
+        globalAlertMessage: state.appStore.globalAlertMessage,
     };
 }
 

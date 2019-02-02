@@ -9,8 +9,10 @@ export default class StoriesListUtils extends StoryCompanion {
 
     componentDidMount() {
         this.props.resetStory();
-        this.getStories();
-        this.getTags();
+        if (this.isUserLoggedIn()) {
+            this.getStories();
+            this.getTags();
+        }
     }
 
     selectStory = (event, id) => {
@@ -24,21 +26,6 @@ export default class StoriesListUtils extends StoryCompanion {
 
     selectStoryToEdit = id => {
         this.props.selectStoryForEdit(id);
-    };
-
-    getStories = () => {
-        let paramsObject = this.createParamsObject();
-        this.StoryRequests.getStories(paramsObject)
-            .then(res => {
-                if ('error' in res) {
-                    this.props.showAlert(res.error, 'warning');
-                } else {
-                    this.props.setStories(res.success);
-                }
-            })
-            .catch(() => {
-                this.props.showAlert('Unable to get response from server', 'warning');
-            });
     };
 
     createStory = async () => {

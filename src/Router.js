@@ -26,14 +26,7 @@ require('dotenv').config();
 class Router extends StoryCompanion {
     constructor(props) {
         super(props);
-        this.state = {
-            isStoryListOpen: true,
-        };
     }
-
-    toggleIsStoryListOpen = () => {
-        this.setState({ isStoryListOpen: !this.state.isStoryListOpen });
-    };
 
     render() {
         return (
@@ -47,15 +40,7 @@ class Router extends StoryCompanion {
                         <DocumentTitle title="Story Companion" />
                         <Route render={props => <HeaderBar {...props} />} />
                         {this.isUserLoggedIn() && (
-                            <Route
-                                render={props => (
-                                    <StoriesList
-                                        {...props}
-                                        toggleIsStoryListOpen={this.toggleIsStoryListOpen}
-                                        hidden={!this.state.isStoryListOpen}
-                                    />
-                                )}
-                            />
+                            <Route render={props => <StoriesList {...props} />} />
                         )}
                         <Route path="/login" exact render={props => <Login {...props} />} />
                         <Route
@@ -71,9 +56,9 @@ class Router extends StoryCompanion {
                         {/* All routes with story list available inside this div */}
                         <div
                             style={
-                                this.state.isStoryListOpen
-                                    ? { marginLeft: '510px' }
-                                    : { marginLeft: '50px' }
+                                this.props.isStoryListOpen
+                                    ? { marginLeft: '505px' }
+                                    : { marginLeft: '45px' }
                             }
                             className="view"
                         >
@@ -108,6 +93,7 @@ class Router extends StoryCompanion {
 
 function mapStateToProps(state) {
     return {
+        isStoryListOpen: state.storyStore.isStoryListOpen,
         apiKey: state.apiKey,
         userId: state.userId,
     };

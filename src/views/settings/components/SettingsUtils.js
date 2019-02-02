@@ -77,6 +77,6 @@ export default class SettingsUtils extends StoryCompanion {
         this.props.logout();
         this.props.resetSettings();
         this.props.closeConfirmation();
-        this.props.navigation.navigate('LoginTab');
+        this.props.history.push('/login');
     };
 }

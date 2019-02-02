@@ -15,20 +15,36 @@ class Tags extends TagsUtils {
         super(props);
     }
 
+    oneLineInputs = () => [
+        {
+            name: 'Tag Name',
+            value: this.props.name,
+            onChange: this.props.handleNameChanged,
+            type: 'default',
+        },
+    ];
+
+    multiLineInputs = () => [
+        {
+            name: 'Description',
+            value: this.props.description,
+            onChange: this.props.handleDescriptionChanged,
+        },
+    ];
+
     renderTags = () => {
-        const tags = this.props.tags;
-        if (tags === null) {
+        if (this.props.tags === null) {
             return null;
         }
-        const tagIds = Object.keys(tags);
+        const tagIds = Object.keys(this.props.tags);
         if (tagIds.length > 0) {
             let renderedTags = [];
             tagIds.forEach(id => {
                 renderedTags.push(
                     <div className="tagContainer" onClick={() => this.props.selectTag(id)}>
-                        <div className="tagName">{tags[id].name}</div>
-                        <div className="tagType">{tags[id].type}</div>
-                        <div className="tagDescription">{tags[id].description}</div>
+                        <div className="tagName">{this.props.tags[id].name}</div>
+                        <div className="tagType">{this.props.tags[id].type}</div>
+                        <div className="tagDescription">{this.props.tags[id].description}</div>
                     </div>
                 );
             });
@@ -56,7 +72,7 @@ class Tags extends TagsUtils {
                     className="icon floatRight"
                     icon={plus}
                     size={28}
-                    onClick={this.newTag}
+                    onClick={this.props.newTag}
                     data-tip="Create a new tag"
                 />
                 <EditEntityModal
@@ -65,10 +81,8 @@ class Tags extends TagsUtils {
                     onRequestClose={this.props.closeTagModal}
                     objectName="Tag"
                     title={this.props.selectedTagId === null ? 'Create a Tag' : 'Edit Tag'}
-                    name={this.props.name}
-                    nameOnChange={this.props.handleNameChanged}
-                    description={this.props.description}
-                    descriptionOnChange={this.props.handleDescriptionChanged}
+                    oneLineInputs={this.oneLineInputs()}
+                    multiLineInputs={this.multiLineInputs()}
                     dropdown={this.props.type}
                     dropdownList={TAG_TYPES}
                     dropdownOnChange={this.props.handleTypeChanged}
@@ -90,7 +104,7 @@ class Tags extends TagsUtils {
 
 function mapStateToProps(state) {
     return {
-        ...state.tagsStore,
+        ...state.tagStore,
         userId: state.appStore.userId,
         apiKey: state.appStore.apiKey,
     };

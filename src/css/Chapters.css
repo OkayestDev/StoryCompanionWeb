@@ -35,10 +35,6 @@
     align-items: center;
 }
 
-.exportChaptersIcon {
-    margin-right: 15px;
-}
-
 .chapterDescription {
     white-space: nowrap;
     overflow: hidden;

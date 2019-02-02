@@ -8,12 +8,36 @@ import { showAlert } from '../../actions/Actions.js';
 import * as chapterActions from '../../actions/ChapterActions.js';
 import WriteChapter from './components/WriteChapter.js';
 import ChaptersUtils from './components/ChaptersUtils.js';
+import EditComponentsNotice from '../../components/EditComponentsNotice.js';
 import '../../css/Chapters.css';
 
 class Chapters extends ChaptersUtils {
     constructor(props) {
         super(props);
     }
+
+    oneLineInputs = () => [
+        {
+            name: 'Chapter Name',
+            value: this.props.name,
+            onChange: this.props.handleNameChanged,
+            type: 'default',
+        },
+        {
+            name: 'Chapter Number',
+            value: this.props.number,
+            onChange: this.props.handleNumberChanged,
+            type: 'numeric',
+        },
+    ];
+
+    multiLineInputs = () => [
+        {
+            name: 'Description',
+            value: this.props.description,
+            onChange: this.props.handleDescriptionChanged,
+        },
+    ];
 
     renderChapters = () => {
         if (this.props.chapters === null) {
@@ -35,7 +59,7 @@ class Chapters extends ChaptersUtils {
                             <div className="chapterName">{this.props.chapters[id].name}</div>
                             <div
                                 className="chapterWriteContainer"
-                                onClick={event => this.selectChapterForWriteContent(event, id)}
+                                onClick={event => this.selectChapterToWriteContent(event, id)}
                             >
                                 <Icon className="icon" icon={pencil} size={28} />
                             </div>
@@ -78,12 +102,8 @@ class Chapters extends ChaptersUtils {
                                 ? 'Create a Chapter'
                                 : 'Edit Chapter'
                         }
-                        description={this.props.description}
-                        descriptionOnChange={this.props.handleDescriptionChanged}
-                        name={this.props.name}
-                        nameOnChange={this.props.handleNameChanged}
-                        number={this.props.number}
-                        numberOnChange={this.props.handleNumberChanged}
+                        oneLineInputs={this.oneLineInputs()}
+                        multiLineInputs={this.multiLineInputs()}
                         onSave={() =>
                             this.props.selectedChapterId === null
                                 ? this.createChapter()
@@ -110,17 +130,17 @@ class Chapters extends ChaptersUtils {
                     />
                     <div className="floatRightContainer">
                         <Icon
-                            className="icon exportChaptersIcon"
+                            className="icon marginRight"
                             icon={envelope}
                             size={28}
-                            onClick={this.exportChapter}
+                            onClick={this.exportChapters}
                             data-tip="Export chapters"
                         />
                         <Icon
                             className="icon"
                             icon={plus}
                             size={28}
-                            onClick={this.newChapter}
+                            onClick={this.props.newChapter}
                             data-tip="Create a new chapter"
                         />
                     </div>
@@ -128,21 +148,17 @@ class Chapters extends ChaptersUtils {
                 </div>
             );
         } else {
-            return (
-                <div className="editComponentsText">
-                    Edit Components of a story to begin creating chapters
-                </div>
-            );
+            return <EditComponentsNotice objectName="chapter" />;
         }
     }
 }
 
-function mappropsToProps(props) {
+function mapStateToProps(state) {
     return {
-        ...props.chaptersStore,
-        selectedStoryId: props.appStore.selectedStoryId,
-        userId: props.appStore.userId,
-        apiKey: props.appStore.apiKey,
+        ...state.chapterStore,
+        selectedStoryId: state.storyStore.selectedStoryId,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
     };
 }
 
@@ -152,6 +168,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-    mappropsToProps,
+    mapStateToProps,
     mapDispatchToProps
 )(Chapters);

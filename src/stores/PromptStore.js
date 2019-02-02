@@ -3,13 +3,13 @@ import { createStore } from 'redux';
 const INITIAL_STATE = {
     name: '',
     description: '',
-    creatingPrompt: false,
     prompt: null,
     updatedAt: null,
     isConfirmationModalOpen: false,
     confirmationTitle: '',
     confirmationNote: '',
     confirmationOnConfirm: null,
+    isPromptModalOpen: false,
 };
 
 export const promptReducer = (state = INITIAL_STATE, action) => {
@@ -46,7 +46,7 @@ export const promptReducer = (state = INITIAL_STATE, action) => {
         case 'NEW_PROMPT':
             newState = {
                 ...state,
-                creatingPrompt: 'new',
+                isPromptModalOpen: true,
             };
             break;
         case 'RESET_PROMPT':
@@ -54,7 +54,7 @@ export const promptReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 description: '',
                 name: '',
-                creatingPrompt: false,
+                isPromptModalOpen: false,
             };
             break;
         case 'SET_PROMPT':

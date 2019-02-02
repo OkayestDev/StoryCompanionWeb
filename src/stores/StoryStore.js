@@ -76,6 +76,7 @@ export const storyReducer = (state = INITIAL_STATE, action) => {
                 selectedTagId: null,
                 selectedStoryIdForEdit: null,
                 selectedStoryId: null,
+                isStoryModalOpen: false,
             };
             break;
         case 'NEW_STORY':
@@ -98,7 +99,7 @@ export const storyReducer = (state = INITIAL_STATE, action) => {
             };
             break;
         case 'SELECT_STORY_FOR_EDIT':
-            let storyToEdit = state.stores[action.payload];
+            let storyToEdit = state.stories[action.payload];
             newState = {
                 ...state,
                 name: storyToEdit.name,

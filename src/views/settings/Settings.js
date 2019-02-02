@@ -49,7 +49,7 @@ class Settings extends SettingsUtils {
                     <div onClick={this.props.submittingFeature} className="button settingsButton">
                         Feature Request
                     </div>
-                    <div onClick={this.props.logout} className="button settingsButton">
+                    <div onClick={this.logout} className="button settingsButton">
                         Logout
                     </div>
                 </div>

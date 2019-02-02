@@ -6,6 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import { plus, envelope } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
 import { showAlert } from '../../actions/Actions.js';
+import EditComponentsNotice from '../../components/EditComponentsNotice.js';
 import * as noteActions from '../../actions/NoteActions.js';
 import '../../css/Notes.css';
 
@@ -13,6 +14,23 @@ class Notes extends NotesUtils {
     constructor(props) {
         super(props);
     }
+
+    oneLineInputs = () => [
+        {
+            name: 'Note Name',
+            value: this.props.name,
+            onChange: this.props.handleNameChanged,
+            type: 'default',
+        },
+    ];
+
+    multiLineInputs = () => [
+        {
+            name: 'Description',
+            value: this.props.description,
+            onChange: this.props.handleDescriptionChanged,
+        },
+    ];
 
     renderNotes = () => {
         if (this.props.notes === null) {
@@ -58,10 +76,8 @@ class Notes extends NotesUtils {
                         onRequestClose={this.props.resetNote}
                         objectName="Note"
                         title={this.props.selectedNoteId === null ? 'Create a Note' : 'Edit Note'}
-                        description={this.props.description}
-                        descriptionOnChange={this.props.handleDescriptionChanged}
-                        name={this.props.name}
-                        nameOnChange={this.props.handleNameChanged}
+                        oneLineInputs={this.oneLineInputs()}
+                        multiLineInputs={this.multiLineInputs()}
                         onSave={
                             this.props.selectedNoteId === null ? this.createNote : this.editNote
                         }
@@ -73,37 +89,35 @@ class Notes extends NotesUtils {
                         deleteButtonText="Delete Note"
                         confirmationAction="Delete Note?"
                     />
-                    <Icon
-                        className="icon secondFloatRight"
-                        icon={envelope}
-                        size={28}
-                        onClick={this.exportNotes}
-                        data-tip="Export Notes"
-                    />
-                    <Icon
-                        className="icon floatRight"
-                        icon={plus}
-                        size={28}
-                        onClick={this.newNote}
-                        data-tip="Create a new note"
-                    />
+                    <div className="floatRightContainer">
+                        <Icon
+                            className="icon marginRight"
+                            icon={envelope}
+                            size={28}
+                            onClick={this.exportNotes}
+                            data-tip="Export Notes"
+                        />
+                        <Icon
+                            className="icon"
+                            icon={plus}
+                            size={28}
+                            onClick={this.props.newNote}
+                            data-tip="Create a new note"
+                        />
+                    </div>
                     <div className="entityContainer">{this.renderNotes()}</div>
                 </div>
             );
         } else {
-            return (
-                <div className="editComponentsText">
-                    Edit Components of a story to begin creating notes
-                </div>
-            );
+            return <EditComponentsNotice objectName="note" />;
         }
     }
 }
 
 function mapStateToProps(state) {
     return {
-        ...state.notesStore,
-        selectedStoryId: state.storiesStore.selectedStoryId,
+        ...state.noteStore,
+        selectedStoryId: state.storyStore.selectedStoryId,
         apiKey: state.appStore.apiKey,
         email: state.appStore.email,
     };

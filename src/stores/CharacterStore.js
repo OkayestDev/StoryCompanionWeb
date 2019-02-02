@@ -122,7 +122,7 @@ export const characterReducer = (state = INITIAL_STATE, action) => {
             newState = {
                 ...state,
                 selectedCharacterId: null,
-                isPlotModalOpen: true,
+                isCharacterModalOpen: true,
             };
             break;
         case 'SET_CHARACTERS':

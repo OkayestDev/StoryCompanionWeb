@@ -7,12 +7,52 @@ import { plus, caretUp, caretDown } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
 import { showAlert } from '../../actions/Actions.js';
 import * as characterActions from '../../actions/CharacterActions.js';
+import EditComponentsNotice from '../../components/EditComponentsNotice.js';
 import '../../css/Characters.css';
 
 class Characters extends CharactersUtils {
     constructor(props) {
         super(props);
     }
+
+    oneLineInputs = () => [
+        {
+            name: 'Character Name',
+            value: this.props.name,
+            onChange: this.props.handleNameChanged,
+            type: 'default',
+        },
+        {
+            name: 'Age',
+            value: this.props.age,
+            onChange: this.props.handleAgeChanged,
+            type: 'numeric',
+        },
+        {
+            name: 'Story Role',
+            value: this.props.storyRole,
+            onChange: this.props.handleStoryRoleChanged,
+            type: 'default',
+        },
+    ];
+
+    multiLineInputs = () => [
+        {
+            name: 'Goal',
+            value: this.props.goal,
+            onChange: this.props.handleGoalChanged,
+        },
+        {
+            name: 'Description',
+            value: this.props.description,
+            onChange: this.props.handleDescriptionChanged,
+        },
+        {
+            name: 'Attributes',
+            value: this.props.attribute,
+            onChange: this.props.handleAttributeChanged,
+        },
+    ];
 
     handleCharacterUpClicked = (event, id) => {
         event.stopPropagation();
@@ -128,11 +168,8 @@ class Characters extends CharactersUtils {
                         }
                         image={this.props.image}
                         imageOnChange={this.props.handleImageChanged}
-                        name={this.props.name}
-                        nameOnChange={this.props.handleNameChanged}
-                        description={this.props.description}
-                        descriptionOnChange={this.props.handleDescriptionChanged}
-                        dropdown={this.props.selectedTagId}
+                        oneLineInputs={this.oneLineInputs()}
+                        multiLineInputs={this.multiLineInputs()}
                         dropdownList={this.filterTagsByType('Character')}
                         dropdownOnChange={this.props.handleTagChanged}
                         dropdownPlaceholder="Tag..."
@@ -157,26 +194,22 @@ class Characters extends CharactersUtils {
                         className="icon floatRight"
                         icon={plus}
                         size={28}
-                        onClick={() => this.newCharacter()}
+                        onClick={this.props.newCharacter}
                         data-tip="Create a new character"
                     />
                     <div className="entityContainer">{this.renderCharacters()}</div>
                 </div>
             );
         } else {
-            return (
-                <div className="editComponentsText">
-                    Edit Components of a story to begin creating characters
-                </div>
-            );
+            return <EditComponentsNotice objectName="character" />;
         }
     }
 }
 
 function mapStateToProps(state) {
     return {
-        ...state.charactersStore,
-        selectedStoryId: state.stoiresStore.selectedStoryId,
+        ...state.characterStore,
+        selectedStoryId: state.storyStore.selectedStoryId,
         userId: state.appStore.userId,
         apiKey: state.appStore.apiKey,
         tags: state.appStore.tags,

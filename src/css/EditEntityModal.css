@@ -1,15 +1,36 @@
+.editEntityModalContainer {
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 35px;
+    border-radius: 10px;
+    background-color: white;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    max-height: 750px;
+    color: #262e3a;
+    outline: none;
+}
+
+.editEntityModalContent {
+    padding: 10px;
+    max-height: 670px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .createEntityButton {
     background-color: #2f95dc;
 }
 
 .deleteEntityButton {
-    background-color: #EB5C52 !important;
+    background-color: #eb5c52 !important;
     margin-top: 10px;
 }
 
 .noImage {
     font-size: 28px;
-    font-weight: bold;    
+    font-weight: bold;
 }
 
 .entityImageContainer {
@@ -19,10 +40,10 @@
 }
 
 .entityImage {
-    width: 175px;
-    height: 175px;
+    width: 300px;
+    height: 300px;
     border-width: 2px;
-    border: solid #CCCCCC;
+    border: solid #cccccc;
     border-radius: 4px;
     cursor: pointer;
     display: flex;
@@ -30,13 +51,36 @@
     align-items: center;
 }
 
-.description {
+.entityModalInputAndLabelContainer {
+    display: flex;
+    flex-direction: column;
+    width: 98.5%;
+    margin-bottom: 15px;
+}
+
+.entityModalInputLabel {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 28px;
+}
+
+.editEntityOneLineInput {
+    width: 100%;
+    font-size: 20px;
+    padding: 5px;
+    height: 45px;
+    border: 2px solid;
+    border-radius: 4px;
+    border-color: #cccccc;
+}
+
+.entityModalMultiLineInput {
     width: 100%;
     font-size: 20px;
     padding: 5px;
     border: 2px solid;
     border-radius: 4px;
-    border-color: #CCCCCC;
-    height: 100px;
+    border-color: #cccccc;
+    height: 125px;
     resize: none;
 }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { showAlert } from '../../actions/Actions.js';
 import DraftUtils from './components/DraftUtils.js';
 import * as draftActions from '../../actions/DraftActions.js';
+import EditComponentsNotice from '../../components/EditComponentsNotice.js';
 import '../../css/Draft.css';
 
 class Draft extends DraftUtils {
@@ -31,27 +32,25 @@ class Draft extends DraftUtils {
                         multiple
                         className="draftInput"
                         value={this.props.description}
-                        onChange={this.props.handleDescriptionChanged}
+                        onChange={value => this.props.handleDescriptionChanged(value.target.value)}
                     />
                 </div>
             );
         } else if (this.props.selectedDraftId === null) {
             return (
-                <div className="noEntityContainer">
-                    <div className="noEntityText">
-                        <div>Looks like you haven't started a draft yet.</div>
-                        <div className="button startDraftButton" onClick={this.createDraft}>
-                            Start A Draft
+                <div>
+                    <div className="noEntityContainer">
+                        <div className="noEntityText">
+                            <div>Looks like you haven't started a draft yet.</div>
+                            <div className="button startDraftButton" onClick={this.createDraft}>
+                                Start A Draft
+                            </div>
                         </div>
                     </div>
                 </div>
             );
         } else {
-            return (
-                <div className="editComponentsText">
-                    Edit Components of a story to begin creating a draft
-                </div>
-            );
+            return <EditComponentsNotice objectName="draft" />;
         }
     }
 }
@@ -59,7 +58,7 @@ class Draft extends DraftUtils {
 function mapStateToProps(state) {
     return {
         ...state.draftStore,
-        selectedStoryId: state.storiesStore.selectedStoryId,
+        selectedStoryId: state.storyStore.selectedStoryId,
         email: state.appStore.email,
         apiKey: state.appStore.apiKey,
     };
