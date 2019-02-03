@@ -111,6 +111,8 @@
     border-radius: 4px;
     background-color: #2f95dc;
     color: white;
+    outline: none;
+    border: none;
 }
 
 .hover:hover {

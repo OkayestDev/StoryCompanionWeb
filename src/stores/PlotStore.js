@@ -77,7 +77,8 @@ export const plotReducer = (state = INITIAL_STATE, action) => {
                 plotParent: action.payload,
                 name: '',
                 description: '',
-                selectedPlotId: 'new',
+                selectedPlotId: null,
+                isPlotModalOpen: true,
             };
             break;
         case 'OPEN_PLOT_CONFIRMATION':

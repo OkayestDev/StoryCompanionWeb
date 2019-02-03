@@ -20,11 +20,12 @@ class Settings extends SettingsUtils {
                     onRequestClose={this.props.resetSettings}
                     showAlert={this.props.showAlert}
                     userId={this.props.userId}
+                    apiKey={this.props.apiKey}
                 />
                 <EmailModal
                     isEmailModalOpen={this.props.isSubmittingBug || this.props.isSubmittingFeature}
                     onRequestClose={this.props.resetSettings}
-                    title={this.props.emailTitle}
+                    title={this.props.isSubmittingFeature ? 'Submitting Feature' : 'Submitting Bug'}
                     placeholder={
                         this.props.isSubmittingFeature
                             ? 'Feature Description...'

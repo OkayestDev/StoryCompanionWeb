@@ -38,9 +38,6 @@ export default class LoginUtils extends StoryCompanion {
                     this.props.history.push('/chapters');
                 }
             })
-            .catch(error => {
-                console.info(error);
-                this.props.showAlert('Unable to login at this time', 'danger');
-            });
+            .catch(() => this.props.showAlert('Unable to login at this time', 'danger'));
     };
 }

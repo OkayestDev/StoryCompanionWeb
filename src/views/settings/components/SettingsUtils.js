@@ -41,7 +41,7 @@ export default class SettingsUtils extends StoryCompanion {
             });
     };
 
-    bug = () => {
+    sendBug = () => {
         let paramsObject = this.createParamsObject();
         this.SettingsRequests.bug(paramsObject)
             .then(res => {
@@ -57,7 +57,7 @@ export default class SettingsUtils extends StoryCompanion {
             });
     };
 
-    feature = () => {
+    sendFeatureRequest = () => {
         let paramsObject = this.createParamsObject();
         this.SettingsRequests.feature(paramsObject)
             .then(res => {
@@ -65,7 +65,10 @@ export default class SettingsUtils extends StoryCompanion {
                     this.props.showAlert(res.error, 'warning');
                 } else {
                     this.props.resetSettings();
-                    this.props.showAlert('Successfully submitted feature. Thank you!', 'success');
+                    this.props.showAlert(
+                        'Successfully submitted feature request. Thank you!',
+                        'success'
+                    );
                 }
             })
             .catch(() => {

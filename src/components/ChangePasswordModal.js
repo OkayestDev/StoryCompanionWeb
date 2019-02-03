@@ -32,6 +32,7 @@ export default class ChangePasswordModal extends Component {
             password: this.state.newPassword,
             confirmPassword: this.state.confirmPassword,
             user: this.props.userId,
+            apiKey: this.props.apiKey,
         };
         this.UserRequests.changePassword(paramsObject)
             .then(res => {
@@ -75,6 +76,7 @@ export default class ChangePasswordModal extends Component {
                 <div className="modalContent">
                     <div className="inputAndLabelContainer">
                         <div className="inputLabel">New Password</div>
+                        &nbsp;
                         <input
                             type="password"
                             className="input"
@@ -85,6 +87,7 @@ export default class ChangePasswordModal extends Component {
                     </div>
                     <div className="inputAndLabelContainer">
                         <div className="inputLabel">Confirm Password</div>
+                        &nbsp;
                         <input
                             type="password"
                             className="input"

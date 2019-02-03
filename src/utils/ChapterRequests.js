@@ -17,7 +17,7 @@ export default class ChapterRequests {
         return postRequestWithFormData(paramsObject, 'chapter/delete', {}).then(res => res);
     };
 
-    exportChapter = paramsObject => {
+    exportChapters = paramsObject => {
         return postRequestWithFormData(paramsObject, 'chapter/export', {}).then(res => res);
     };
 

@@ -8,6 +8,13 @@ import '../css/GlobalAlert.css';
 
 // @TODO set timeout for showing global alert
 class GlobalAlert extends StoryCompanion {
+    // Closes globalAlert after 3.5 seconds
+    componentDidUpdate(prevProps) {
+        if (this.props.showGlobalAlert === true && prevProps.showGlobalAlert === false) {
+            setTimeout(this.props.closeAlert, 3500);
+        }
+    }
+
     figureColor = () => {
         if (this.props.globalAlertType === 'success') {
             return '#4CAF4F';

@@ -125,7 +125,7 @@ class Chapters extends ChaptersUtils {
                         chapterName={this.props.name}
                         chapterNumber={this.props.number}
                         writeChapter={this.writeChapter}
-                        chapterContentOnChange={this.handleChapterContentChanged}
+                        handleContentChanged={this.props.handleContentChanged}
                         onRequestClose={this.props.closeChapterContentModal}
                     />
                     <div className="floatRightContainer">

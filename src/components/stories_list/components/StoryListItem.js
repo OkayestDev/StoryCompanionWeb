@@ -5,7 +5,7 @@ export default class StoryListItem extends Component {
     render() {
         return (
             <div className="storyListItem" onClick={this.props.selectStoryForEdit}>
-                {this.props.story.image === '' ? (
+                {this.props.story.image === '' || this.props.story.image === null ? (
                     <div className="noStoryImage">No Image</div>
                 ) : (
                     <div>

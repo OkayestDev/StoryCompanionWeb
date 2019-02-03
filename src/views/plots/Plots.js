@@ -32,9 +32,9 @@ class Plots extends PlotsUtils {
         },
     ];
 
-    returnPlot = (styleName = 'parentPlots', id, addIcon = true) => {
+    renderPlot = (styleName = 'parentPlots', id, addIcon = true) => {
         return (
-            <div className={'plot ' + styleName}>
+            <div className={'plot ' + styleName} key={id}>
                 <div className="plotName" onClick={() => this.props.selectPlot(id)}>
                     {this.props.plots[id].name}
                 </div>
@@ -51,7 +51,7 @@ class Plots extends PlotsUtils {
         );
     };
 
-    renderPlots = () => {
+    renderPlotList = () => {
         if (this.props.plots === null) {
             return null;
         }
@@ -63,17 +63,19 @@ class Plots extends PlotsUtils {
                 if (this.props.plots[id].plot !== '') {
                     return;
                 } else {
-                    renderedPlots.push(this.returnPlot('plotParent', id));
+                    renderedPlots.push(this.renderPlot('plotParent', id));
                     let parentOneId = id;
                     // Render Children one
-                    plotIds.forEach(id => {
-                        if (this.props.plots[id].plot === parentOneId) {
-                            renderedPlots.push(this.returnPlot('childOnePlots', id));
+                    plotIds.forEach(idTwo => {
+                        if (this.props.plots[idTwo].plot == parentOneId) {
+                            renderedPlots.push(this.renderPlot('childOnePlots', idTwo));
                             // Render childrenTwo
-                            let parentTwoId = id;
-                            plotIds.forEach(id => {
-                                if (this.props.plots[id].plot === parentTwoId) {
-                                    renderedPlots.push(this.returnPlot('childTwoPlots', id, false));
+                            let parentTwoId = idTwo;
+                            plotIds.forEach(idThree => {
+                                if (this.props.plots[idThree].plot == parentTwoId) {
+                                    renderedPlots.push(
+                                        this.renderPlot('childTwoPlots', idThree, false)
+                                    );
                                 }
                             });
                         } else {
@@ -130,7 +132,7 @@ class Plots extends PlotsUtils {
                         onClick={this.props.newPlot}
                         data-tip="Create a new plot"
                     />
-                    <div className="entityContainer">{this.renderPlots()}</div>
+                    <div className="entityContainer">{this.renderPlotList()}</div>
                 </div>
             );
         } else {

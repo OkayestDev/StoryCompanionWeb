@@ -23,7 +23,7 @@ class Login extends LoginUtils {
                 <form className="login">
                     <div className="loginInputContainer">
                         <div className="loginLabel">Email</div>
-                        <div style={{ width: '50%' }}>
+                        <div className="loginInputDiv">
                             <input
                                 className="loginInput"
                                 onChange={newEmail =>
@@ -34,7 +34,7 @@ class Login extends LoginUtils {
                     </div>
                     <div className="loginInputContainer">
                         <div className="loginLabel">Password</div>
-                        <div style={{ width: '50%' }}>
+                        <div className="loginInputDiv">
                             <input
                                 type="password"
                                 className="loginInput"

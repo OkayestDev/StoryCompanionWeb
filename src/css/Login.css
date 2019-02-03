@@ -14,8 +14,11 @@
 }
 
 .login {
-    width: 400px;
-    height: 220px;
+    width: 450px;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     background-color: white;
     margin-bottom: 150px;
     border-radius: 8px;
@@ -34,9 +37,13 @@
 }
 
 .loginLabel {
-    width: 40%;
+    width: 35%;
     font-size: 28px;
     font-weight: bold;
+}
+
+.loginInputDiv {
+    width: 55%;
 }
 
 .loginInput {

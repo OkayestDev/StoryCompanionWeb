@@ -39,7 +39,7 @@ export default class WriteChapter extends Component {
                             className="textarea contentTextArea"
                             placeholder="Chapter Content"
                             value={this.props.chapterContent}
-                            onChange={this.props.chapterContentOnChange}
+                            onChange={value => this.props.handleContentChanged(value.target.value)}
                         />
                     </div>
                 </Modal>
