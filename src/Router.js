@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
+import Home from './views/home/Home.js';
 import Prompt from './views/prompt/Prompt.js';
 import Tags from './views/tags/Tags.js';
 import App from './App.js';
@@ -30,19 +31,16 @@ class Router extends StoryCompanion {
     }
 
     render() {
+        const IS_LOGGED_IN = this.isUserLoggedIn();
         return (
             <div className="full flex">
                 <BrowserRouter>
                     <div className="application">
-                        <div>
-                            <GlobalAlert />
-                        </div>
-                        <title>Story Companion</title>
+                        <GlobalAlert />
                         <DocumentTitle title="Story Companion" />
                         <Route render={props => <HeaderBar {...props} />} />
-                        {this.isUserLoggedIn() && (
-                            <Route render={props => <StoriesList {...props} />} />
-                        )}
+                        {IS_LOGGED_IN && <Route render={props => <StoriesList {...props} />} />}
+                        <Route path="/home" exact render={props => <Home {...props} />} />
                         <Route path="/login" exact render={props => <Login {...props} />} />
                         <Route
                             path="/create_account"
@@ -55,36 +53,42 @@ class Router extends StoryCompanion {
                             render={props => <ResetPassword {...props} />}
                         />
                         {/* All routes with story list available inside this div */}
-                        <div
-                            style={
-                                this.props.isStoryListOpen
-                                    ? { marginLeft: '505px' }
-                                    : { marginLeft: '45px' }
-                            }
-                            className="view"
-                        >
-                            <Route
-                                path="/chapters"
-                                exact
-                                render={props => <Chapters {...props} />}
-                            />
-                            <Route path="/plots" exact render={props => <Plots {...props} />} />
-                            <Route
-                                path="/characters"
-                                exact
-                                render={props => <Characters {...props} />}
-                            />
-                            <Route path="/notes" exact render={props => <Notes {...props} />} />
-                            <Route path="/draft" exact render={props => <Draft {...props} />} />
-                            <Route
-                                path="/settings"
-                                exact
-                                render={props => <Settings {...props} />}
-                            />
-                            <Route path="/tags" exact render={props => <Tags {...props} />} />
-                            <Route path="/prompt" exact render={props => <Prompt {...props} />} />
-                            <Route path="/" exact render={props => <App {...props} />} />
-                        </div>
+                        {IS_LOGGED_IN && (
+                            <div
+                                style={
+                                    this.props.isStoryListOpen
+                                        ? { marginLeft: '505px' }
+                                        : { marginLeft: '45px' }
+                                }
+                                className="view"
+                            >
+                                <Route
+                                    path="/chapters"
+                                    exact
+                                    render={props => <Chapters {...props} />}
+                                />
+                                <Route path="/plots" exact render={props => <Plots {...props} />} />
+                                <Route
+                                    path="/characters"
+                                    exact
+                                    render={props => <Characters {...props} />}
+                                />
+                                <Route path="/notes" exact render={props => <Notes {...props} />} />
+                                <Route path="/draft" exact render={props => <Draft {...props} />} />
+                                <Route
+                                    path="/settings"
+                                    exact
+                                    render={props => <Settings {...props} />}
+                                />
+                                <Route path="/tags" exact render={props => <Tags {...props} />} />
+                                <Route
+                                    path="/prompt"
+                                    exact
+                                    render={props => <Prompt {...props} />}
+                                />
+                                <Route path="/" exact render={props => <App {...props} />} />
+                            </div>
+                        )}
                     </div>
                 </BrowserRouter>
                 {this.isUserLoggedIn() && <Ad />}

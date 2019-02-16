@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { showAlert, closeAlert } from '../actions/Actions.js';
 import '../css/HeaderBar.css';
 
-const LOGIN_PATHNAMES = ['', '/', '/login', '/create_account', '/reset_password'];
+const LOGIN_PATHNAMES = ['', '/', '/home', '/login', '/create_account', '/reset_password'];
 
 const STORY_PATHNAMES = [
     '/chapters',
@@ -47,6 +47,12 @@ class HeaderBar extends StoryCompanion {
         if (LOGIN_PATHNAMES.includes(pathname)) {
             return (
                 <div className="linksContainer">
+                    <div
+                        className={'link' + (pathname === '/home' ? ' activeLink' : '')}
+                        onClick={() => this.redirect('/home')}
+                    >
+                        Home
+                    </div>
                     <div
                         className={'link' + (pathname === '/login' ? ' activeLink' : '')}
                         onClick={() => this.redirect('/login')}
