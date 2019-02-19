@@ -15,10 +15,6 @@ import '../../css/StoriesList.css';
  * @TODO open/closed book for story list
  */
 class StoriesList extends StoriesListUtils {
-    constructor(props) {
-        super(props);
-    }
-
     oneLineInputs = () => [
         {
             name: 'Story Name',
@@ -121,13 +117,15 @@ class StoriesList extends StoriesListUtils {
         } else if (this.isUserLoggedIn()) {
             return (
                 <div className="hiddenStoriesList">
-                    <Icon
-                        className="storiesListIcon"
-                        icon={iosBook}
-                        size={30}
-                        data-tip="Open Stories List"
-                        onClick={this.props.toggleIsStoryListOpen}
-                    />
+                    <div className="hiddenStoriesListIconContainer">
+                        <Icon
+                            className="storiesListIcon"
+                            icon={iosBook}
+                            size={30}
+                            data-tip="Open Stories List"
+                            onClick={this.props.toggleIsStoryListOpen}
+                        />
+                    </div>
                 </div>
             );
         } else {

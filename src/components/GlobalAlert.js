@@ -39,19 +39,27 @@ class GlobalAlert extends StoryCompanion {
         if (this.props.showGlobalAlert) {
             return (
                 <div className="globalAlert" style={{ backgroundColor: this.figureColor() }}>
-                    <div className="globalAlertIconAndMessage">
-                        <div>
-                            <Icon className="globalAlertIcon" icon={this.figureIcon()} size={40} />
+                    <div className="globalAlertContent">
+                        <div className="globalAlertIconAndMessage">
+                            <div>
+                                <Icon
+                                    className="globalAlertIcon"
+                                    icon={this.figureIcon()}
+                                    size={40}
+                                />
+                            </div>
+                            <div className="globalAlertMessage">
+                                {this.props.globalAlertMessage}
+                            </div>
                         </div>
-                        <div className="globalAlertMessage">{this.props.globalAlertMessage}</div>
-                    </div>
-                    <div className="globalAlertCloseContainer">
-                        <Icon
-                            className="globalAlertClose"
-                            icon={close}
-                            size={40}
-                            onClick={this.props.closeAlert}
-                        />
+                        <div className="globalAlertCloseContainer">
+                            <Icon
+                                className="globalAlertClose"
+                                icon={close}
+                                size={40}
+                                onClick={this.props.closeAlert}
+                            />
+                        </div>
                     </div>
                 </div>
             );

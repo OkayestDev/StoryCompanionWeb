@@ -33,7 +33,7 @@ class Notes extends NotesUtils {
     ];
 
     renderNotes = () => {
-        if (this.props.notes === null) {
+        if (!this.props.notes) {
             return null;
         }
 

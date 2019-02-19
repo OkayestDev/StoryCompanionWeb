@@ -20,11 +20,11 @@ export const mobileScreenshots = [
         src: './mobile_screenshots/chapters.png',
     },
     {
-        name: "Write Chapter's Content",
+        name: "Write Chapters' Content",
         src: './mobile_screenshots/chapter_content.png',
     },
     {
-        name: 'Create Character',
+        name: 'Create Characters',
         src: './mobile_screenshots/character_edit.png',
     },
     {

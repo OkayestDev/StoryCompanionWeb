@@ -1,9 +1,7 @@
 .homeContainer {
     padding-top: 10px;
     width: 100%;
-    height: 100%;
     background-color: white;
-    overflow-y: scroll !important;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -28,7 +26,6 @@
     align-items: center;
     justify-content: space-evenly;
     width: 90%;
-    background-color: #f2f2f2;
     border-radius: 4px;
     padding: 10px;
 }
@@ -38,9 +35,80 @@
     height: 622.22px;
 }
 
+.screenshot {
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
 .slideContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.mainAppStoreButtonContainer {
+    padding: 10px;
+    width: 500px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.appStoreButton {
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.slideName {
+    font-weight: bold;
+    color: black;
+    font-size: 24px;
+}
+
+.homeLogo {
+    width: 150px;
+    height: 150px;
+    margin-right: 25px;
+}
+
+.logoAndIntroductionContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px;
+}
+
+.description {
+    color: black;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.sectionLabel {
+    color: #2f95dc;
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.storeLink {
+    color: #2f95dc;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.featureLabel {
+    color: #2f95dc;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.sectionContainer ul {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.featureListContainer {
+    padding: 25px;
 }

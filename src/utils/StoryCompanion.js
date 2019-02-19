@@ -58,7 +58,6 @@ export default class StoryCompanion extends Component {
     };
 
     isUserLoggedIn = () => {
-        console.info(`this.props`, this.props);
         if (
             this.props.userId !== null &&
             this.props.apiKey !== null &&

@@ -52,7 +52,7 @@ class Plots extends PlotsUtils {
     };
 
     renderPlotList = () => {
-        if (this.props.plots === null) {
+        if (!this.props.plots) {
             return null;
         }
 

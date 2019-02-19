@@ -19,9 +19,15 @@ body {
     overflow-x: hidden;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .flex {
     display: flex;
     flex-direction: column;
+}
+
+.entitiesContainer {
+    flex: 1;
 }

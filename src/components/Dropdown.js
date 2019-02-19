@@ -29,7 +29,7 @@ export default class Dropdown extends Component {
 
     // this function ensures proper closing/opening of our dropdownList list
     handleClick = clickedItem => {
-        if (this.dropdown === null) {
+        if (!this.dropdown) {
             return;
         }
         // page isn't fully loaded yet or clickedItem is inside our dropdownList
@@ -117,7 +117,7 @@ export default class Dropdown extends Component {
     renderSelection = () => {
         const list = this.props.list;
         let value = '';
-        if (this.props.selectedValue === '' || this.props.selectedValue === null) {
+        if (this.props.selectedValue === '' || !this.props.selectedValue) {
             value = this.props.placeholder;
         } else if (list instanceof Array) {
             value = this.props.selectedValue;

@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { showAlert } from './actions/Actions.js';
 
 class App extends Component {
-    componentWillMount() {
-        if (this.props.userId !== null) {
+    componentDidMount() {
+        if (this.props.userId !== null && this.props.apiKey !== null) {
             this.props.history.push('/chapters');
         } else {
-            this.props.history.push('/login');
+            this.props.history.push('/home');
         }
     }
 
@@ -19,7 +19,8 @@ class App extends Component {
 
 function mapStateToProps(state) {
     return {
-        userId: state.userId,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
     };
 }
 

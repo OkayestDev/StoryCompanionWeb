@@ -8,12 +8,9 @@ const Slideshow = ({ slides, currentPage, perPage, slideClassName }) => {
         if (typeof slides[i + offset] !== 'undefined') {
             const slide = slides[i + offset];
             renderedSlides.push(
-                <div 
-                    className="slideContainer"
-                    key={uuid.v4()}
-                >
-                    {slide.name}
-                    <img className={slideClassName} src={slide.src} />
+                <div className="slideContainer" key={uuid.v4()}>
+                    <div className="slideName">{slide.name}</div>
+                    <img className={slideClassName + ' screenshot'} src={slide.src} />
                 </div>
             );
         }

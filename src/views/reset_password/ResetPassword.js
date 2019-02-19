@@ -39,8 +39,8 @@ class ResetPassword extends ResetPasswordUtils {
 
 function mapStateToProps(state) {
     return {
-        userId: state.userId,
-        apiKey: state.apiKey,
+        userId: state.appStore.userId,
+        apiKey: state.appStore.apiKey,
     };
 }
 

@@ -40,7 +40,7 @@ class Chapters extends ChaptersUtils {
     ];
 
     renderChapters = () => {
-        if (this.props.chapters === null) {
+        if (!this.props.chapters) {
             return null;
         }
 
@@ -159,6 +159,7 @@ function mapStateToProps(state) {
         selectedStoryId: state.storyStore.selectedStoryId,
         userId: state.appStore.userId,
         apiKey: state.appStore.apiKey,
+        email: state.appStore.email,
     };
 }
 

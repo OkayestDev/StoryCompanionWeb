@@ -162,9 +162,11 @@
 
 .view {
     background-color: white;
-    height: 100% !important;
-    padding: 10px;
+    width: 100%;
+    flex: 1;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: row;
 }
 
 .marginRight {
@@ -205,6 +207,7 @@
 .full {
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
 }
 
 .noEntityContainer {

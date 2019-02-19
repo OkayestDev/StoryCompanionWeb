@@ -34,7 +34,7 @@ class Tags extends TagsUtils {
     ];
 
     renderTags = () => {
-        if (this.props.tags === null) {
+        if (!this.props.tags) {
             return null;
         }
         const tagIds = Object.keys(this.props.tags);

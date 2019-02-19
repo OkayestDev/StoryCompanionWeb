@@ -65,7 +65,7 @@ class Characters extends CharactersUtils {
     };
 
     renderCharacters = () => {
-        if (this.props.characters === null) {
+        if (!this.props.characters) {
             return null;
         }
 

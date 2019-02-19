@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import { AppStore, Persistor } from './stores/AppStore.js';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import GlobalAlert from './components/GlobalAlert.js';
 
 // @TODO implement a loading screen
 function loading() {

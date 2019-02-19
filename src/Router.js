@@ -25,23 +25,31 @@ import './css/Router.css';
 import './css/CommonTheme.css';
 require('dotenv').config();
 
-class Router extends StoryCompanion {
-    constructor(props) {
-        super(props);
-    }
+const height = window.innerHeight;
+const heightOfHeaderBar = 75;
 
+const applicationDiv = {
+    overflowX: 'hidden',
+    overflowY: 'hidden',
+    width: '100%',
+    height: height - heightOfHeaderBar,
+    display: 'flex',
+    flexDirection: 'column',
+};
+
+class Router extends StoryCompanion {
     render() {
         const IS_LOGGED_IN = this.isUserLoggedIn();
         return (
-            <div className="full flex">
+            <div className="full">
+                <GlobalAlert />
                 <BrowserRouter>
-                    <div className="application">
-                        <GlobalAlert />
-                        <DocumentTitle title="Story Companion" />
+                    <div>
                         <Route render={props => <HeaderBar {...props} />} />
-                        {IS_LOGGED_IN && <Route render={props => <StoriesList {...props} />} />}
                         <Route path="/home" exact render={props => <Home {...props} />} />
+                        <DocumentTitle title="Story Companion" />
                         <Route path="/login" exact render={props => <Login {...props} />} />
+                        <Route path="/" exact render={props => <App {...props} />} />
                         <Route
                             path="/create_account"
                             exact
@@ -53,45 +61,60 @@ class Router extends StoryCompanion {
                             render={props => <ResetPassword {...props} />}
                         />
                         {/* All routes with story list available inside this div */}
-                        {IS_LOGGED_IN && (
-                            <div
-                                style={
-                                    this.props.isStoryListOpen
-                                        ? { marginLeft: '505px' }
-                                        : { marginLeft: '45px' }
-                                }
-                                className="view"
-                            >
-                                <Route
-                                    path="/chapters"
-                                    exact
-                                    render={props => <Chapters {...props} />}
-                                />
-                                <Route path="/plots" exact render={props => <Plots {...props} />} />
-                                <Route
-                                    path="/characters"
-                                    exact
-                                    render={props => <Characters {...props} />}
-                                />
-                                <Route path="/notes" exact render={props => <Notes {...props} />} />
-                                <Route path="/draft" exact render={props => <Draft {...props} />} />
-                                <Route
-                                    path="/settings"
-                                    exact
-                                    render={props => <Settings {...props} />}
-                                />
-                                <Route path="/tags" exact render={props => <Tags {...props} />} />
-                                <Route
-                                    path="/prompt"
-                                    exact
-                                    render={props => <Prompt {...props} />}
-                                />
-                                <Route path="/" exact render={props => <App {...props} />} />
-                            </div>
-                        )}
+                        <div style={applicationDiv}>
+                            {IS_LOGGED_IN && (
+                                <div className="view">
+                                    <div>
+                                        <Route render={props => <StoriesList {...props} />} />
+                                    </div>
+                                    <div className="entitiesContainer">
+                                        <Route
+                                            path="/chapters"
+                                            exact
+                                            render={props => <Chapters {...props} />}
+                                        />
+                                        <Route
+                                            path="/plots"
+                                            exact
+                                            render={props => <Plots {...props} />}
+                                        />
+                                        <Route
+                                            path="/characters"
+                                            exact
+                                            render={props => <Characters {...props} />}
+                                        />
+                                        <Route
+                                            path="/notes"
+                                            exact
+                                            render={props => <Notes {...props} />}
+                                        />
+                                        <Route
+                                            path="/draft"
+                                            exact
+                                            render={props => <Draft {...props} />}
+                                        />
+                                        <Route
+                                            path="/settings"
+                                            exact
+                                            render={props => <Settings {...props} />}
+                                        />
+                                        <Route
+                                            path="/tags"
+                                            exact
+                                            render={props => <Tags {...props} />}
+                                        />
+                                        <Route
+                                            path="/prompt"
+                                            exact
+                                            render={props => <Prompt {...props} />}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                            {this.isUserLoggedIn() && <Ad />}
+                        </div>
                     </div>
                 </BrowserRouter>
-                {this.isUserLoggedIn() && <Ad />}
             </div>
         );
     }
@@ -100,8 +123,8 @@ class Router extends StoryCompanion {
 function mapStateToProps(state) {
     return {
         isStoryListOpen: state.storyStore.isStoryListOpen,
-        apiKey: state.apiKey,
-        userId: state.userId,
+        apiKey: state.appStore.apiKey,
+        userId: state.appStore.userId,
     };
 }
 
