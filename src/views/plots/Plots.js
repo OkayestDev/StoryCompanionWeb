@@ -2,7 +2,7 @@ import React from 'react';
 import PlotsUtils from './components/PlotsUtils.js';
 import EditEntityModal from '../../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
-import { plus } from 'react-icons-kit/fa';
+import { plus, envelope } from 'react-icons-kit/fa';
 import ReactTooltip from 'react-tooltip';
 import { connect } from 'react-redux';
 import { showAlert } from '../../actions/Actions.js';
@@ -125,13 +125,22 @@ class Plots extends PlotsUtils {
                         deleteButtonText="Delete Plot"
                         confirmationAction="Delete Plot?"
                     />
-                    <Icon
-                        className="icon floatRight"
-                        icon={plus}
-                        size={28}
-                        onClick={this.props.newPlot}
-                        data-tip="Create a new plot"
-                    />
+                    <div className="floatRightContainer">
+                        <Icon
+                            className="icon marginRight"
+                            icon={envelope}
+                            size={28}
+                            onClick={this.exportPlots}
+                            data-tip="Export chapters"
+                        />
+                        <Icon
+                            className="icon"
+                            icon={plus}
+                            size={28}
+                            onClick={this.props.newPlot}
+                            data-tip="Create a new plot"
+                        />
+                    </div>
                     <div className="entityContainer">{this.renderPlotList()}</div>
                 </div>
             );
@@ -146,6 +155,7 @@ function mapStateToProps(state) {
         ...state.plotStore,
         selectedStoryId: state.storyStore.selectedStoryId,
         apiKey: state.appStore.apiKey,
+        email: state.appStore.email,
     };
 }
 

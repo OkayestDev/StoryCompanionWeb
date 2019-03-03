@@ -99,7 +99,7 @@ export default class NotesUtils extends StoryCompanion {
                 if ('error' in res) {
                     this.props.showAlert(res.error, 'danger');
                 } else {
-                    this.props.showAlert(`Success emailed notes to ${this.props.email}`, 'success');
+                    this.props.showAlert(`Successfully emailed notes to ${this.props.email}`, 'success');
                 }
             })
             .catch(() => {

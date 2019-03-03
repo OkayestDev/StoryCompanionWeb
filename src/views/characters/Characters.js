@@ -3,7 +3,7 @@ import CharactersUtils from './components/CharactersUtils.js';
 import ReactTooltip from 'react-tooltip';
 import EditEntityModal from '../../components/EditEntityModal.js';
 import Icon from 'react-icons-kit';
-import { plus, caretUp, caretDown } from 'react-icons-kit/fa';
+import { plus, caretUp, caretDown, envelope } from 'react-icons-kit/fa';
 import { connect } from 'react-redux';
 import { showAlert } from '../../actions/Actions.js';
 import * as characterActions from '../../actions/CharacterActions.js';
@@ -191,13 +191,22 @@ class Characters extends CharactersUtils {
                         deleteButtonText="Delete Character"
                         confirmationAction="Delete Character?"
                     />
-                    <Icon
-                        className="icon floatRight"
-                        icon={plus}
-                        size={28}
-                        onClick={this.props.newCharacter}
-                        data-tip="Create a new character"
-                    />
+                    <div className="floatRightContainer">
+                        <Icon
+                            className="icon marginRight"
+                            icon={envelope}
+                            size={28}
+                            onClick={this.exportCharacters}
+                            data-tip="Export chapters"
+                        />
+                        <Icon
+                            className="icon"
+                            icon={plus}
+                            size={28}
+                            onClick={this.props.newCharacter}
+                            data-tip="Create a new character"
+                        />
+                    </div>
                     <div className="entityContainer">{this.renderCharacters()}</div>
                 </div>
             );
@@ -213,6 +222,7 @@ function mapStateToProps(state) {
         selectedStoryId: state.storyStore.selectedStoryId,
         userId: state.appStore.userId,
         apiKey: state.appStore.apiKey,
+        email: state.appStore.email,
         tags: state.tagStore.tags,
     };
 }

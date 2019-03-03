@@ -1,21 +1,23 @@
-import { 
-    postRequestWithFormData,
-} from './HelperFunctions.js';
+import { postRequestWithFormData } from './HelperFunctions.js';
 
 export default class PlotRequests {
-    getPlots = (paramsObject) => {
+    getPlots = paramsObject => {
         return postRequestWithFormData(paramsObject, 'plot/view', {}).then(res => res);
-    }
+    };
 
-    createPlot = (paramsObject) => {
+    createPlot = paramsObject => {
         return postRequestWithFormData(paramsObject, 'plot/creation', {}).then(res => res);
-    }
+    };
 
-    editPlot = (paramsObject) => {
+    editPlot = paramsObject => {
         return postRequestWithFormData(paramsObject, 'plot/edit', {}).then(res => res);
-    }
+    };
 
-    deletePlot = (paramsObject) => {
+    deletePlot = paramsObject => {
         return postRequestWithFormData(paramsObject, 'plot/delete', {}).then(res => res);
-    }
+    };
+
+    exportPlots = paramsObject => {
+        return postRequestWithFormData(paramsObject, 'plot/export', {}).then(res => res);
+    };
 }

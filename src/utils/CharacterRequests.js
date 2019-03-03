@@ -25,4 +25,8 @@ export default class CharacterRequests {
     moveCharacterDown = paramsObject => {
         return postRequestWithFormData(paramsObject, 'person/move_down', {}).then(res => res);
     };
+
+    exportCharacters = paramsObject => {
+        return postRequestWithFormData(paramsObject, 'person/export', {}).then(res => res);
+    };
 }
