@@ -61,8 +61,8 @@ class Router extends StoryCompanion {
                             render={props => <ResetPassword {...props} />}
                         />
                         {/* All routes with story list available inside this div */}
-                        <div style={applicationDiv}>
-                            {IS_LOGGED_IN && (
+                        {IS_LOGGED_IN && (
+                            <div style={applicationDiv}>
                                 <div className="view">
                                     <div>
                                         <Route render={props => <StoriesList {...props} />} />
@@ -110,9 +110,9 @@ class Router extends StoryCompanion {
                                         />
                                     </div>
                                 </div>
-                            )}
-                            {this.isUserLoggedIn() && <Ad />}
-                        </div>
+                                {this.isUserLoggedIn() && <Ad />}
+                            </div>
+                        )}
                     </div>
                 </BrowserRouter>
             </div>

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { showAlert } from '../../actions/Actions.js';
 import DraftUtils from './components/DraftUtils.js';
 import * as draftActions from '../../actions/DraftActions.js';
+import Icon from 'react-icons-kit';
+import { check, envelope } from 'react-icons-kit/fa';
 import EditComponentsNotice from '../../components/EditComponentsNotice.js';
 import '../../css/Draft.css';
 
@@ -21,10 +23,22 @@ class Draft extends DraftUtils {
                 <div className="full">
                     <div className="draftActions">
                         <div className="draftAction" onClick={this.exportDraft}>
-                            EXPORT
+                            <Icon
+                                className="icon marginRight"
+                                icon={envelope}
+                                size={28}
+                                onClick={this.exportChapters}
+                                data-tip="Export chapters"
+                            />
                         </div>
                         <div className="draftAction" onClick={this.editDraft}>
-                            SAVE
+                            <Icon
+                                className="icon"
+                                icon={check}
+                                size={28}
+                                onClick={this.props.newChapter}
+                                data-tip="Create a new chapter"
+                            />
                         </div>
                     </div>
                     <textarea

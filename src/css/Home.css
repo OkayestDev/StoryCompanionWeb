@@ -30,6 +30,11 @@
     padding: 10px;
 }
 
+.webScreenShot {
+    width: 960px;
+    height: 545px;
+}
+
 .mobileScreenShot {
     width: 350px;
     height: 622.22px;

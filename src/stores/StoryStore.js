@@ -82,6 +82,10 @@ export const storyReducer = (state = INITIAL_STATE, action) => {
         case 'NEW_STORY':
             newState = {
                 ...state,
+                name: '',
+                description: '',
+                image: '',
+                genre: '',
                 selectedStoryIdForEdit: null,
                 isStoryModalOpen: true,
             };

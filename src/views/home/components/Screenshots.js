@@ -41,4 +41,41 @@ export const mobileScreenshots = [
     },
 ];
 
-export const webScreenshots = [];
+export const webScreenshots = [
+    {
+        name: 'Create an Account',
+        src: './web_screenshots/create_account.png',
+    },
+    {
+        name: 'Create Stories',
+        src: './web_screenshots/create_stories.png',
+    },
+    {
+        name: 'Create Chapters',
+        src: './web_screenshots/chapters.png',
+    },
+    {
+        name: 'Write Chapters',
+        src: './web_screenshots/chapter_content.png',
+    },
+    {
+        name: 'Create Characters',
+        src: './web_screenshots/characters.png',
+    },
+    {
+        name: 'Create Plot Points',
+        src: './web_screenshots/plots.png',
+    },
+    {
+        name: 'Write a Draft',
+        src: './web_screenshots/draft.png',
+    },
+    {
+        name: 'Create Notes',
+        src: './web_screenshots/notes.png',
+    },
+    {
+        name: 'Writing Prompts',
+        src: './web_screenshots/prompt.png',
+    },
+];

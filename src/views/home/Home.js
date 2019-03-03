@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { mobileScreenshots, webScreenshots } from './components/Screenshots.js';
 import { Icon } from 'react-icons-kit';
 import { chevronCircleRight, chevronCircleLeft } from 'react-icons-kit/fa';
 import Slideshow from './components/Slideshow.js';
 import Features from './components/Features.js';
 import '../../css/Home.css';
-
+import StoryCompanion from '../../utils/StoryCompanion.js';
 const appleAppStoreUrl = 'https://itunes.apple.com/us/app/story-companion/id1439693042?ls=1&mt=8';
 const googlePlayStoreUrl =
     'https://play.google.com/store/apps/details?id=com.isjustgame.storycompanion&hl=en';
 
-export default class Home extends Component {
+export default class Home extends StoryCompanion {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,11 +21,20 @@ export default class Home extends Component {
         };
     }
 
+    componentWillMount() {
+        if (this.isUserLoggedIn()) {
+            this.props.history.push('/chapters');
+        }
+    }
+
     handleMobileSlideshowLeftClicked = () => {
         if (this.state.mobileScreenshotPage === 0) {
-            return;
+            let newPage =
+                Math.ceil(mobileScreenshots.length / this.state.mobileScreenshotsPerPage) - 1;
+            this.setState({ mobileScreenshotPage: newPage });
+        } else {
+            this.setState({ mobileScreenshotPage: this.state.mobileScreenshotPage - 1 });
         }
-        this.setState({ mobileScreenshotPage: this.state.mobileScreenshotPage - 1 });
     };
 
     handleMobileSlideshowRightClicked = () => {
@@ -46,16 +55,27 @@ export default class Home extends Component {
 
     handleWebSlideshowLeftClicked = () => {
         if (this.state.webScreenshotPage === 0) {
-            return;
+            this.setState({ webScreenshotPage: webScreenshots.length - 1 });
+        } else {
+            this.setState({ webScreenshotPage: this.state.webScreenshotPage - 1 });
         }
-        this.setState({ webScreenshotPage: this.state.webScreenshotPage - 1 });
     };
 
-    handleWebSlideshowRightClicked = () => {};
-
-    renderMobileScreenshots = () => {};
-
-    renderWebScreenshots = () => {};
+    handleWebSlideshowRightClicked = () => {
+        const currentPage = this.state.webScreenshotPage;
+        const perPage = this.state.webScreenshotsPerPage;
+        // We only need to check if the first index of screenShots exists
+        if (typeof webScreenshots[(currentPage + 1) * perPage] === 'undefined') {
+            // Loop back to beginning of slideshow
+            this.setState({
+                webScreenshotPage: 0,
+            });
+        } else {
+            this.setState({
+                webScreenshotPage: currentPage + 1,
+            });
+        }
+    };
 
     render() {
         return (
@@ -84,6 +104,10 @@ export default class Home extends Component {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="sectionContainer">
+                    <div className="sectionLabel">Features</div>
+                    <Features />
                 </div>
                 <div className="sectionContainer">
                     <div className="sectionLabel">Mobile App</div>
@@ -119,18 +143,19 @@ export default class Home extends Component {
                     </div>
                 </div>
                 <div className="sectionContainer">
-                    <div className="sectionLabel">Features</div>
-                    <Features />
-                </div>
-                <div className="sectionContainer">
                     <div className="sectionLabel">Web App</div>
-                    <div />
                     <div className="slideShowContainer">
                         <Icon
                             className="icon"
                             icon={chevronCircleLeft}
                             size={80}
                             onClick={this.handleWebSlideshowLeftClicked}
+                        />
+                        <Slideshow
+                            slides={webScreenshots}
+                            currentPage={this.state.webScreenshotPage}
+                            perPage={this.state.webScreenshotsPerPage}
+                            slideClassName="webScreenShot"
                         />
                         <Icon
                             className="icon"
